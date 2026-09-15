@@ -18,7 +18,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[🏠 在线预览](https://zz3656.github.io/Atom-blog) · [📝 写文章](#-写文章) · [🚀 部署](#-部署到-github-pages) · [⚙️ 自定义](#%EF%B8%8F-%E8%87%AA%E5%AE%9A%E4%B9%89) · [🇬🇧 English](README_EN.md) · [📘 开发者指南](DEVELOP.md) · [🔄 Hexo 转换工具](scripts/README.md)
+[🏠 在线预览](https://zz3656.github.io/Atom-blog) · [📝 写文章](#-写文章) · [🤖 CLI 工具](#-cli-本地构建工具) · [🚀 部署](#-部署到-github-pages) · [⚙️ 自定义](#%EF%B8%8F-%E8%87%AA%E5%AE%9A%E4%B9%89) · [🇬🇧 English](README_EN.md) · [📘 开发者指南](DEVELOP.md) · [🔄 Hexo 转换工具](scripts/README.md)
 
 </div>
 
@@ -33,7 +33,7 @@
 | 📱 **响应式设计** | 手机、平板、桌面完美适配 |
 | 🎯 **路由修复** | 支持 GitHub Pages 子路径部署 |
 | 📝 **Markdown 写作** | 原生支持，代码语法高亮 |
-| 📁 **分类 + 标签** | 分类（单数）组织文章大类，标签（可多）标注细分主题 |
+| 🤖 **CLI 工具** | `atom new` / `atom list` / `atom build` — 本地创建文章、一键构建推送 |
 | 🚀 **GitHub Actions** | 推送代码自动构建部署 |
 | 🔍 **SEO 友好** | 语义化 HTML、Open Graph / Twitter Card / JSON-LD 结构化数据、Sitemap、RSS 订阅（导航栏 📡 和页脚均可访问） |
 | 📦 **超小体积** | HTML 仅 ~3KB（单页） |
@@ -49,17 +49,19 @@
 
 ### 文章页
 
-- 标题 → 描述 → 日期 → 分类 → 标签，层次清晰
+- 居中布局：标题 → 描述 → 日期 → 分类 → 标签
 - 阅读进度条
 - 代码块语法高亮（GitHub Dark 主题）
 - 上一篇 / 下一篇导航
 
 ### 分类 & 标签
 
-- 📁 **分类列表页**：展示所有分类及文章数量，点击跳转分类详情
-- 📁 **分类详情页**：展示某分类下的所有文章
-- 🏷️ **标签列表页 & 标签详情页**：展示标签对应的文章
+- 📁 **分类列表页**：科技感卡片网格，每张卡片展示分类名、文章数及进度条
+- 📁 **分类详情页**：列表展示该分类下所有文章
+- 🏷️ **标签列表页**：科技感卡片网格，展示标签名、文章数及占比进度条
+- 🏷️ **标签详情页**：列表展示该标签下所有文章
 - 分类与标签完全独立，互不混淆
+- 所有页面内容居中显示，视觉更加均衡
 
 ## 📁 项目结构
 
@@ -192,6 +194,110 @@ reward: true                   # 可选：是否在文末显示打赏码
 | 用途 | 组织文章的大类（如"技术笔记""生活随笔"） | 标注文章的细分主题（如"JavaScript""Astro"） |
 | 展示 | 📁 分类列表页 + 分类详情页 | 🏷️ 标签列表页 + 标签详情页 |
 | 关系 | **相互独立**，不互相影响 | |
+
+## 🤖 CLI 本地构建工具
+
+Atom 提供命令行工具 `atom-cli.mjs`，体验类似 Hexo / Hugo 的本地工作流。
+
+### 安装准备
+
+将 `Atom-blog`（上线仓库）放在 `Atom`（源码仓库）的父目录下：
+
+```
+parent/
+├── Atom/              ← 源码仓库
+│   ├── scripts/
+│   │   └── atom-cli.mjs
+│   └── src/
+└── Atom-blog/         ← 上线仓库（生成 dist/）
+    ├── src/
+    └── dist/
+```
+
+### 命令速览
+
+```
+node scripts/atom-cli.mjs --help
+```
+
+| 命令 | 说明 |
+|------|------|
+| `atom new <标题>` | 创建新文章（交互式填写 frontmatter） |
+| `atom new <标题> -c 分类` | 指定分类 |
+| `atom new <标题> -t 标签1,标签2` | 指定标签 |
+| `atom new <标题> -d 日期` | 指定发布日期 |
+| `atom new <标题> --draft` | 创建为草稿 |
+| `atom list` | 列出所有文章 |
+| `atom build` | 同步源文件 → 构建 → 推送到上线仓库 |
+
+### 交互式创建
+
+```bash
+$ node scripts/atom-cli.mjs new "我的第一篇文章"
+📝 文章标题: （自动从参数获取）
+📁 分类（回车跳过）: 技术笔记
+🏷️ 标签（逗号分隔，回车跳过）: Astro,Blog
+📄 描述（回车自动生成）: 
+🖼️ 封面图路径（回车跳过）: 
+💰 是否显示打赏码? [y/N]: n
+
+✅ 文章已创建
+   📂 src/content/blog/my-first-article.md
+   📝 我的第一篇文章
+   📅 2026-09-15
+   📁 技术笔记
+   🏷️ Astro, Blog
+```
+
+### 非交互式创建（CI / 脚本）
+
+```bash
+# 一行命令创建文章，不交互
+node scripts/atom-cli.mjs new "Astro 101" \
+  -c "技术教程" \
+  -t "Astro,教程" \
+  -d 2026-09-15
+
+# 创建草稿
+node scripts/atom-cli.mjs new "草稿内容" --draft
+```
+
+### 一键构建推送
+
+```bash
+# 1. 确保 Atom-blog 目录存在且是 git 仓库
+# 2. 执行构建
+node scripts/atom-cli.mjs build
+
+# 会自动：
+#   1. 同步 src/ 下的所有 Astro 源文件到 Atom-blog
+#   2. 在 Atom-blog 目录执行 npm run build
+#   3. git add + commit + push 到 main 分支
+```
+
+### 源码仓库目录结构（更新后）
+
+```
+Atom/
+├── scripts/
+│   ├── atom-cli.mjs           # 🤖 CLI 本地构建工具 ← 新增
+│   ├── convert-hexo.mjs       # Hexo → Atom 转换工具
+│   ├── generate-rss.mjs       # RSS + Sitemap 生成脚本
+│   └── README.md              # 脚本文档
+├── src/
+│   ├── content/blog/          # 📝 文章目录（CLI 新建内容）
+│   └── ...
+└── ...
+```
+
+> 💡 **与 Hexo 对比**
+>
+> | Hexo | Atom |
+> |------|------|
+> | `hexo new "标题"` | `node atom-cli.mjs new "标题"` |
+> | `hexo generate` | `node atom-cli.mjs build` |
+> | `hexo deploy` | `node atom-cli.mjs build`（内置部署） |
+> | `hexo server` | `npm run dev` |
 
 ## 🐙 部署到 GitHub Pages
 
