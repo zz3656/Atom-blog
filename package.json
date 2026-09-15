@@ -5,7 +5,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "postbuild": "node scripts/generate-rss.mjs"
+    "postbuild": "node scripts/generate-rss.mjs && node scripts/fix-links.mjs"
   },
   "dependencies": {
     "astro": "^4.16.0"
