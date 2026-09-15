@@ -6,22 +6,26 @@ interface Props {
   description: string;
   category?: string;
   tags?: string[];
+  index?: number;
 }
 
 import FormattedDate from './FormattedDate.astro';
 
-const { slug, title, pubDate, description, category = '', tags = [] } = Astro.props;
+const { slug, title, pubDate, description, category = '', tags = [], index = 0 } = Astro.props;
 ---
 
 <li class="post-card">
   <a href={slug}>
+    <div class="post-card-index">{String(index + 1).padStart(2, '0')}</div>
     <div class="post-card-body">
       <h2 class="post-card-title">{title}</h2>
       <p class="post-card-desc">{description}</p>
       <div class="post-card-meta">
-        <FormattedDate date={pubDate} />
+        <time datetime={pubDate.toISOString()} class="post-card-date">
+          {pubDate.toLocaleDateString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+        </time>
         {category && (
-          <span class="post-card-category">📁 {category}</span>
+          <span class="post-card-category">{category}</span>
         )}
         {tags.length > 0 && (
           <span class="post-card-tags">

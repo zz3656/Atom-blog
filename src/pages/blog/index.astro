@@ -40,14 +40,16 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
       <p class="blog-count">共 {totalPosts} 篇</p>
     </div>
     <ul class="post-list">
-      {paginatedPosts.map((post) => (
+      {paginatedPosts.map((post, idx) => (
         <PostCard
+          key={post.slug}
           slug={base + "/blog/" + post.slug + "/"}
           title={post.data.title}
           pubDate={post.data.pubDate}
           description={post.data.description}
           category={post.data.category}
           tags={post.data.tags}
+          index={idx}
         />
       ))}
     </ul>
