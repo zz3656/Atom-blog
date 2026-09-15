@@ -66,18 +66,18 @@ const { title, pubDate, updatedDate, description, heroImage, category = '', tags
           </span>
         )}
       </div>
-      {category && (
-        <div class="post-category">
-          📁 {category}
-        </div>
-      )}
-      {tags.length > 0 && (
-        <div class="post-tags">
-          {tags.map((tag) => (
-            <span class="tag">{tag}</span>
-          ))}
-        </div>
-      )}
+      <div class="post-meta-extra">
+        {category && (
+          <span class="post-category-tag">📁 {category}</span>
+        )}
+        {tags.length > 0 && (
+          <span class="post-tags-row">
+            {tags.map((tag) => (
+              <span class="tag">{tag}</span>
+            ))}
+          </span>
+        )}
+      </div>
     </div>
     {heroImage && (
       <div class="hero-image">

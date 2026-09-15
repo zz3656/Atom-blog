@@ -33,13 +33,10 @@ const categoryPosts = (await getCollection('blog'))
 ---
 
 <BaseLayout title={`${category} | Atom Blog`}>
-  <section class="category-detail-page">
-    <div class="category-detail-header">
-      <div class="category-detail-icon">⬡</div>
-      <div class="category-detail-info">
-        <h1>{category}</h1>
-        <p class="category-detail-count">共 <span class="accent">{categoryPosts.length}</span> 篇文章</p>
-      </div>
+  <section class="listing-page">
+    <div class="unified-page-header">
+      <h1>{category}</h1>
+      <p class="unified-page-subtitle">共 <span class="accent">{categoryPosts.length}</span> 篇文章</p>
     </div>
 
     {categoryPosts.length > 0 ? (

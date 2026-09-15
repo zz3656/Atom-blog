@@ -24,13 +24,10 @@ const tagPosts = (await getCollection('blog'))
 ---
 
 <BaseLayout title={`${tag} | Atom Blog`}>
-  <section class="tag-detail-page">
-    <div class="tag-detail-header">
-      <div class="tag-detail-icon">◈</div>
-      <div class="tag-detail-info">
-        <h1>{tag}</h1>
-        <p class="tag-detail-count">共 <span class="accent">{tagPosts.length}</span> 篇文章</p>
-      </div>
+  <section class="listing-page">
+    <div class="unified-page-header">
+      <h1>{tag}</h1>
+      <p class="unified-page-subtitle">共 <span class="accent">{tagPosts.length}</span> 篇文章</p>
     </div>
 
     {tagPosts.length > 0 ? (

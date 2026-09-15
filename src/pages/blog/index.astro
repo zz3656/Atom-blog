@@ -35,9 +35,9 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
 
 <BaseLayout title={`所有文章 | 第${currentPage}页`} description="查看所有文章">
   <section class="blog-list">
-    <div class="blog-list-header">
-      <h1>📝 所有文章</h1>
-      <p class="blog-count">共 {totalPosts} 篇</p>
+    <div class="unified-page-header">
+      <h1>所有文章</h1>
+      <p class="unified-page-subtitle">共 {totalPosts} 篇</p>
     </div>
     <ul class="post-list">
       {paginatedPosts.map((post, idx) => (
