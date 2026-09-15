@@ -290,7 +290,10 @@ reward: true                # 可选：显示打赏码
    git add . && git commit -m "enable github actions" && git push
    ```
 3. 进入 **Settings → Pages → Source → 选择 GitHub Actions**
-4. 推送代码到 `main` 分支 ✅
+4. 进入 **Settings → Actions → General → Workflow permissions → 选择 Read repository permissions and write permissions**
+5. 推送代码到 `main` 分支 ✅
+
+> 💡 **Fork 后注意**：GitHub Actions 会自动从仓库名推导 base 路径。如果仓库名为 `my-blog`，则部署到 `https://username.github.io/my-blog/`。如需自定义，在 `.github/workflows/deploy.yml` 中设置 `REPO_NAME` 环境变量。
 
 > 💡 `.github_disabled/` 是因为 Token 权限限制无法推送 workflow 文件，手动启用即可。
 
@@ -323,12 +326,28 @@ export const SOCIAL_LINKS = {
 
 ### 2. 部署地址
 
-编辑 `astro.config.mjs`：
+编辑 `astro.config.mjs`，根据你的部署平台修改：
+
+**GitHub Pages（自动检测仓库名）：**
+
+```javascript
+// 设置环境变量即可，base 自动从 REPO_NAME 推导
+REPO_NAME=your-repo-name  // 仓库名（如 Atom-blog）
+```
+
+**Cloudflare Pages / 自定义域名：**
+
+```javascript
+// 不设置 DEPLOY_TARGET=github，base 自动为空字符串 '/'
+CF_DOMAIN='atom.inte8.top'  // 你的自定义域名
+```
+
+> ⚡ 如果默认值不满足需求，可以手动调整 `astro.config.mjs` 中的 `site` 和 `base` 字段。
 
 ```javascript
 export default defineConfig({
-  site: 'https://yourusername.github.io',   // 你的 GitHub Pages 地址（不含路径）
-  base: '/your-repo-name',                  // 仓库名（根站点用 '/'，子路径填仓库名）
+  site: 'https://yourdomain.com',   // 你的网站域名
+  base: '/',                        // 子路径仓库填 '/your-repo-name'
   markdown: {
     shikiConfig: {
       theme: 'github-dark',      // 代码高亮主题（可选 'github-light'）
