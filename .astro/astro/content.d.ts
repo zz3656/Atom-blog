@@ -267,6 +267,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"github-ai-top10-sept-2026.md": {
+	id: "github-ai-top10-sept-2026.md";
+  slug: "github-ai-top10-sept-2026";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "github-weekly-top10-2026-05-04.md": {
 	id: "github-weekly-top10-2026-05-04.md";
   slug: "github-weekly-top10-2026-05-04";
