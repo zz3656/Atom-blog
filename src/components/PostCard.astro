@@ -6,17 +6,20 @@ interface Props {
   description: string;
   category?: string;
   tags?: string[];
-  index?: number;
+  index?: number | undefined;
 }
 
 import FormattedDate from './FormattedDate.astro';
 
-const { slug, title, pubDate, description, category = '', tags = [], index = 0 } = Astro.props;
+const { slug, title, pubDate, description, category = '', tags = [] } = Astro.props;
+const index = 'index' in Astro.props ? Astro.props.index : undefined;
 ---
 
 <li class="post-card">
   <a href={slug}>
-    <div class="post-card-index">{String(index + 1).padStart(2, '0')}</div>
+    {index != null && (
+      <div class="post-card-index">{String(index + 1).padStart(2, '0')}</div>
+    )}
     <div class="post-card-body">
       <h2 class="post-card-title">{title}</h2>
       <p class="post-card-desc">{description}</p>

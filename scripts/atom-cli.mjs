@@ -287,12 +287,25 @@ async function syncSourceToBlogRepo() {
   // 同步 .astro 文件（自动发现新页面）
   const pagesDir = join(ROOT, 'src', 'pages');
   if (await dirExists(pagesDir)) {
-    const pageFiles = await findFilesRecursively(pagesDir, '*.astro');
+    const pageFiles = await findFilesRecursively(pagesDir);
     for (const pageFile of pageFiles) {
       const rel = relative(ROOT, pageFile);
       const dst = join(BLOG_REPO_DIR, rel);
       await mkdir(dirname(dst), { recursive: true });
       await copyFile(pageFile, dst);
+    }
+  }
+
+  // 同步文章 .md 文件
+  const blogDir = join(ROOT, 'src', 'content', 'blog');
+  if (await dirExists(blogDir)) {
+    const entries = await readdir(blogDir);
+    for (const entry of entries) {
+      if (entry.endsWith('.md')) {
+        const src = join(blogDir, entry);
+        const dst = join(BLOG_REPO_DIR, 'src', 'content', 'blog', entry);
+        await copyFile(src, dst);
+      }
     }
   }
 }
