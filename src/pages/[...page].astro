@@ -5,26 +5,27 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
-const posts = (await getCollection('blog')).sort(
-  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
-);
 
-// Pagination settings
-const POSTS_PER_PAGE = 12;
-const totalPosts = posts.length;
-const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE) || 1;
+export async function getStaticPaths() {
+  const POSTS_PER_PAGE = 12;
+  const allPosts = (await getCollection('blog')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  );
+  const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE) || 1;
 
-export function getStaticPaths() {
-  const paths: { params: { page?: string }; props: { page: number } }[] = [];
+  const paths = [];
   for (let page = 1; page <= totalPages; page++) {
-    paths.push({ params: page === 1 ? {} : { page: String(page) }, props: { page }});
+    const startIndex = (page - 1) * POSTS_PER_PAGE;
+    const pagePosts = allPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+    paths.push({
+      params: { page: page === 1 ? '' : String(page) },
+      props: { page, pagePosts, totalPosts: allPosts.length, totalPages },
+    });
   }
   return paths;
 }
 
-const currentPage = Astro.props.page || 1;
-const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
-const paginatedPosts = posts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+const { page = 1, pagePosts, totalPosts, totalPages } = Astro.props;
 
 const getPageUrl = (p: number) => {
   if (p <= 1) return base + '/';
@@ -72,7 +73,7 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
       <span class="section-count">共 {totalPosts} 篇</span>
     </div>
     <ul class="post-grid">
-      {paginatedPosts.map((post) => (
+      {pagePosts.map((post) => (
         <PostCard
           slug={base + "/blog/" + post.slug + "/"}
           title={post.data.title}
@@ -86,21 +87,21 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
 
     {totalPages > 1 && (
       <nav class="pagination" aria-label="文章分页">
-        {currentPage > 1 && (
-          <a href={getPageUrl(currentPage - 1)} class="page-btn prev">← 上一页</a>
+        {page > 1 && (
+          <a href={getPageUrl(page - 1)} class="page-btn prev">← 上一页</a>
         )}
         <div class="page-numbers">
           {pageNumbers.map((p) => (
             <a
               href={getPageUrl(p)}
-              class:list={['page-link', p === currentPage && 'active']}
-              aria-label={p === currentPage ? '当前页' : `第 ${p} 页`}
-              aria-current={p === currentPage ? 'page' : undefined}
+              class:list={['page-link', p === page && 'active']}
+              aria-label={p === page ? '当前页' : `第 ${p} 页`}
+              aria-current={p === page ? 'page' : undefined}
             >{p}</a>
           ))}
         </div>
-        {currentPage < totalPages && (
-          <a href={getPageUrl(currentPage + 1)} class="page-btn next">下一页 →</a>
+        {page < totalPages && (
+          <a href={getPageUrl(page + 1)} class="page-btn next">下一页 →</a>
         )}
       </nav>
     )}
