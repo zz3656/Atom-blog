@@ -42,6 +42,17 @@ const rssUrl = base + '/rss.xml';
         <a href={link.href} class:list={['nav-link', link.active && 'active']}>{link.label}</a>
       ))}
       <div class="nav-actions">
+        <div class="search-wrapper">
+          <input
+            type="text"
+            id="search-input"
+            class="search-input"
+            placeholder="搜索文章…"
+            aria-label="搜索文章"
+            autocomplete="off"
+          />
+          <div id="search-results" class="search-results"></div>
+        </div>
         <div class="theme-toggle" id="theme-toggle" aria-label="切换暗黑模式" style="cursor:pointer;">🌙</div>
         <a href={rssUrl} class="theme-toggle" aria-label="RSS 订阅" style="text-decoration:none;font-size:1.1rem;cursor:pointer;">📡</a>
       </div>

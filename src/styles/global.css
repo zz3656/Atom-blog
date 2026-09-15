@@ -340,6 +340,104 @@ html.dark .theme-toggle:hover {
   transform: rotate(15deg);
 }
 
+/* ===== Search ===== */
+.search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  outline: none;
+  transition: all 0.25s ease;
+  width: 140px;
+  font-family: var(--font-sans);
+}
+
+.search-input:focus {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  width: 220px;
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  max-height: 400px;
+  overflow-y: auto;
+  min-width: 280px;
+  max-width: 360px;
+  display: none;
+  z-index: 200;
+}
+
+.search-results.active {
+  display: block;
+}
+
+.search-result-item {
+  display: block;
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border-light);
+  transition: background 0.2s;
+  text-decoration: none;
+  color: var(--text-primary);
+}
+
+.search-result-item:last-child {
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  background: var(--accent-glow);
+}
+
+.search-result-title {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-bright);
+  margin-bottom: 0.25rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.search-result-title mark {
+  background: var(--accent);
+  color: #fff;
+  padding: 0.05rem 0.15rem;
+  border-radius: 2px;
+}
+
+.search-result-desc {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.search-no-result {
+  padding: 1rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
 /* ===== Main ===== */
 main {
   flex: 1;

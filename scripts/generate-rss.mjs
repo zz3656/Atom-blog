@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { readdirSync } from 'fs';
 import { join, dirname } from 'path';
 
@@ -114,3 +114,27 @@ sitemapItems.push('</urlset>');
 
 writeFileSync('dist/sitemap.xml', sitemapItems.join('\n'), 'utf-8');
 console.log('Sitemap generated: dist/sitemap.xml');
+
+// --- Generate Search Index ---
+var searchIndex = posts.map(function(p) {
+  // 转小写用于搜索
+  var titleLower = p.title.toLowerCase();
+  var descLower = p.description ? p.description.toLowerCase() : '';
+  var searchContent = titleLower + ' ' + descLower;
+  return {
+    slug: p.slug,
+    title: p.title,
+    description: p.description || '',
+    pubDate: p.pubDate.toISOString(),
+    content: searchContent,
+    categories: (p.category || '').toLowerCase(),
+    tags: (p.tags || []).map(function(t){ return t.toLowerCase(); }),
+  };
+});
+// 写入 public/_assets/，Astro 构建时会自动复制到 dist/
+var publicAssetsDir = join(process.cwd(), 'public', '_assets');
+if (!existsSync(publicAssetsDir)) {
+  mkdirSync(publicAssetsDir, { recursive: true });
+}
+writeFileSync(join(publicAssetsDir, 'search-index.json'), JSON.stringify(searchIndex));
+console.log('Search index generated: public/_assets/search-index.json');
