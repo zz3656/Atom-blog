@@ -28,7 +28,7 @@ function parseFrontmatter(content) {
 }
 
 var siteUrl = 'https://zz3656.github.io';
-var repoName = 'Atom-blog';
+var repoName = 'Atom';
 var prefix = repoName ? '/' + repoName : '';
 
 // --- Generate RSS ---
