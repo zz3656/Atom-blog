@@ -36,21 +36,12 @@ function getCategoryFilter(category: string): (post: any) => boolean {
 
     {sortedCategories.length > 0 ? (
       <div class="category-grid">
-        {sortedCategories.map(([category, catPosts]) => {
-          const filter = getCategoryFilter(category);
-          return (
-            <a href={`${base}/category/${category}/`} class="category-card">
-              <div class="category-card-icon">⬡</div>
-              <div class="category-card-info">
-                <span class="category-card-name">{category}</span>
-                <span class="category-card-count">{catPosts.length} 篇</span>
-              </div>
-              <div class="category-card-bar">
-                <div class="category-card-bar-fill" style={{width: `${Math.min(100, (catPosts.length / posts.length) * 100)}%`}}></div>
-              </div>
-            </a>
-          );
-        })}
+        {sortedCategories.map(([category, catPosts]) => (
+          <a href={`${base}/category/${category}/`} class="category-card">
+            <span class="category-card-name">📁 {category}</span>
+            <span class="category-card-count">{catPosts.length}</span>
+          </a>
+        ))}
       </div>
     ) : (
       <p class="empty-state">暂无分类</p>

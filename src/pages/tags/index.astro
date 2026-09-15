@@ -31,13 +31,8 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].lengt
       <div class="tag-grid">
         {sortedTags.map(([tag, tagPosts]) => (
           <a href={`${base}/tag/${tag}/`} class="tag-card">
-            <div class="tag-card-label">{tag}</div>
-            <div class="tag-card-meta">
-              <span class="tag-card-count">{tagPosts.length} 篇</span>
-              <div class="tag-card-bar">
-                <div class="tag-card-bar-fill" style={{width: `${Math.min(100, (tagPosts.length / posts.length) * 100)}%`}}></div>
-              </div>
-            </div>
+            <span class="tag-card-label">{tag}</span>
+            <span class="tag-card-count">{tagPosts.length}</span>
           </a>
         ))}
       </div>
