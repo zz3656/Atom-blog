@@ -7,35 +7,53 @@ const posts = (await getCollection('blog')).sort(
   (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
 );
 
-// Collect all unique categories
+// Collect all unique categories — normalize empty → '未分类'
 const categoryMap = new Map<string, typeof posts>();
 posts.forEach((post) => {
-  const cat = post.data.category || '未分类';
+  const cat = (post.data.category && post.data.category.trim()) ? post.data.category : '未分类';
   if (!categoryMap.has(cat)) categoryMap.set(cat, []);
   categoryMap.get(cat)!.push(post);
 });
 
 const sortedCategories = [...categoryMap.entries()].sort((a, b) => b[1].length - a[1].length);
+
+// Filtered posts for each category use the same normalization
+function getCategoryFilter(category: string): (post: any) => boolean {
+  if (category === '未分类') {
+    return (post) => (!post.data.category || !post.data.category.trim());
+  }
+  return (post) => post.data.category === category;
+}
 ---
 
 <BaseLayout title="所有分类 | Atom Blog">
-  <section class="blog-list">
-    <div class="blog-list-header">
-      <h1>📁 所有分类</h1>
-      <p class="blog-count">共 {sortedCategories.length} 个分类</p>
+  <section class="category-page">
+    <div class="category-page-header">
+      <div class="category-page-icon">⬢</div>
+      <h1>所有分类</h1>
+      <p class="category-page-subtitle">共 <span class="accent">{sortedCategories.length}</span> 个分类 · <span class="accent">{posts.length}</span> 篇文章</p>
     </div>
 
     {sortedCategories.length > 0 ? (
-      <div class="category-cloud">
-        {sortedCategories.map(([category, catPosts]) => (
-          <a href={`${base}/category/${category}/`} class="category-item">
-            <span class="category-name">📁 {category}</span>
-            <span class="category-count">{catPosts.length}</span>
-          </a>
-        ))}
+      <div class="category-grid">
+        {sortedCategories.map(([category, catPosts]) => {
+          const filter = getCategoryFilter(category);
+          return (
+            <a href={`${base}/category/${category}/`} class="category-card">
+              <div class="category-card-icon">⬡</div>
+              <div class="category-card-info">
+                <span class="category-card-name">{category}</span>
+                <span class="category-card-count">{catPosts.length} 篇</span>
+              </div>
+              <div class="category-card-bar">
+                <div class="category-card-bar-fill" style={{width: `${Math.min(100, (catPosts.length / posts.length) * 100)}%`}}></div>
+              </div>
+            </a>
+          );
+        })}
       </div>
     ) : (
-      <p class="blog-count">暂无分类</p>
+      <p class="empty-state">暂无分类</p>
     )}
   </section>
 </BaseLayout>

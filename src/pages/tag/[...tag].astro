@@ -9,7 +9,7 @@ export async function getStaticPaths() {
   posts.forEach((post) => {
     (post.data.tags || []).forEach((tag) => allTags.add(tag));
   });
-  
+
   return [...allTags].map((tag) => ({
     params: { tag },
   }));
@@ -24,10 +24,13 @@ const tagPosts = (await getCollection('blog'))
 ---
 
 <BaseLayout title={`${tag} | Atom Blog`}>
-  <section class="blog-list">
-    <div class="blog-list-header">
-      <h1>🏷️ {tag}</h1>
-      <p class="blog-count">共 {tagPosts.length} 篇文章</p>
+  <section class="tag-detail-page">
+    <div class="tag-detail-header">
+      <div class="tag-detail-icon">◈</div>
+      <div class="tag-detail-info">
+        <h1>{tag}</h1>
+        <p class="tag-detail-count">共 <span class="accent">{tagPosts.length}</span> 篇文章</p>
+      </div>
     </div>
 
     {tagPosts.length > 0 ? (
@@ -43,10 +46,13 @@ const tagPosts = (await getCollection('blog'))
         ))}
       </ul>
     ) : (
-      <p class="blog-count">该标签下暂无文章</p>
+      <div class="empty-list">
+        <div class="empty-list-icon">⊘</div>
+        <p class="empty-list-text">该标签下暂无文章</p>
+      </div>
     )}
 
-    <div class="view-all" style="margin-top: 2rem;">
+    <div class="view-all">
       <a href={base + '/tags'}>← 返回所有标签</a>
     </div>
   </section>

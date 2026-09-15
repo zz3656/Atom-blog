@@ -957,104 +957,337 @@ html.dark .post-list .post-card-date {
   min-height: 200px;
 }
 
-/* ===== Category Cloud ===== */
-.category-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  justify-content: center;
-  padding: 1rem 0;
+/* ===== Accent Text ===== */
+.accent {
+  color: var(--accent);
+  font-weight: 700;
+  font-family: var(--font-mono);
 }
 
-.category-item {
+/* ===== Category / Tag Pages — Sci-Fi Design ===== */
+
+/* --- Common Layout --- */
+.category-page, .tag-page {
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+/* --- Page Header --- */
+.category-page-header, .tag-page-header {
+  text-align: center;
+  padding: 2.5rem 0 2rem;
+  position: relative;
+}
+
+.category-page-header::before, .tag-page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(ellipse, var(--accent-glow) 0%, var(--purple-glow) 50%, transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.category-page-header h1, .tag-page-header h1 {
+  font-size: 2.4rem;
+  font-weight: 800;
+  margin-bottom: 0.6rem;
+  color: var(--text-bright);
+  letter-spacing: -1px;
+}
+
+html:not(.dark) .category-page-header h1, html:not(.dark) .tag-page-header h1 {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.dark .category-page-header h1, html.dark .tag-page-header h1 {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 20px var(--accent-glow));
+}
+
+.category-page-header::after, .tag-page-header::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 2px;
+  background: var(--accent-gradient);
+  margin: 0.8rem auto 0;
+  border-radius: 1px;
+}
+
+html.dark .category-page-header::after, html.dark .tag-page-header::after {
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.category-page-subtitle, .tag-page-subtitle {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+/* --- Page Icons --- */
+.category-page-icon, .tag-page-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  opacity: 0.4;
+}
+
+html.dark .category-page-icon, html.dark .tag-page-icon {
+  color: var(--accent);
+  text-shadow: 0 0 20px var(--accent-glow);
+  opacity: 0.6;
+}
+
+/* --- Grid Layout --- */
+.category-grid, .tag-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  padding: 1rem 0 2rem;
+}
+
+/* --- Cards --- */
+.category-card, .tag-card {
   display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1.2rem 1.3rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
   transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
 }
 
-html:not(.dark) .category-item:hover {
-  border-color: var(--cat-text);
-  background: var(--bg-card-hover);
-  box-shadow: var(--shadow);
+html:not(.dark) .category-card::before, html:not(.dark) .tag-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--accent-gradient);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+html.dark .category-card::before, html.dark .tag-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+html:not(.dark) .category-card:hover, html:not(.dark) .tag-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
-html.dark .category-item:hover {
-  border-color: var(--cat-text);
-  background: var(--bg-card-hover);
-  box-shadow: 0 0 15px var(--purple-glow);
+html.dark .category-card:hover, html.dark .tag-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow);
   transform: translateY(-2px);
 }
 
-.category-name {
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: var(--text-bright);
-  font-family: var(--font-mono);
+html:not(.dark) .category-card:hover::before, html:not(.dark) .tag-card:hover::before {
+  opacity: 0.6;
 }
 
-.category-count {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  background: var(--cat-bg);
-  padding: 0.1rem 0.5rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
+html.dark .category-card:hover::before, html.dark .tag-card:hover::before {
+  opacity: 0.6;
 }
 
-/* ===== Tag Cloud ===== */
-.tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem;
-  justify-content: center;
-  padding: 1rem 0;
+/* Category card icon */
+.category-card-icon {
+  font-size: 1.5rem;
+  opacity: 0.5;
+  transition: all 0.3s;
 }
 
-.tag-item {
+html.dark .category-card-icon {
+  color: var(--cat-text);
+  opacity: 0.3;
+}
+
+html:not(.dark) .category-card:hover .category-card-icon { opacity: 0.7; }
+html.dark .category-card:hover .category-card-icon {
+  opacity: 0.6;
+  text-shadow: 0 0 10px var(--purple-glow);
+}
+
+/* Card Info Row */
+.category-card-info, .tag-card-meta {
   display: flex;
   align-items: center;
-  gap: 0.4rem;
-  padding: 0.5rem 1rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  transition: all 0.3s ease;
+  justify-content: space-between;
+  gap: 0.5rem;
 }
 
-html:not(.dark) .tag-item:hover {
-  border-color: var(--accent);
-  background: var(--bg-card-hover);
-  box-shadow: var(--shadow);
-  transform: translateY(-2px);
-}
-
-html.dark .tag-item:hover {
-  border-color: var(--accent);
-  background: var(--bg-card-hover);
-  box-shadow: 0 0 15px var(--accent-glow);
-  transform: translateY(-2px);
-}
-
-.tag-name {
+.category-card-name, .tag-card-label {
   font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-bright);
   font-family: var(--font-mono);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.tag-count {
-  font-size: 0.75rem;
+.category-card-count, .tag-card-count {
+  font-size: 0.8rem;
   color: var(--text-muted);
-  background: var(--tag-bg);
-  padding: 0.1rem 0.5rem;
-  border-radius: var(--radius-sm);
   font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+html.dark .tag-card-count {
+  color: var(--accent);
+  opacity: 0.6;
+}
+
+/* Progress Bar */
+.category-card-bar, .tag-card-bar {
+  width: 100%;
+  height: 3px;
+  background: var(--border-light);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+html.dark .category-card-bar, html.dark .tag-card-bar {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.category-card-bar-fill, .tag-card-bar-fill {
+  height: 100%;
+  background: var(--accent-gradient);
+  border-radius: 2px;
+  transition: width 0.6s ease;
+}
+
+html.dark .category-card-bar-fill, html.dark .tag-card-bar-fill {
+  box-shadow: 0 0 6px var(--accent-glow);
+}
+
+/* --- Category Detail / Tag Detail Page --- */
+.category-detail-page, .tag-detail-page {
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.category-detail-header, .tag-detail-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding: 2rem 0 1.5rem;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.category-detail-icon, .tag-detail-icon {
+  font-size: 2rem;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+html.dark .category-detail-icon {
+  color: var(--cat-text);
+  text-shadow: 0 0 15px var(--purple-glow);
+}
+
+html.dark .tag-detail-icon {
+  color: var(--accent);
+  text-shadow: 0 0 15px var(--accent-glow);
+}
+
+.category-detail-info h1, .tag-detail-info h1 {
+  font-size: 1.6rem;
+  font-weight: 800;
+  margin: 0;
+  color: var(--text-bright);
+  text-align: center;
+}
+
+.category-detail-info, .tag-detail-info {
+  text-align: center;
+}
+
+html:not(.dark) .category-detail-info h1 {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+html.dark .category-detail-info h1 {
+  background: var(--accent-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.category-detail-count, .tag-detail-count {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  margin: 0.2rem 0 0;
+  text-align: center;
+}
+
+/* --- Empty State --- */
+.empty-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3rem 1rem;
+  gap: 0.8rem;
+}
+
+.empty-list-icon {
+  font-size: 2.5rem;
+  opacity: 0.2;
+  font-family: monospace;
+}
+
+html.dark .empty-list-icon {
+  color: var(--accent);
+  opacity: 0.3;
+  text-shadow: 0 0 15px var(--accent-glow);
+}
+
+.empty-list-text {
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 0;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
 }
 
 /* ===== Blog Listing Header ===== */
@@ -1062,6 +1295,7 @@ html.dark .tag-item:hover {
   margin-bottom: 2rem;
   padding-bottom: 1.2rem;
   border-bottom: 1px solid var(--border-light);
+  text-align: center;
 }
 
 .blog-list-header h1 {
@@ -1075,6 +1309,7 @@ html.dark .tag-item:hover {
   color: var(--text-muted);
   font-size: 0.9rem;
   font-family: var(--font-mono);
+  text-align: center;
 }
 
 /* ===== Blog Post ===== */
@@ -1087,6 +1322,7 @@ html.dark .tag-item:hover {
   margin-bottom: 2.5rem;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--border-light);
+  text-align: center;
 }
 
 .post-header h1 {
@@ -1102,6 +1338,7 @@ html.dark .tag-item:hover {
   color: var(--text-secondary);
   margin-bottom: 0.8rem;
   line-height: 1.6;
+  text-align: center;
 }
 
 .post-meta {
@@ -1109,6 +1346,7 @@ html.dark .tag-item:hover {
   font-size: 0.85rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 1rem;
   flex-wrap: wrap;
   font-family: var(--font-mono);
@@ -1136,6 +1374,7 @@ html.dark .tag-item:hover {
   font-weight: 500;
   font-family: var(--font-mono);
   transition: all 0.2s ease;
+  text-align: center;
 }
 
 html:not(.dark) .post-category:hover {
@@ -1151,6 +1390,7 @@ html.dark .post-category:hover {
 .post-tags {
   margin-top: 0.8rem;
   display: flex;
+  justify-content: center;
   gap: 0.4rem;
   flex-wrap: wrap;
 }
@@ -1445,15 +1685,20 @@ html.dark .post-content th {
   margin-top: 3rem;
   padding-top: 1.5rem;
   border-top: 1px solid var(--border-light);
+  text-align: center;
 }
 
 .post-nav a {
   font-weight: 500;
   font-size: 0.9rem;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   gap: 0.3rem;
-  padding: 0.5rem 0;
+  padding: 0.5rem 1.2rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius);
+  transition: all 0.25s;
+  color: var(--accent);
 }
 
 html:not(.dark) .post-nav a:hover {
@@ -1470,6 +1715,7 @@ html.dark .post-nav a:hover {
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   padding-top: 1rem;
+  text-align: center;
 }
 
 html:not(.dark) .post-nav-link {
@@ -1512,12 +1758,8 @@ html.dark .post-nav-link:hover {
   transform: translateY(-1px);
 }
 
-.post-nav-link.prev {
-  text-align: left;
-}
-
-.post-nav-link.next {
-  text-align: right;
+.post-nav-link.prev, .post-nav-link.next {
+  text-align: center;
 }
 
 .nav-label {
@@ -1572,11 +1814,18 @@ html.dark .reading-progress-fill {
   font-weight: 800;
   margin-bottom: 1.5rem;
   color: var(--text-bright);
+  text-align: center;
 }
 
 .about-content {
   max-width: var(--content-width);
+  margin: 0 auto;
   line-height: 1.8;
+  text-align: center;
+}
+
+.about-content h2 {
+  text-align: center;
 }
 
 .about-content h2 {
@@ -1605,6 +1854,7 @@ html.dark .reading-progress-fill {
   display: flex;
   gap: 0.8rem;
   margin-top: 1.5rem;
+  justify-content: center;
 }
 
 /* ===== About — Projects ===== */
@@ -1613,6 +1863,7 @@ html.dark .reading-progress-fill {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.2rem;
   margin-bottom: 2rem;
+  justify-items: center;
 }
 
 .project-card {

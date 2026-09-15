@@ -20,23 +20,29 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].lengt
 ---
 
 <BaseLayout title="所有标签 | Atom Blog">
-  <section class="blog-list">
-    <div class="blog-list-header">
-      <h1>🏷️ 所有标签</h1>
-      <p class="blog-count">共 {sortedTags.length} 个标签</p>
+  <section class="tag-page">
+    <div class="tag-page-header">
+      <div class="tag-page-icon">◈</div>
+      <h1>所有标签</h1>
+      <p class="tag-page-subtitle">共 <span class="accent">{sortedTags.length}</span> 个标签 · <span class="accent">{posts.length}</span> 篇文章</p>
     </div>
 
     {sortedTags.length > 0 ? (
-      <div class="tag-cloud">
+      <div class="tag-grid">
         {sortedTags.map(([tag, tagPosts]) => (
-          <a href={`${base}/tag/${tag}/`} class="tag-item">
-            <span class="tag-name">{tag}</span>
-            <span class="tag-count">{tagPosts.length}</span>
+          <a href={`${base}/tag/${tag}/`} class="tag-card">
+            <div class="tag-card-label">{tag}</div>
+            <div class="tag-card-meta">
+              <span class="tag-card-count">{tagPosts.length} 篇</span>
+              <div class="tag-card-bar">
+                <div class="tag-card-bar-fill" style={{width: `${Math.min(100, (tagPosts.length / posts.length) * 100)}%`}}></div>
+              </div>
+            </div>
           </a>
         ))}
       </div>
     ) : (
-      <p class="blog-count">暂无标签</p>
+      <p class="empty-state">暂无标签</p>
     )}
   </section>
 </BaseLayout>
