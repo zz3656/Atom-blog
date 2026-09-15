@@ -16,6 +16,8 @@ export async function getStaticPaths() {
 }
 
 const base = import.meta.env.BASE_URL;
+const isRootBase = base === '/' || base === '';
+function blogSlug(slug: string) { return isRootBase ? `/blog/${slug}/` : `${base}/blog/${slug}/`; }
 const { tag } = Astro.params;
 
 const tagPosts = (await getCollection('blog'))
@@ -34,7 +36,7 @@ const tagPosts = (await getCollection('blog'))
       <ul class="post-list">
         {tagPosts.map((post) => (
           <PostCard
-            slug={base + '/blog/' + post.slug + '/'}
+            slug={blogSlug(post.slug)}
             title={post.data.title}
             pubDate={post.data.pubDate}
             description={post.data.description}
@@ -50,7 +52,7 @@ const tagPosts = (await getCollection('blog'))
     )}
 
     <div class="view-all">
-      <a href={base + '/tags'}>← 返回所有标签</a>
+      <a href={isRootBase ? '/tags' : base + '/tags'}>← 返回所有标签</a>
     </div>
   </section>
 </BaseLayout>

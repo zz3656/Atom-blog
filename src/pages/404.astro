@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { SITE_TITLE } from '../consts';
 
 const base = import.meta.env.BASE_URL;
+const isRootBase = base === '/' || base === '';
 ---
 
 <BaseLayout title="404 - 页面不存在" description="你访问的页面走丢了">
@@ -13,8 +14,8 @@ const base = import.meta.env.BASE_URL;
       就像 Atom 在拳击台上偶尔也会……嗯，好吧，Atom 从不会走丢。
     </p>
     <div class="hero-actions">
-      <a href={base} class="btn btn-primary">回到首页 →</a>
-      <a href={base + "/blog"} class="btn btn-secondary">浏览文章</a>
+      <a href={isRootBase ? '/' : base} class="btn btn-primary">回到首页 →</a>
+      <a href={isRootBase ? '/blog' : base + '/blog'} class="btn btn-secondary">浏览文章</a>
     </div>
   </section>
 </BaseLayout>

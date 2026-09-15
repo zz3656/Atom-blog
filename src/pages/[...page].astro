@@ -5,6 +5,12 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
 import { getCollection } from 'astro:content';
 
 const base = import.meta.env.BASE_URL;
+const isRootBase = base === '/' || base === '';
+function blogSlug(slug: string) { return isRootBase ? `/blog/${slug}/` : `${base}/blog/${slug}/`; }
+function pageUrl(p: number) {
+  if (p <= 1) return isRootBase ? '/' : base;
+  return isRootBase ? `/${p}/` : `${base}/${p}/`;
+}
 
 export async function getStaticPaths() {
   const POSTS_PER_PAGE = 12;
@@ -26,11 +32,6 @@ export async function getStaticPaths() {
 }
 
 const { page = 1, pagePosts, totalPosts, totalPages } = Astro.props;
-
-const getPageUrl = (p: number) => {
-  if (p <= 1) return base + '/';
-  return base + '/' + p + '/';
-};
 const pageNumbers: number[] = [];
 for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
 ---
@@ -62,8 +63,8 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
       Lighthouse 满分，为你的内容而生。
     </p>
     <div class="hero-actions">
-      <a href={base + "/blog"} class="btn btn-primary">浏览文章 →</a>
-      <a href={base + "/about"} class="btn btn-secondary">关于此博客</a>
+      <a href={isRootBase ? '/blog' : base + '/blog'} class="btn btn-primary">浏览文章 →</a>
+      <a href={isRootBase ? '/about' : base + '/about'} class="btn btn-secondary">关于此博客</a>
     </div>
   </section>
 
@@ -75,7 +76,7 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
     <ul class="post-grid">
       {pagePosts.map((post) => (
         <PostCard
-          slug={base + "/blog/" + post.slug + "/"}
+          slug={blogSlug(post.slug)}
           title={post.data.title}
           pubDate={post.data.pubDate}
           description={post.data.description}
@@ -88,12 +89,12 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
     {totalPages > 1 && (
       <nav class="pagination" aria-label="文章分页">
         {page > 1 && (
-          <a href={getPageUrl(page - 1)} class="page-btn prev">← 上一页</a>
+          <a href={pageUrl(page - 1)} class="page-btn prev">← 上一页</a>
         )}
         <div class="page-numbers">
           {pageNumbers.map((p) => (
             <a
-              href={getPageUrl(p)}
+              href={pageUrl(p)}
               class:list={['page-link', p === page && 'active']}
               aria-label={p === page ? '当前页' : `第 ${p} 页`}
               aria-current={p === page ? 'page' : undefined}
@@ -101,7 +102,7 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
           ))}
         </div>
         {page < totalPages && (
-          <a href={getPageUrl(page + 1)} class="page-btn next">下一页 →</a>
+          <a href={pageUrl(page + 1)} class="page-btn next">下一页 →</a>
         )}
       </nav>
     )}

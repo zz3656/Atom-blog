@@ -4,6 +4,9 @@ import FormattedDate from '../components/FormattedDate.astro';
 import { AUTHOR } from '../consts';
 
 const base = import.meta.env.BASE_URL;
+const isRootBase = base === '/' || base === '';
+function blogPath(slug: string) { return isRootBase ? `/blog/${slug}` : `${base}/blog/${slug}`; }
+function rootPath() { return isRootBase ? '/' : base; }
 
 interface Props {
   title: string;
@@ -106,12 +109,12 @@ const { title, pubDate, updatedDate, description, heroImage, category = '', tags
       <nav class="post-nav">
         <div class="post-nav-links">
           {prevPost && (
-            <a href={base + "/blog/" + prevPost.slug} class="post-nav-link prev">
+            <a href={blogPath(prevPost.slug)} class="post-nav-link prev">
               ← <span class="nav-label">{prevPost.title}</span>
             </a>
           )}
           {nextPost && (
-            <a href={base + "/blog/" + nextPost.slug} class="post-nav-link next">
+            <a href={blogPath(nextPost.slug)} class="post-nav-link next">
               <span class="nav-label">{nextPost.title}</span> →
             </a>
           )}
@@ -119,7 +122,7 @@ const { title, pubDate, updatedDate, description, heroImage, category = '', tags
       </nav>
     ) : (
       <div class="post-nav">
-        <a href={base + '/'}>← 返回首页</a>
+        <a href={rootPath()}>← 返回首页</a>
       </div>
     )}
   </article>

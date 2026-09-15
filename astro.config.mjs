@@ -8,7 +8,7 @@ const CUSTOM_DOMAIN = 'https://atom.inte8.top';
 // GitHub 仓库名 (用于 GitHub Pages)
 const REPO_NAME = 'Atom-blog';
 
-const base = isGitHubPages ? `/${REPO_NAME}` : '/';
+const base = isGitHubPages ? `/${REPO_NAME}` : '';
 const site = isGitHubPages
   ? `${CUSTOM_DOMAIN.replace('atom.inte8.top', 'zz3656.github.io')}/${REPO_NAME}`
   : CUSTOM_DOMAIN;
