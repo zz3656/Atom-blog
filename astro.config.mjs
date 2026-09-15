@@ -1,11 +1,20 @@
 import { defineConfig } from 'astro/config';
 
-// 自动从 GitHub 仓库名获取 base 路径
-const repoName = 'Atom-blog';
-const base = `/${repoName}`;
+// 部署目标: DEPLOY_TARGET=github → GitHub Pages, DEPLOY_TARGET=cf → Cloudflare Pages
+const isGitHubPages = process.env.DEPLOY_TARGET === 'github';
+
+// 自定义域名 (Cloudflare Pages 优先)
+const CUSTOM_DOMAIN = 'https://atom.inte8.top';
+// GitHub 仓库名 (用于 GitHub Pages)
+const REPO_NAME = 'Atom-blog';
+
+const base = isGitHubPages ? `/${REPO_NAME}` : '/';
+const site = isGitHubPages
+  ? `${CUSTOM_DOMAIN.replace('atom.inte8.top', 'zz3656.github.io')}/${REPO_NAME}`
+  : CUSTOM_DOMAIN;
 
 export default defineConfig({
-  site: `https://zz3656.github.io/${repoName}`,
+  site,
   base,
   markdown: {
     shikiConfig: {
