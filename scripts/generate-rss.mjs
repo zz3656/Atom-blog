@@ -1,6 +1,6 @@
 import { readFileSync, writeFileSync } from 'fs';
 import { readdirSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
 
 function escapeXml(str) {
   var map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' };
@@ -27,9 +27,27 @@ function parseFrontmatter(content) {
   return fm;
 }
 
+// 自动从 dist/_astro/ 目录获取 base 路径（Astro 构建产物）
+var distDir = join(process.cwd(), 'dist');
+var astroFiles = readdirSync(distDir).filter(function(f) { return f.startsWith('_astro'); });
+var base = '/';
+if (astroFiles.length > 0) {
+  // 通过 dist/index.html 提取 base 路径
+  try {
+    var indexHtml = readFileSync(join(distDir, 'index.html'), 'utf-8');
+    var hrefMatch = indexHtml.match(/href="\/([^\/"']*\/_astro)/);
+    if (hrefMatch) {
+      base = '/' + hrefMatch[1].replace('/_astro', '');
+    }
+  } catch (e) {
+    // fallback to /
+  }
+}
+
+// 从 GitHub repo 名推断站点 URL
+var repoName = 'Atom-blog';
 var siteUrl = 'https://zz3656.github.io';
-var repoName = 'Atom';
-var prefix = repoName ? '/' + repoName : '';
+var prefix = base;
 
 // --- Generate RSS ---
 var blogDir = 'src/content/blog';
