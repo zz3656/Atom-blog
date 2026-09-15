@@ -16,8 +16,8 @@ const fullTitle = title;
 const desc = description || SITE_DESCRIPTION;
 const base = import.meta.env.BASE_URL;
 const isRootBase = base === '/' || base === '';
-const rssLink = isRootBase ? '/rss.xml' : `${base}rss.xml`;
-const faviconLink = isRootBase ? '/favicon.svg' : `${base}favicon.svg`;
+const rssLink = isRootBase ? '/rss.xml' : `${base}/rss.xml`;
+const faviconLink = isRootBase ? '/favicon.svg' : `${base}/favicon.svg`;
 const searchBase = isRootBase ? '/' : base;
 
 const siteUrl = Astro.site || (isRootBase ? 'https://atom.inte8.top' : 'https://zz3656.github.io/Atom-blog');

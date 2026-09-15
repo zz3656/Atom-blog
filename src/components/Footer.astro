@@ -3,7 +3,7 @@ import { SOCIAL_LINKS } from '../consts';
 const year = new Date().getFullYear();
 const base = import.meta.env.BASE_URL;
 const isRootBase = base === '/' || base === '';
-const rssUrl = isRootBase ? '/rss.xml' : `${base}rss.xml`;
+const rssUrl = isRootBase ? '/rss.xml' : `${base}/rss.xml`;
 const aboutUrl = isRootBase ? '/about' : `${base}about`;
 ---
 
