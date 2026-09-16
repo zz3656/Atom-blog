@@ -267,13 +267,6 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"routeros7use.md": {
-	id: "routeros7use.md";
-  slug: "routeros7use";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "truenas.md": {
 	id: "truenas.md";
   slug: "truenas";
