@@ -1759,15 +1759,23 @@ html.dark .reading-progress-fill {
 .about-content {
   margin-top: 1rem;
   line-height: 1.8;
-  text-align: center;
+  text-align: left;
 }
 
 .about-content h2 {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
   margin-bottom: 0.8rem;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--text-bright);
-  text-align: center;
+  text-align: left;
+  padding-left: 0.2rem;
+}
+
+.about-bio {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
 }
 
 .about-content p {
@@ -1804,54 +1812,48 @@ html.dark .reading-progress-fill {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.6rem;
+  padding: 1.5rem;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-sm);
-  display: flex;
-  flex-direction: column;
-  height: 100%;
 }
 
 html:not(.dark) .project-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--border-glow);
   box-shadow: var(--shadow-md);
 }
 
 html.dark .project-card:hover {
-  transform: translateY(-3px);
+  transform: translateY(-2px);
   border-color: var(--border-glow);
   box-shadow: var(--shadow-glow);
 }
 
 .project-emoji {
-  font-size: 2rem;
-  margin-bottom: 0.6rem;
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
 }
 
 .project-card h3 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
   color: var(--text-bright);
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
 }
 
 .project-card p {
-  font-size: 0.88rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  line-height: 1.7;
+  line-height: 1.65;
   margin-bottom: 1rem;
-  flex-grow: 1;
 }
 
 .project-card p code {
   background: var(--bg-inline-code);
-  padding: 0.15rem 0.35rem;
-  border-radius: 4px;
-  font-size: 0.82rem;
+  padding: 0.12rem 0.3rem;
+  border-radius: 3px;
+  font-size: 0.8rem;
 }
 
 .project-links {
@@ -1890,25 +1892,23 @@ html.dark .project-links .tag:hover {
 
 /* ===== About — Topics ===== */
 .about-topics {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.2rem;
   margin-bottom: 2rem;
 }
 
 .topic-card {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.8rem;
-  padding: 1rem 1.2rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
+  padding: 1.3rem;
   transition: all 0.3s ease;
 }
 
 html:not(.dark) .topic-card:hover {
   border-color: var(--border-glow);
+  box-shadow: var(--shadow-md);
 }
 
 html.dark .topic-card:hover {
@@ -1917,25 +1917,21 @@ html.dark .topic-card:hover {
 }
 
 .topic-icon {
-  font-size: 1.5rem;
-  flex-shrink: 0;
-  margin-top: 0.1rem;
-}
-
-.topic-info {
-  flex: 1;
-  text-align: left;
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+  line-height: 1;
 }
 
 .topic-info strong {
   display: block;
   font-size: 0.95rem;
+  font-weight: 700;
   color: var(--text-bright);
-  margin-bottom: 0.3rem;
+  margin-bottom: 0.4rem;
 }
 
 .topic-info span {
-  font-size: 0.85rem;
+  font-size: 0.84rem;
   color: var(--text-secondary);
   line-height: 1.6;
 }
@@ -2400,16 +2396,14 @@ html.dark .view-all a:hover {
 
   /* --- About --- */
   .about-content h2 {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
-  .about-projects {
+  .about-projects,
+  .about-topics {
     grid-template-columns: 1fr;
   }
-  .about-topics {
-    gap: 0.5rem;
-  }
   .topic-card {
-    padding: 0.8rem 1rem;
+    padding: 1rem;
   }
 
   /* --- Footer --- */

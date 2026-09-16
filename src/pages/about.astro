@@ -8,66 +8,63 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       <h1>关于我</h1>
     </div>
     <div class="about-content">
-      <p>
-        你好！我是 <strong>zz3656</strong>，一名热爱折腾的开发者。<br>
-        日常活跃在 <a href="https://astro.build" target="_blank">Astro</a> 静态站点开发、Linux 系统运维和自动化脚本编写之间，<br>
-        喜欢在开源中寻找解决问题的优雅方案，也乐于把自己的折腾经验写成教程分享出来。<br>
-        目前主营NAS折腾、软路由部署、VPS运维，同时偶尔写点小程序和AI工具评测。
+      <p class="about-bio">
+        你好！我是 <strong>zz3656</strong>，一名热爱折腾的开发者。日常活跃在 <a href="https://astro.build" target="_blank">Astro</a> 静态站点开发、Linux 系统运维和自动化脚本编写之间，喜欢在开源中寻找解决问题的优雅方案，也乐于把自己的折腾经验写成教程分享出来。目前主营 NAS 折腾、软路由部署、VPS 运维，同时偶尔写点小程序和 AI 工具评测。
       </p>
 
       <h2>🚀 开源项目</h2>
       <div class="about-projects">
         <div class="project-card">
           <div class="project-emoji">⚡</div>
-          <h3><span>Atom</span></h3>
-          <p class="project-desc">用 Astro 4.x 构建的现代轻量级博客主题。零 JavaScript 输出、双主题切换、移动端汉堡菜单、SEO 全内置，构建时间不到 1 秒。配套 CLI 工具支持 <code>atom new</code> 快速创建文章、<code>atom build</code> 一键构建推送，大幅简化静态博客的写作部署流程。</p>
+          <h3>Atom</h3>
+          <p>用 Astro 4.x 构建的现代轻量级博客主题。零 JavaScript 输出、双主题切换、移动端汉堡菜单、SEO 全内置，构建时间不到 1 秒。配套 CLI 工具支持 <code>atom new</code> 快速创建文章、<code>atom build</code> 一键构建推送，大幅简化静态博客的写作部署流程。</p>
           <div class="project-links">
-            <a href="https://github.com/zz3656/Atom" target="_blank" class="tag">🐙 GitHub</a>
-            <a href="https://zz3656.github.io/Atom" target="_blank" class="tag">🌐 在线预览</a>
-            <a href="https://github.com/zz3656/Atom/tree/main/scripts" target="_blank" class="tag">🤖 CLI 工具</a>
+            <a href="https://github.com/zz3656/Atom" target="_blank" class="tag">GitHub</a>
+            <a href="https://zz3656.github.io/Atom" target="_blank" class="tag">在线预览</a>
+            <a href="https://github.com/zz3656/Atom/tree/main/scripts" target="_blank" class="tag">CLI 工具</a>
           </div>
         </div>
         <div class="project-card">
           <div class="project-emoji">📊</div>
-          <h3><span>meter-stats</span></h3>
-          <p class="project-desc">轻量级计量统计分析工具。帮助个人用户和小团队跟踪网络流量、存储用量、电力消耗等资源消耗数据，提供直观的可视化报表和告警通知功能，帮助你更好地管理和优化资源。</p>
+          <h3>meter-stats</h3>
+          <p>轻量级计量统计分析工具。帮助个人用户和小团队跟踪网络流量、存储用量、电力消耗等资源消耗数据，提供直观的可视化报表和告警通知功能，帮助你更好地管理和优化资源。</p>
           <div class="project-links">
-            <a href="https://github.com/zz3656/meter-stats" target="_blank" class="tag">🐙 GitHub</a>
+            <a href="https://github.com/zz3656/meter-stats" target="_blank" class="tag">GitHub</a>
           </div>
         </div>
         <div class="project-card">
           <div class="project-emoji">🎮</div>
-          <h3><span>epic-games-helper</span></h3>
-          <p class="project-desc">Epic Games 平台辅助工具。支持自动化领取免费游戏、游戏库管理、定时提醒等功能，告别手动刷新的繁琐操作，让免费领游戏变得更省心省力。</p>
+          <h3>epic-games-helper</h3>
+          <p>Epic Games 平台辅助工具。支持自动化领取免费游戏、游戏库管理、定时提醒等功能，告别手动刷新的繁琐操作，让免费领游戏变得更省心省力。</p>
           <div class="project-links">
-            <a href="https://github.com/zz3656/epic-games-helper" target="_blank" class="tag">🐙 GitHub</a>
+            <a href="https://github.com/zz3656/epic-games-helper" target="_blank" class="tag">GitHub</a>
           </div>
         </div>
       </div>
 
       <h2>📝 关于这个博客</h2>
-      <p>这个博客是我多年技术折腾和经验沉淀的记录本，主要涵盖以下几个方向：</p>
+      <p>这个博客是我多年技术折腾和经验沉淀的记录本，主要涵盖以下三个方向：</p>
 
       <div class="about-topics">
         <div class="topic-card">
           <span class="topic-icon">🖥️</span>
           <div class="topic-info">
             <strong>技术笔记</strong>
-            <span>NAS 搭建（TrueNAS / CasaOS / iStoreOS）、软路由（RouterOS / 爱快）、VPS 部署与运维，从硬件选型到系统调优的完整折腾记录</span>
+            <span>NAS 搭建（TrueNAS / CasaOS / iStoreOS）、软路由（RouterOS / 爱快）、VPS 部署与运维，从硬件选型到系统调优的完整折腾记录。</span>
           </div>
         </div>
         <div class="topic-card">
           <span class="topic-icon">📖</span>
           <div class="topic-info">
             <strong>生活随笔</strong>
-            <span>回忆录系列「我这一生」，从童年到求学，记录一个普通小人物在平凡岁月里的成长轨迹和生活点滴</span>
+            <span>回忆录系列「我这一生」，从童年到求学，记录一个普通小人物在平凡岁月里的成长轨迹和生活点滴。</span>
           </div>
         </div>
         <div class="topic-card">
           <span class="topic-icon">🤖</span>
           <div class="topic-info">
             <strong>开源探索</strong>
-            <span>AI 项目评测（大模型 / AI Agent）、开源工具推荐、自动化脚本分享，跟踪前沿技术的实用落地方案</span>
+            <span>AI 项目评测（大模型 / AI Agent）、开源工具推荐、自动化脚本分享，跟踪前沿技术的实用落地方案。</span>
           </div>
         </div>
       </div>
