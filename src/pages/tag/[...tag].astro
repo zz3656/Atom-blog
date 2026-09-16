@@ -38,8 +38,8 @@ const tagPosts = (await getCollection('blog'))
           <PostCard
             slug={blogSlug(post.slug)}
             title={post.data.title}
+          body={post.body}
             pubDate={post.data.pubDate}
-            description={post.data.description}
             tags={post.data.tags}
           />
         ))}

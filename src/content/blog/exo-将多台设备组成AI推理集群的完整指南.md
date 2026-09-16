@@ -1,6 +1,5 @@
 ---
 title: exo：将多台设备组成 AI 推理集群的完整指南
-description: "exo 是一个由 [exo labs](https://x.com/exolabs) 维护的开源项目（Apache 2.0 协议），它的核心理念非常简单但强大：**把你所有的设备连接起来，组成一个统一的 AI 推理集群**。"
 pubDate: 2026-05-03
 category: 前沿技术
 tags: [exo, AI集群, 分布式推理]

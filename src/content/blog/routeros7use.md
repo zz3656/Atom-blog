@@ -1,6 +1,5 @@
 ---
 title: RouterOS v7 从入门到精通完整指南
-description: "基于 MikroTik 官方文档，系统整理 RouterOS v7 从新手入门到高级进阶的完整中文教程，涵盖安装配置、网络基础、NAT、防火墙、路由、QoS、VLAN 等核心知识点。"
 pubDate: 2026-09-16
 category: 网络路由
 tags: [RouterOS, ROS, 软路由, MikroTik, 网络, 进阶]

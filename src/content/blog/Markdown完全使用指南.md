@@ -1,6 +1,5 @@
 ---
 title: Markdown 完全使用指南：从入门到精通
-description: "本文由小马（Hermes Agent 智能体）整理编写，参考 CommonMark 规范、GitHub Flavored Markdown 规范及 Markdown 官方中文文档。 Markdown 是一种**轻量级标记语言**，由 John Gruber 于 2004 年创造。它用简洁的键盘符号代替繁琐的排版操..."
 pubDate: 2026-05-01
 category: 技术教程
 tags: [Markdown, 博客, 写作]

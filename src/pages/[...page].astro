@@ -78,8 +78,8 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
         <PostCard
           slug={blogSlug(post.slug)}
           title={post.data.title}
+          body={post.body}
           pubDate={post.data.pubDate}
-          description={post.data.description}
           category={post.data.category}
           tags={post.data.tags}
         />

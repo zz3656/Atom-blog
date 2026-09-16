@@ -1,6 +1,5 @@
 ---
 title: Multipass 使用笔记
-description: "[!IMPORTANT] 本文出自悟空的日常抄录，未做任何修改仅用来存根记录。 原文链接：https://wkdaily.cpolar.cn/archives/multipass ```bash"
 pubDate: 2025-07-12
 category: 操作系统
 tags: [linux, multipass, ubuntu]

@@ -1,6 +1,5 @@
 ---
 title: PVE 安装 iStoreOS 手把手图文教程
-description: 在 Proxmox VE 下安装 iStoreOS 软路由系统，从梅林和 OpenWrt 衍生而来，适合小白的一站式软路由方案。
 pubDate: 2025-07-12
 category: 网络路由
 tags: [pve, istoreos, all in one]

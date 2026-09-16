@@ -1,6 +1,5 @@
 ---
 title: Multipass 使用完全指南：本地 Ubuntu 虚拟化管理利器
-description: Multipass 是由 Canonical（Ubuntu 母公司）开发的一款轻量级虚拟机管理工具，可以在 Linux、macOS 和 Windows 上快速创建和管理 cloud 风格的 Ubuntu 虚拟机（称为「实例」）。它提供了一个简洁而强大的命令行界面（CLI），让你能够在几秒钟内获得一个 Ubuntu...
 pubDate: 2026-04-30
 category: 技术教程
 tags: [Multipass, ubuntu, 虚拟机]

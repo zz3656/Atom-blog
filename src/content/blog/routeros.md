@@ -1,6 +1,5 @@
 ---
 title: 各云盘 VPS 写入 ROS 方法
-description: RouterOS CHR 云端版在各云盘和 VPS 上的部署方法，已从 6.x 更新适配到 7.x 版本。
 pubDate: 2025-07-12
 category: 网络路由
 tags: [routeros, ros, 软路由]

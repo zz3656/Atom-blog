@@ -1,6 +1,5 @@
 ---
 title: Pi Agent 详细使用指南：从安装到自部署
-description: Pi 是 earendil-works 出品的极简终端编程 agent，本文是 npm 安装、多家模型认证、交互模式、扩展/技能/提示模板、SDK/RPC 集成、容器化沙箱的完整实战手册。
 pubDate: 2026-09-03
 category: 技术笔记
 tags: [AI, 编程, AI Agent]
@@ -344,7 +343,6 @@ export default function (pi: ExtensionAPI) {
 ```markdown
 ---
 name: pdf-extract
-description: 从 PDF 中提取文字与表格，保留版式。文件类型 .pdf 时调用。
 ---
 
 # pdf-extract
@@ -381,7 +379,6 @@ Markdown 文件，文件名（去掉 `.md`）就是命令名：
 ```markdown
 <!-- ~/.pi/agent/prompts/review.md -->
 ---
-description: Review staged git changes
 ---
 
 Review the staged changes (`git diff --cached`). Focus on:
@@ -394,7 +391,6 @@ Review the staged changes (`git diff --cached`). Focus on:
 
 ```markdown
 ---
-description: Review PRs from URLs with structured issue and code analysis
 argument-hint: <pr-url>
 ---
 ```

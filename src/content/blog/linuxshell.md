@@ -1,6 +1,5 @@
 ---
 title: 科技Lion一键脚本：Linux服务器运维工具箱 监控管理建站一个脚本全搞定
-description: 本文源自科技lion博客，仅记录个人使用。感谢大佬分享！
 pubDate: 2025-07-12
 category: 操作系统
 tags: [linux, shell, 教程]

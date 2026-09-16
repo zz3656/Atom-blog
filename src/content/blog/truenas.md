@@ -1,6 +1,5 @@
 ---
 title: TrueNAS Scale 虚拟机安装 iStoreOS
-description: TrueNAS Scale（Cobia / Dragonfish / Fangtooth 等版本）是基于 Linux 的 NAS 系统，内置 KVM / Incus 虚拟化。在不额外装 PVE /  的情况下，可以直接在 TrueNAS 里跑软路由系统做主路由 / 旁路由。
 pubDate: 2025-07-12
 category: 操作系统
 tags: [truenas, linux, nas]

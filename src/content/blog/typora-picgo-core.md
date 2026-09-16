@@ -1,6 +1,5 @@
 ---
 title: Typora + PicGo-Core + GitHub 实现图片上传到 GitHub
-description: "由于我的电脑有`nodejs`环境，所以我使用的是`npm`命令安装`picgo`, 命令如下："
 pubDate: 2025-07-12
 category: 技术笔记
 tags: [typora, 文本编辑, picgo]

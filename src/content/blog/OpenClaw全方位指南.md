@@ -1,6 +1,5 @@
 ---
 title: OpenClaw 全方位指南
-description: "**OpenClaw** 是一款开源的个人 AI 助手，GitHub 星标超过 **36.6 万**，由 OpenAI、GitHub、NVIDIA、Vercel 等顶级公司赞助。它运行在你自己的设备上，通过你已经在用的聊天软件与你交互，支持语音唤醒和实时对话，甚至能控制可视化画布（Canvas）。"
 pubDate: 2026-04-30
 category: 前沿技术
 tags: [OpenClaw, AI助手, 开源]

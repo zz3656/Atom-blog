@@ -1,6 +1,5 @@
 ---
 title: VPS 安装 ros 系统
-description: "**📌 说明**：本文流程与同仓库《各云盘 VPS 写入 ROS 方法》(B8) 90% 重叠，差异点在于本文覆盖**双网卡场景**（VPS 既要访问外网又要被 LAN 设备访问）和**PVE 导入**的另一种实现路径。如果你只需要单网卡 VPS 装 ROS，看 B8 即可；本文针对多网卡 / PVE 场景。 ..."
 pubDate: 2025-07-12
 category: 操作系统
 tags: [vps, ros, 软路由]

@@ -3,26 +3,40 @@ interface Props {
   slug: string;
   title: string;
   pubDate: Date;
-  description: string;
+  description?: string;
   category?: string;
   tags?: string[];
   index?: number | undefined;
+  body?: string;
 }
 
 import FormattedDate from './FormattedDate.astro';
 
-const { slug, title, pubDate, description, category = '', tags = [] } = Astro.props;
-const index = 'index' in Astro.props ? Astro.props.index : undefined;
+const { slug, title, pubDate, description, category = '', tags = [], index, body = '' } = Astro.props;
+const idx = 'index' in Astro.props ? Astro.props.index : undefined;
+
+// Auto-extract description from body if not provided
+let autoDesc = '';
+if (!description && body) {
+  let content = body.replace(/^---[\s\S]*?---/, '').trim();
+  content = content.replace(/^\s*>.*$/gm, '').replace(/^\s*\n/gm, '').trim();
+  const paragraphs = content.split(/\n\s*\n/);
+  if (paragraphs.length > 0) {
+    let para = paragraphs[0].replace(/[#*`_~\[\]()!&\x3e]/g, '').trim();
+    autoDesc = para.length > 120 ? para.slice(0, 120) + '\u2026' : para;
+  }
+}
+const postDesc = description || autoDesc || '';
 ---
 
 <li class="post-card">
   <a href={slug}>
-    {index != null && (
-      <div class="post-card-index">{String(index + 1).padStart(2, '0')}</div>
+    {idx != null && (
+      <div class="post-card-index">{String(idx + 1).padStart(2, '0')}</div>
     )}
     <div class="post-card-body">
       <h2 class="post-card-title">{title}</h2>
-      <p class="post-card-desc">{description}</p>
+      {postDesc && <p class="post-card-desc">{postDesc}</p>}
       <div class="post-card-meta">
         <div class="meta-top">
           <time datetime={pubDate.toISOString()} class="post-card-date">
