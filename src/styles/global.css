@@ -821,13 +821,23 @@ html.dark .post-card a:hover .post-card-title {
 
 .post-card-meta {
   display: flex;
-  align-items: center;
-  gap: 0.8rem;
+  flex-direction: column;
+  gap: 0.4rem;
   font-size: 0.82rem;
   color: var(--text-muted);
-  padding-top: 0.9rem;
+  padding-top: 0.8rem;
   border-top: 1px solid var(--border-light);
-  flex-wrap: wrap;
+}
+
+.meta-top {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.post-card-date {
+  color: var(--text-secondary);
+  white-space: nowrap;
 }
 
 .post-card-category {
@@ -838,22 +848,34 @@ html.dark .post-card a:hover .post-card-title {
 
 .post-card-tags {
   display: flex;
-  gap: 0.35rem;
   flex-wrap: wrap;
+  gap: 0.3rem;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+
+.post-card-tags .tag {
+  line-height: 1.4;
 }
 
 /* ===== Tags ===== */
 .tag {
   display: inline-block;
-  padding: 0.12rem 0.5rem;
+  padding: 0.1rem 0.45rem;
   background: var(--tag-bg);
   color: var(--tag-text);
   border: 1px solid var(--tag-border);
   border-radius: var(--radius-sm);
-  font-size: 0.75rem;
+  font-size: 0.73rem;
   font-weight: 500;
   font-family: var(--font-mono);
   transition: all 0.2s ease;
+  line-height: 1.4;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* 硬性限制：每个标签最大 4 个中文字宽度 */
+  max-width: 8em;
 }
 
 html:not(.dark) .tag:hover {
