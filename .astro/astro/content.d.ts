@@ -246,6 +246,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"astro-blog-tutorial.md": {
+	id: "astro-blog-tutorial.md";
+  slug: "astro-blog-tutorial";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "casaos.md": {
 	id: "casaos.md";
   slug: "casaos";
@@ -281,6 +288,13 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"hello-world.md": {
+	id: "hello-world.md";
+  slug: "hello-world";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 "hexotwikoo.md": {
 	id: "hexotwikoo.md";
   slug: "hexotwikoo";
@@ -312,6 +326,13 @@ declare module 'astro:content' {
 "macssh.md": {
 	id: "macssh.md";
   slug: "macssh";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"markdown-guide.md": {
+	id: "markdown-guide.md";
+  slug: "markdown-guide";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">

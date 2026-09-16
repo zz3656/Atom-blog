@@ -3,9 +3,9 @@
 
 export const SITE_TITLE = 'Atom Blog';
 export const SITE_DESCRIPTION = 'A modern, lightweight blog built with Astro — clean, fast, elegant';
-export const AUTHOR = 'Atom Blog';
+export const AUTHOR = 'zz3656';
 export const SOCIAL_LINKS = {
-  github: 'https://github.com/zz3656/Atom',
+  github: 'https://github.com/zz3656',
   twitter: '',
   email: '',
 };

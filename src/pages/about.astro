@@ -1,59 +1,60 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { SITE_TITLE, SOCIAL_LINKS } from '../consts';
 ---
 
 <BaseLayout title="关于 | Atom Blog">
   <section class="about">
     <div class="unified-page-header">
-      <h1>关于此博客</h1>
+      <h1>关于 Atom 博客</h1>
     </div>
     <div class="about-content">
       <p>
-        你好！这是 <strong>Atom 博客</strong>，一个基于 <a href="https://astro.build" target="_blank">Astro</a> 构建的现代静态博客。
-        项目灵感来自电影《铁甲钢拳》(Real Steel) 中的机器人 Atom —
+        <strong>Atom 博客</strong> 是一个用 <a href="https://astro.build" target="_blank">Astro</a> 构建的现代轻量级静态博客主题。
+        灵感来自电影《铁甲钢拳》(Real Steel) 中的机器人 Atom —
         小巧、精准、充满力量。
       </p>
 
-      <h2>🎯 设计理念</h2>
-      <p>Atom 博客追求简洁、快速、优雅。我们相信好的博客应该：</p>
-      <ul>
-        <li>🚀 <strong>极快</strong> — 零 JavaScript，纯 HTML，Lighthouse 满分</li>
-        <li>📝 <strong>专注内容</strong> — Markdown 写作，无需后台</li>
-        <li>🌙 <strong>优雅体验</strong> — 暗黑模式，响应式布局</li>
-        <li>🔍 <strong>SEO 友好</strong> — 内置 RSS、Sitemap、Open Graph</li>
-      </ul>
-
-      <h2>🛠️ 技术栈</h2>
+      <h2>✨ 为什么选择 Atom</h2>
       <div class="about-projects">
         <div class="project-card">
-          <h3>⚡ Astro</h3>
-          <p>现代静态站点生成器，零 JS 默认输出，内容优先架构。</p>
+          <h3>⚡ 极致性能</h3>
+          <p>零 JavaScript 输出，纯 HTML + CSS，Lighthouse 性能评分接近满分。</p>
           <div class="project-links">
-            <a href="https://astro.build" target="_blank" class="tag">官网</a>
+            <a href="https://astro.build" target="_blank" class="tag">Astro 4.x</a>
+            <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML" target="_blank" class="tag">HTML5</a>
           </div>
         </div>
         <div class="project-card">
-          <h3>📘 TypeScript</h3>
-          <p>类型安全的开发体验，编辑器智能提示，内容 Schema 校验。</p>
+          <h3>🎨 优雅设计</h3>
+          <p>双主题模式 — 日间简洁明亮 + 夜间赛博朋克风格，基于 CSS 变量实现一键切换。</p>
           <div class="project-links">
-            <a href="https://www.typescriptlang.org" target="_blank" class="tag">官网</a>
+            <a href="https://postcss.org" target="_blank" class="tag">CSS 变量</a>
+            <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Backdrop-filter" target="_blank" class="tag">毛玻璃</a>
           </div>
         </div>
         <div class="project-card">
-          <h3>🐙 GitHub Pages</h3>
-          <p>免费静态站点托管，GitHub Actions 自动构建部署。</p>
+          <h3>📱 移动优先</h3>
+          <p>汉堡菜单导航、安全区域适配、多断点渐进缩放，各类设备完美体验。</p>
           <div class="project-links">
-            <a href="https://pages.github.com" target="_blank" class="tag">官网</a>
+            <a href="https://www.w3.org/TR/mediaqueries-4/" target="_blank" class="tag">响应式</a>
+            <a href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@media" target="_blank" class="tag">媒体查询</a>
           </div>
         </div>
       </div>
 
-      <h2>💬 联系我</h2>
-      <p>如果你对这个项目感兴趣，欢迎 Star 或 Fork！</p>
+      <h2>🏗️ 架构</h2>
+      <ul>
+        <li><strong>内容管理</strong> — Astro Content Collections + Markdown，零数据库依赖</li>
+        <li><strong>构建部署</strong> — GitHub Actions 自动构建，支持 GitHub Pages / Cloudflare Pages</li>
+        <li><strong>SEO 优化</strong> — Open Graph / Twitter Card / JSON-LD / Sitemap / RSS 全内置</li>
+        <li><strong>开发体验</strong> — TypeScript 类型安全，CLI 工具快速创建文章</li>
+      </ul>
+
+      <h2>🤝 社区</h2>
+      <p>Atom 博客是一个开源项目，欢迎 Fork、提 Issue 或提交 PR。</p>
       <div class="about-links">
-        {SOCIAL_LINKS.github && <a href={SOCIAL_LINKS.github} target="_blank" class="btn btn-secondary">GitHub</a>}
-        {SOCIAL_LINKS.email && <a href={SOCIAL_LINKS.email} class="btn btn-secondary">Email</a>}
+        <a href="https://github.com/zz3656/Atom" target="_blank" class="btn btn-secondary">🐙 GitHub</a>
+        <a href="https://github.com/zz3656/Atom/issues" target="_blank" class="btn btn-secondary">💡 提交 Issue</a>
       </div>
     </div>
   </section>

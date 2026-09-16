@@ -18,7 +18,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[🌐 在线预览](https://zz3656.github.io/Atom-blog) · [📝 写文章](#-写文章) · [🤖 CLI 工具](#-cli-本地构建工具) · [🚀 部署](#-部署到-github-pages) · [⚙️ 自定义](#%EF%B8%8F-自定义) · [🇬🇧 English](README_EN.md) · [📘 开发者指南](DEVELOP.md) · [🔄 Hexo 转换工具](scripts/README.md)
+[🌐 在线预览](https://zz3656.github.io/Atom) · [📝 写文章](#-写文章) · [🤖 CLI 工具](#-cli-本地构建工具) · [🚀 部署](#-部署到-github-pages) · [⚙️ 自定义](#%EF%B8%8F-自定义) · [🇬🇧 English](README_EN.md) · [📘 开发者指南](DEVELOP.md) · [🔄 Hexo 转换工具](scripts/README.md)
 
 </div>
 
@@ -30,7 +30,7 @@
 |------|------|
 | ⚡ **Astro 驱动** | 零 JS 输出，纯 HTML，加载极快 |
 | 🎨 **双主题切换** | 日间明亮模式 + 夜间赛博朋克风格，一键切换，自动记忆 |
-| 📱 **响应式设计** | 手机、平板、桌面完美适配 |
+| 📱 **响应式设计** | 手机汉堡菜单、平板、桌面完美适配，iOS 安全区域支持 |
 | 📝 **Markdown 写作** | 原生支持，Shiki 代码语法高亮 |
 | 🤖 **CLI 工具** | `atom new` / `atom list` / `atom build` — 本地创建文章、一键构建推送 |
 | 📁 **分类 + 标签** | 分类（单数）组织文章大类，标签（可多）标注细分主题 |
@@ -47,6 +47,13 @@
 - Hero 区域：Atom 原子图标（紫色渐变轨道球体）+ 渐变大标题 + 背景光晕
 - 卡片网格布局：展示标题、描述、日期、分类、标签
 - 日间 / 夜间模式一键切换
+
+### 移动端体验
+- **汉堡菜单**：768px 断点自动折叠导航为抽屉式菜单，带 X 形切换动画
+- **横向卡片转纵向**：文章列表在移动端自动切换为纵向卡片
+- **安全区域适配**：支持 iPhone 刘海屏、底部横条等安全区域
+- **触控优化**：禁用 iOS 触摸高亮、文本缩放、滚动回弹
+- **字体自适应**：多断点（768px / 480px）渐进式字体缩放
 
 ### 文章页
 - **居中渐变标题** → 描述 → 日期 / 更新日 → 分类 + 标签
@@ -266,6 +273,29 @@ reward: true                # 可选：显示打赏码
 | `updatedDate` | `date` | ❌ | 更新日期，显示在文章标题下方 |
 | `reward` | `boolean` | ❌ | 是否在文末显示打赏码（默认关闭） |
 
+### CSS 样式自定义
+
+编辑 `src/styles/global.css`，移动端断点也已集成在同一个文件中：
+
+```css
+/* 768px 断点：汉堡菜单 + 纵向卡片 */
+@media (max-width: 768px) {
+  .nav-toggle { display: flex; }        /* 汉堡按钮显示 */
+  .nav-links   { display: none; }        /* 导航隐藏 */
+  .nav-links.open { display: flex; }     /* 打开时显示 */
+}
+
+/* 480px 断点：极小屏幕进一步缩放 */
+@media (max-width: 480px) {
+  .hero h1         { font-size: 1.6rem; }
+  .post-card-title { font-size: 1.05rem; }
+}
+```
+
+### 导航栏
+
+导航栏在 `src/components/Header.astro` 中配置，修改 `navLinks` 数组即可增删导航项。
+
 ### 分类 vs 标签
 
 | | **分类 (Category)** | **标签 (Tag)** |
@@ -371,7 +401,7 @@ const navLinks = [
 ];
 ```
 
-### 4. 页脚
+### 5. 页脚
 
 编辑 `src/components/Footer.astro`：
 
@@ -383,7 +413,7 @@ const navLinks = [
 </footer>
 ```
 
-### 5. 打赏二维码
+### 6. 打赏二维码
 
 二维码图片放在 `public/medias/reward/` 目录下：
 
@@ -395,7 +425,7 @@ public/medias/reward/
 
 在文章 frontmatter 中设置 `reward: true` 即可在文章末尾显示打赏码。
 
-### 6. 样式主题
+### 7. 样式主题
 
 编辑 `src/styles/global.css`，所有颜色通过 CSS 变量控制：
 
@@ -420,7 +450,7 @@ html.dark {
 }
 ```
 
-### 7. 添加新页面
+### 8. 添加新页面
 
 在 `src/pages/` 下新建 `.astro` 文件即可自动注册路由：
 
@@ -465,7 +495,7 @@ src/pages/links.astro        → /links
 
 | 微信 | 支付宝 |
 |------|--------|
-| <img src="https://zz3656.github.io/Atom-blog/medias/reward/wechat.png" width="140" alt="微信赞赏码" /> | <img src="https://zz3656.github.io/Atom-blog/medias/reward/alipay.png" width="140" alt="支付宝收款码" /> |
+| <img src="https://raw.githubusercontent.com/zz3656/Atom/main/public/medias/reward/wechat.png" width="140" alt="微信赞赏码" /> | <img src="https://raw.githubusercontent.com/zz3656/Atom/main/public/medias/reward/alipay.png" width="140" alt="支付宝收款码" /> |
 
 每一分支持都是对开源项目的最大鼓励 ❤️
 
