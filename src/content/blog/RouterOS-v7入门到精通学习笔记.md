@@ -2,7 +2,7 @@
 title: RouterOS v7 入门到精通学习笔记
 description: "本文整理自余松老师的《RouterOS 入门到精通 v7.4e》教程（共 192 页），系统梳理了 RouterOS v7 的核心新功能和配置要点。教程官网：[www.irouteros.com](http://www.irouteros.com)"
 pubDate: 2026-04-30
-category: 网络技术
+category: 网络路由
 tags: [RouterOS, 软路由, MikroTik]
 ---
 

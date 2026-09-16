@@ -2,8 +2,8 @@
 title: Pi Agent 详细使用指南：从安装到自部署
 description: Pi 是 earendil-works 出品的极简终端编程 agent，本文是 npm 安装、多家模型认证、交互模式、扩展/技能/提示模板、SDK/RPC 集成、容器化沙箱的完整实战手册。
 pubDate: 2026-09-03
-category: 工作笔记
-tags: [AI, 编程, AI-Agent]
+category: 技术笔记
+tags: [AI, 编程, AI Agent]
 ---
 
 ## 前言

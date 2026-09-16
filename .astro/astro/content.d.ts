@@ -197,23 +197,9 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"astro-blog-tutorial.md": {
-	id: "astro-blog-tutorial.md";
-  slug: "astro-blog-tutorial";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "exo-将多台设备组成AI推理集群的完整指南.md": {
 	id: "exo-将多台设备组成AI推理集群的完整指南.md";
   slug: "exo-将多台设备组成ai推理集群的完整指南";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"hello-world.md": {
-	id: "hello-world.md";
-  slug: "hello-world";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -228,13 +214,6 @@ declare module 'astro:content' {
 "macssh.md": {
 	id: "macssh.md";
   slug: "macssh";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"markdown-guide.md": {
-	id: "markdown-guide.md";
-  slug: "markdown-guide";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -281,23 +260,9 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"vpsikuai.md": {
-	id: "vpsikuai.md";
-  slug: "vpsikuai";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "vpsros.md": {
 	id: "vpsros.md";
   slug: "vpsros";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"welcome.md": {
-	id: "welcome.md";
-  slug: "welcome";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">

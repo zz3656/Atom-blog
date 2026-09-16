@@ -1,7 +1,8 @@
 ---
 title: 各云盘 VPS 写入 ROS 方法
-description: "**📌 来源说明**：本文方法转载自「无线路由类」博客（2023-12-08），原方法适用于 RouterOS CHR 6.48.x，文中命令已更新到 7.x 适用版本。 RouterOS CHR（Cloud Hosted Router）是 MikroTik 官方推出的**云端版 RouterOS**，免费许可..."
+description: RouterOS CHR 云端版在各云盘和 VPS 上的部署方法，已从 6.x 更新适配到 7.x 版本。
 pubDate: 2025-07-12
+category: 网络路由
 tags: [routeros, ros, 软路由]
 ---
 

@@ -1,7 +1,8 @@
 ---
 title: PVE 安装 iStoreOS 手把手图文教程
-description: 想必大家对梅林路由器系统很熟悉，我的主路由也是Netgear网件刷的梅林并安装几个好用的插件，一直稳定服役多年，iStoreOS系统同样也是梅林的开发团队制作，iStoreOS是基于Openwrt深度定制编译，加入了亲切的向导跟插件商店等功能，很适合我这种小白的一款多功能软路由系统。安装了PVE系统后，选择了安装...
+description: 在 Proxmox VE 下安装 iStoreOS 软路由系统，从梅林和 OpenWrt 衍生而来，适合小白的一站式软路由方案。
 pubDate: 2025-07-12
+category: 网络路由
 tags: [pve, istoreos, all in one]
 ---
 

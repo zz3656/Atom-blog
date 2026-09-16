@@ -2,7 +2,7 @@
 title: DeepSeek Harness 完全指南：安装、必装插件与生态探索
 description: 2026 年 8 月 13 日，DeepSeek 发布了 DeepSeek Harness（dsh）开发者预览版。上线仅 6 天，GitHub 星标突破 16 万。这个「一切皆插件」的开源 AI Agent 框架正在重新定义开发者与 AI 的协作方式。 DeepSeek Harness（简称 dsh）是 Deep...
 pubDate: 2026-08-25
-category: 技术分享
+category: 技术笔记
 tags: [DeepSeek, AI Agent, 开源工具]
 ---
 

@@ -2,7 +2,7 @@
 title: Mac SSH功能，配合 Vim 编辑器对编程十分有帮助
 description: "本文整合自网络教程（原文链接：<https://blog.csdn.net/xcg132566/article/details/78797339>），并补充了 2026 年 macOS SSH / Vim 的现代实践。 macOS 内置 OpenSSH 客户端和 Vim 编辑器，无需额外安装就能远程管理 Linu..."
 pubDate: 2025-07-12
-category: 工作笔记
+category: 技术笔记
 tags: [macos, linux, ssh]
 ---
 

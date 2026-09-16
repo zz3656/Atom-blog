@@ -3,7 +3,7 @@ title: Ubuntu 26.04 LTS「Resolute Raccoon」全面解析：开源操作系统�
 description: "2026年4月23日，Canonical 正式发布了 Ubuntu 26.04 LTS（长期支持版），代号 **\"Resolute Raccoon\"（坚定的浣熊）**。这是 Ubuntu 第 11 个 LTS 版本，也是近年来变化最大、功能最为全面的长期支持版本之一。"
 pubDate: 2026-05-07
 category: 技术教程
-tags: [Linux, Ubuntu, 操作系统]
+tags: [Linux, ubuntu, 操作系统]
 ---
 
 ## 前言
