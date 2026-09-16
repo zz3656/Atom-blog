@@ -1795,37 +1795,44 @@ html.dark .reading-progress-fill {
 /* ===== About — Projects ===== */
 .about-projects {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 1.2rem;
   margin-bottom: 2rem;
-  justify-items: center;
 }
 
 .project-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  padding: 1.4rem;
+  padding: 1.6rem;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 html:not(.dark) .project-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--border-glow);
   box-shadow: var(--shadow-md);
 }
 
 html.dark .project-card:hover {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   border-color: var(--border-glow);
   box-shadow: var(--shadow-glow);
 }
 
+.project-emoji {
+  font-size: 2rem;
+  margin-bottom: 0.6rem;
+}
+
 .project-card h3 {
-  font-size: 1rem;
+  font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.6rem;
   color: var(--text-bright);
   display: flex;
   align-items: center;
@@ -1835,8 +1842,16 @@ html.dark .project-card:hover {
 .project-card p {
   font-size: 0.88rem;
   color: var(--text-secondary);
-  line-height: 1.6;
-  margin-bottom: 0.8rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  flex-grow: 1;
+}
+
+.project-card p code {
+  background: var(--bg-inline-code);
+  padding: 0.15rem 0.35rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
 }
 
 .project-links {
@@ -1871,6 +1886,89 @@ html.dark .project-links .tag {
 html.dark .project-links .tag:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+/* ===== About — Topics ===== */
+.about-topics {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  margin-bottom: 2rem;
+}
+
+.topic-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  padding: 1rem 1.2rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s ease;
+}
+
+html:not(.dark) .topic-card:hover {
+  border-color: var(--border-glow);
+}
+
+html.dark .topic-card:hover {
+  border-color: var(--border-glow);
+  box-shadow: var(--shadow-glow);
+}
+
+.topic-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+
+.topic-info {
+  flex: 1;
+  text-align: left;
+}
+
+.topic-info strong {
+  display: block;
+  font-size: 0.95rem;
+  color: var(--text-bright);
+  margin-bottom: 0.3rem;
+}
+
+.topic-info span {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== About — Skills ===== */
+.about-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+}
+
+.skill-tag {
+  display: inline-block;
+  padding: 0.35rem 0.85rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+  cursor: default;
+}
+
+html:not(.dark) .skill-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+html.dark .skill-tag:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  box-shadow: var(--shadow-glow);
 }
 
 /* ===== Footer ===== */
@@ -2303,6 +2401,15 @@ html.dark .view-all a:hover {
   /* --- About --- */
   .about-content h2 {
     font-size: 1.15rem;
+  }
+  .about-projects {
+    grid-template-columns: 1fr;
+  }
+  .about-topics {
+    gap: 0.5rem;
+  }
+  .topic-card {
+    padding: 0.8rem 1rem;
   }
 
   /* --- Footer --- */
