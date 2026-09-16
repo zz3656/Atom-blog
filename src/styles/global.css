@@ -1815,6 +1815,9 @@ html.dark .reading-progress-fill {
   padding: 1.5rem;
   transition: all 0.3s ease;
   box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
 }
 
 html:not(.dark) .project-card:hover {
@@ -1846,7 +1849,7 @@ html.dark .project-card:hover {
   font-size: 0.85rem;
   color: var(--text-secondary);
   line-height: 1.65;
-  margin-bottom: 1rem;
+  margin-bottom: auto;
 }
 
 .project-card p code {
@@ -1854,6 +1857,14 @@ html.dark .project-card:hover {
   padding: 0.12rem 0.3rem;
   border-radius: 3px;
   font-size: 0.8rem;
+}
+
+.project-links {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--border-light);
 }
 
 .project-links {
@@ -1904,6 +1915,9 @@ html.dark .project-links .tag:hover {
   border-radius: var(--radius-lg);
   padding: 1.3rem;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  min-height: 130px;
 }
 
 html:not(.dark) .topic-card:hover {
