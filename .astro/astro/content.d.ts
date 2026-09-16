@@ -162,34 +162,6 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"GitHub-2026-05-第三周热门新项目Top10.md": {
-	id: "GitHub-2026-05-第三周热门新项目Top10.md";
-  slug: "github-2026-05-第三周热门新项目top10";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"GitHub-2026-05-第二周热门新项目Top10.md": {
-	id: "GitHub-2026-05-第二周热门新项目Top10.md";
-  slug: "github-2026-05-第二周热门新项目top10";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"GitHub-2026-06-第三周热门新项目Top10.md": {
-	id: "GitHub-2026-06-第三周热门新项目Top10.md";
-  slug: "github-2026-06-第三周热门新项目top10";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"Hexo博客性能优化实践.md": {
-	id: "Hexo博客性能优化实践.md";
-  slug: "hexo博客性能优化实践";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "Markdown完全使用指南.md": {
 	id: "Markdown完全使用指南.md";
   slug: "markdown完全使用指南";
@@ -211,13 +183,6 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"Python装饰器从入门到精通.md": {
-	id: "Python装饰器从入门到精通.md";
-  slug: "python装饰器从入门到精通";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "RouterOS-v7入门到精通学习笔记.md": {
 	id: "RouterOS-v7入门到精通学习笔记.md";
   slug: "routeros-v7入门到精通学习笔记";
@@ -232,30 +197,9 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"alistaliyun.md": {
-	id: "alistaliyun.md";
-  slug: "alistaliyun";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"aliyunikuai.md": {
-	id: "aliyunikuai.md";
-  slug: "aliyunikuai";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "astro-blog-tutorial.md": {
 	id: "astro-blog-tutorial.md";
   slug: "astro-blog-tutorial";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"casaos.md": {
-	id: "casaos.md";
-  slug: "casaos";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -267,51 +211,9 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"githelp.md": {
-	id: "githelp.md";
-  slug: "githelp";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"github-ai-top10-sept-2026.md": {
-	id: "github-ai-top10-sept-2026.md";
-  slug: "github-ai-top10-sept-2026";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"github-weekly-top10-2026-05-04.md": {
-	id: "github-weekly-top10-2026-05-04.md";
-  slug: "github-weekly-top10-2026-05-04";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "hello-world.md": {
 	id: "hello-world.md";
   slug: "hello-world";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"hexotwikoo.md": {
-	id: "hexotwikoo.md";
-  slug: "hexotwikoo";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"internetcafe.md": {
-	id: "internetcafe.md";
-  slug: "internetcafe";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"jellyfin.md": {
-	id: "jellyfin.md";
-  slug: "jellyfin";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -372,13 +274,6 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
-"system.md": {
-	id: "system.md";
-  slug: "system";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
 "truenas.md": {
 	id: "truenas.md";
   slug: "truenas";
@@ -410,20 +305,6 @@ declare module 'astro:content' {
 "welcome.md": {
 	id: "welcome.md";
   slug: "welcome";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"xiaoyaalist.md": {
-	id: "xiaoyaalist.md";
-  slug: "xiaoyaalist";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"从零搭建Hexo博客并部署到GitHub-Pages完整记录.md": {
-	id: "从零搭建Hexo博客并部署到GitHub-Pages完整记录.md";
-  slug: "从零搭建hexo博客并部署到github-pages完整记录";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
@@ -466,20 +347,6 @@ declare module 'astro:content' {
 "我这一生04-长桥镇一中.md": {
 	id: "我这一生04-长桥镇一中.md";
   slug: "我这一生04-长桥镇一中";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"爱快iKuai软路由安装全指南.md": {
-	id: "爱快iKuai软路由安装全指南.md";
-  slug: "爱快ikuai软路由安装全指南";
-  body: string;
-  collection: "blog";
-  data: InferEntrySchema<"blog">
-} & { render(): Render[".md"] };
-"阿里云腾讯云安装爱快系统步骤.md": {
-	id: "阿里云腾讯云安装爱快系统步骤.md";
-  slug: "阿里云腾讯云安装爱快系统步骤";
   body: string;
   collection: "blog";
   data: InferEntrySchema<"blog">
