@@ -1,5 +1,6 @@
 ---
 title: TrueNAS Scale 虚拟机安装 iStoreOS
+description: "TrueNAS Scale 虚拟机安装 iStoreOS"
 pubDate: 2025-07-12
 category: 操作系统
 tags: [truenas, linux, nas]

@@ -1,5 +1,6 @@
 ---
 title: 各云盘 VPS 写入 ROS 方法
+description: "各云盘 VPS 写入 ROS 方法"
 pubDate: 2025-07-12
 category: 网络路由
 tags: [routeros, ros, 软路由]

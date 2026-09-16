@@ -1,5 +1,6 @@
 ---
 title: Markdown 完全使用指南：从入门到精通
+description: "Markdown 完全使用指南：从入门到精通"
 pubDate: 2026-05-01
 category: 技术教程
 tags: [Markdown, 博客, 写作]
@@ -364,6 +365,7 @@ Hexo 博客使用 Markdown 编写文章时，每篇文章开头需要 Front Matt
 ```yaml
 ---
 title: 文章标题
+description: "文章标题"
 date: 2026-05-01 12:00:00
 tags:
   - 标签1

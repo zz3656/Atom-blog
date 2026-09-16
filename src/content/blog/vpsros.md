@@ -1,5 +1,6 @@
 ---
 title: VPS 安装 ros 系统
+description: "VPS 安装 ros 系统"
 pubDate: 2025-07-12
 category: 操作系统
 tags: [vps, ros, 软路由]

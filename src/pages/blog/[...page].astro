@@ -46,6 +46,7 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
           key={post.slug}
           slug={base + "/blog/" + post.slug + "/"}
           title={post.data.title}
+          description={post.data.description}
           body={post.body}
           pubDate={post.data.pubDate}
           category={post.data.category}

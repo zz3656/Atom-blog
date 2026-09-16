@@ -1,5 +1,6 @@
 ---
 title: exo：将多台设备组成 AI 推理集群的完整指南
+description: "exo：将多台设备组成 AI 推理集群的完整指南"
 pubDate: 2026-05-03
 category: 前沿技术
 tags: [exo, AI集群, 分布式推理]

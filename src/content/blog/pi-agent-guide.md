@@ -1,5 +1,6 @@
 ---
 title: Pi Agent 详细使用指南：从安装到自部署
+description: "Pi Agent 详细使用指南：从安装到自部署"
 pubDate: 2026-09-03
 category: 技术笔记
 tags: [AI, 编程, AI Agent]
@@ -313,11 +314,9 @@ import type { ExtensionAPI } from "@earendil-works/pi-coding-agent";
 export default function (pi: ExtensionAPI) {
   pi.registerTool({
     name: "word_count",
-    description: "Count words in a file",
     inputSchema: {
       type: "object",
       properties: {
-        path: { type: "string", description: "File path" }
       },
       required: ["path"]
     },

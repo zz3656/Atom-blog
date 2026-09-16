@@ -1,5 +1,6 @@
 ---
 title: AI 大模型最新进展盘点
+description: "AI 大模型最新进展盘点"
 pubDate: 2026-04-29
 category: 前沿技术
 tags: [AI, 大模型, GPT]

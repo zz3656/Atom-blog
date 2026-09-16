@@ -1,5 +1,6 @@
 ---
 title: Multipass 使用笔记
+description: "Multipass 使用笔记"
 pubDate: 2025-07-12
 category: 操作系统
 tags: [linux, multipass, ubuntu]

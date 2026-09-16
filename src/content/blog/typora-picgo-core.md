@@ -1,5 +1,6 @@
 ---
 title: Typora + PicGo-Core + GitHub 实现图片上传到 GitHub
+description: "Typora + PicGo-Core + GitHub 实现图片上传到 GitHub"
 pubDate: 2025-07-12
 category: 技术笔记
 tags: [typora, 文本编辑, picgo]

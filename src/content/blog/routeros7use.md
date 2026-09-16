@@ -1,5 +1,6 @@
 ---
 title: RouterOS v7 从入门到精通完整指南
+description: "RouterOS v7 从入门到精通完整指南"
 pubDate: 2026-09-16
 category: 网络路由
 tags: [RouterOS, ROS, 软路由, MikroTik, 网络, 进阶]

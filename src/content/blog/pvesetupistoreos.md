@@ -1,5 +1,6 @@
 ---
 title: PVE 安装 iStoreOS 手把手图文教程
+description: "PVE 安装 iStoreOS 手把手图文教程"
 pubDate: 2025-07-12
 category: 网络路由
 tags: [pve, istoreos, all in one]

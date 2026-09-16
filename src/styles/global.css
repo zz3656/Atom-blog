@@ -857,21 +857,17 @@ html.dark .post-card a:hover .post-card-title {
 /* ===== Tags ===== */
 .tag {
   display: inline-block;
-  padding: 0.08rem 0.35rem;
+  padding: 0.12rem 0.5rem;
   background: var(--tag-bg);
   color: var(--tag-text);
   border: 1px solid var(--tag-border);
   border-radius: var(--radius-sm);
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   font-family: var(--font-mono);
   transition: all 0.2s ease;
   line-height: 1.4;
   white-space: nowrap;
-  /* 每个标签不超过 6 个字符 */
-  max-width: 6ch;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 html:not(.dark) .tag:hover {

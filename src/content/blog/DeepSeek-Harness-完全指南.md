@@ -1,5 +1,6 @@
 ---
 title: DeepSeek Harness 完全指南：安装、必装插件与生态探索
+description: "DeepSeek Harness 完全指南：安装、必装插件与生态探索"
 pubDate: 2026-08-25
 category: 技术笔记
 tags: [DeepSeek, AI Agent, 开源工具]

@@ -163,7 +163,7 @@ $ node scripts/atom-cli.mjs new "我的第一篇文章"
 📝 文章标题: （从参数自动获取）
 📁 分类（回车跳过）: 技术笔记
 🏷️ 标签（逗号分隔，回车跳过）: Astro, Blog
-📄 描述（回车自动生成）:
+📄 描述（每篇文章必填，简短概括文章内容，建议不超过 80 字）:
 🖼️ 封面图路径（回车跳过）:
 
 ✅ 文章已创建
@@ -248,10 +248,10 @@ npm run preview  # 本地预览构建结果
 ```markdown
 ---
 title: 文章标题
-description: 简短描述（显示在文章卡片上）
+description: 简短描述（显示在文章卡片上，建议不超过 80 字）
 pubDate: 2026-09-13
 category: 技术笔记         # 每篇文章一个分类
-tags: [JavaScript, Astro]  # 可以有多个标签
+tags: [JavaScript, Astro]  # 建议不超过 4 个标签，避免过长
 heroImage: /images/cover.jpg  # 可选：封面图
 updatedDate: 2026-09-14     # 可选：更新日期
 reward: true                # 可选：显示打赏码
@@ -265,10 +265,10 @@ reward: true                # 可选：显示打赏码
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `title` | `string` | ✅ | 文章标题 |
-| `description` | `string` | ✅ | 简短描述，显示在文章卡片 |
+| `description` | `string` | ✅ | 简短描述，显示在文章卡片（建议不超过 80 字，用户可自定义） |
 | `pubDate` | `date` | ✅ | 发布日期 |
 | `category` | `string` | ❌ | 分类名称（每篇文章只能一个） |
-| `tags` | `string[]` | ❌ | 标签列表（可以有多个） |
+| `tags` | `string[]` | ❌ | 标签列表（建议不超过 4 个，每个标签不超过 6 个字符，过长/过多会导致卡片排版错乱） |
 | `heroImage` | `string` | ❌ | 封面图片路径，放在 `public/` 下 |
 | `updatedDate` | `date` | ❌ | 更新日期，显示在文章标题下方 |
 | `reward` | `boolean` | ❌ | 是否在文末显示打赏码（默认关闭） |

@@ -1,5 +1,6 @@
 ---
 title: OpenClaw 全方位指南
+description: "OpenClaw 全方位指南"
 pubDate: 2026-04-30
 category: 前沿技术
 tags: [OpenClaw, AI助手, 开源]
