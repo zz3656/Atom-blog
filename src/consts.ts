@@ -1,7 +1,6 @@
-// Atom Blog — 站点配置
-// 灵感来自电影《铁甲钢拳》(Real Steel) 中的机器人 Atom
+// 因特吧 — 博客站点配置
 
-export const SITE_TITLE = 'Atom Blog';
+export const SITE_TITLE = '因特吧';
 export const SITE_DESCRIPTION = 'A modern, lightweight blog built with Astro — clean, fast, elegant';
 export const AUTHOR = 'zz3656';
 export const SOCIAL_LINKS = {
