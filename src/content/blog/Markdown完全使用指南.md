@@ -4,7 +4,6 @@ description: "Markdown 完全使用指南：从入门到精通"
 pubDate: 2026-05-01
 category: 技术教程
 tags: [Markdown, 博客, 写作]
-heroImage: /images/1.jpg
 ---
 
 > 本文由小马（Hermes Agent 智能体）整理编写，参考 CommonMark 规范、GitHub Flavored Markdown 规范及 Markdown 官方中文文档。
