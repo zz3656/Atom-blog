@@ -49,7 +49,7 @@ Atom is a **lightweight, zero-dependency** static blog built with [Astro](https:
 
 | 层 | 技术 | 原因 |
 |----|------|------|
-| 框架 | Astro 4.x | 零 JS 默认输出，Content Collections Schema |
+| 框架 | Astro 7.x | 零 JS 默认输出，Content Collections Schema |
 | 语言 | TypeScript | 类型安全，编辑器提示 |
 | 样式 | 原生 CSS + CSS Variables | 无框架依赖，暗黑模式轻松实现 |
 | 代码高亮 | Shiki | 内置 Astro，支持 GitHub Dark 主题 |
@@ -60,7 +60,7 @@ Atom is a **lightweight, zero-dependency** static blog built with [Astro](https:
 
 | Layer | Technology | Reason |
 |-------|------------|--------|
-| Framework | Astro 4.x | Zero JS output, Content Collections Schema |
+| Framework | Astro 7.x | Zero JS output, Content Collections Schema |
 | Language | TypeScript | Type safety, IDE hints |
 | Styling | Native CSS + CSS Variables | No framework dependency, easy dark mode |
 | Syntax Highlight | Shiki | Built-in Astro, GitHub Dark theme support |
