@@ -273,6 +273,20 @@ html.dark .site-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 1rem;
+}
+
+/* Desktop: site-title (left) + nav-links (center) + actions (right) */
+@media (min-width: 769px) {
+  .nav-container {
+    justify-content: space-between;
+    gap: 0;
+  }
+  /* nav-links takes remaining space and centers its content */
+  .nav-links {
+    flex: 1;
+    justify-content: center;
+  }
 }
 
 .site-title {
@@ -284,6 +298,18 @@ html.dark .site-header {
   color: var(--text-bright);
   letter-spacing: -0.5px;
   transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
+.site-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.site-name-text {
+  display: inline;
 }
 
 html:not(.dark) .site-title:hover {
@@ -303,15 +329,14 @@ html.dark .site-title:hover {
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  /* Desktop: center via media query on .nav-container */
 }
 
 .nav-actions {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  margin-left: 0.5rem;
-  padding-left: 0.75rem;
-  border-left: 1px solid var(--border-color);
+  flex-shrink: 0;
 }
 
 .nav-link {
@@ -2226,6 +2251,7 @@ html.dark .view-all a:hover {
     font-size: 0.95rem;
     border-radius: var(--radius-sm);
   }
+  .nav-links.open .nav-actions,
   .nav-actions {
     border-left: none;
     padding-left: 0;
@@ -2233,6 +2259,10 @@ html.dark .view-all a:hover {
     flex-direction: row;
     justify-content: flex-end;
     gap: 0.4rem;
+  }
+  /* On mobile, show actions inside the opened nav dropdown */
+  .nav-links.open .nav-actions {
+    display: flex;
     padding-top: 0.5rem;
     border-top: 1px solid var(--border-light);
     margin-top: 0.25rem;

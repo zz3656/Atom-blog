@@ -52,7 +52,8 @@ Atom/
 ├── .github_disabled/            # GitHub Actions config (rename to .github/)
 │   └── deploy.yml               # Auto-deploy workflow
 ├── public/
-│   ├── favicon.svg              # Site favicon
+│   ├── favicon.svg              # Browser favicon
+│   ├── logos/                   # Navbar logo files (.svg / .png / .webp)
 │   └── robots.txt               # Search engine crawling rules
 ├── scripts/
 │   └── generate-rss.mjs         # Post-build RSS + Sitemap generator
@@ -186,20 +187,30 @@ Actions will automatically: `Install deps → Build → Deploy`
 
 ## ⚙️ Customize
 
-### Site Info
+### Site Info, Logo & Favicon
 
-Edit `src/consts.ts`:
+**All customization in a single file** — edit `src/consts.ts`:
 
 ```typescript
-export const SITE_TITLE = 'Your Blog Name';
+export const SITE_TITLE = 'Your Blog Name';     // Site title (SEO, OG, RSS, footer)
+export const SITE_NAME = 'MyBlog';               // Name shown in navbar
 export const SITE_DESCRIPTION = 'Your blog description';
 export const AUTHOR = 'Your Name';
+
+export const SITE_LOGO = '/logos/logo.svg';      // Navbar logo file path
+export const SITE_FAVICON = '/favicon.svg';      // Browser favicon file path
+
 export const SOCIAL_LINKS = {
   github: 'https://github.com/yourusername',
-  twitter: 'https://twitter.com/yourusername',
-  email: 'mailto:your@email.com',
+  twitter: '',
+  email: '',
 };
 ```
+
+> 💡 **Logo and Favicon are independent**:
+> 1. **Logo** (navbar): put in `public/logos/logo.svg` (supports .svg / .png / .webp), update `SITE_LOGO`
+> 2. **Favicon** (browser tab): put in `public/favicon.svg`, update `SITE_FAVICON`
+> No need to touch any component code!
 
 ### Deploy URL
 
@@ -249,7 +260,7 @@ src/pages/blog/index.astro → /blog
 
 | Solution | Output Size | JS Deps | Build Time | SEO / RSS / Sitemap | Learning Curve |
 |----------|-------------|---------|------------|-----------|----------------|
-| **Atom (This)** | **~3 KB** | **0** | **~1s** | **RSS/Sitemap/JSON-LD auto-generated, RSS accessible from 📡 nav button and footer** | Minimal |
+| **Atom (This)** | **~3 KB** | **0** | **~1s** | **RSS/Sitemap/JSON-LD auto-generated, RSS in footer** | Minimal |
 | Hexo + Matery | ~15 MB | Dozens of libs | ~5s | Needs plugin | Medium |
 | Hugo | ~2 MB | 0 | ~0.5s | Needs plugin | Medium (Hugo syntax) |
 | Jekyll | ~3 MB | Minimal | ~3s | Built-in | Medium (Ruby) |
@@ -263,6 +274,7 @@ src/pages/blog/index.astro → /blog
 - **Minimal builds** — RSS / Sitemap generated post-build with zero config
 - **1-second build** — Fast compared to Hexo's 5s+
 - **TypeScript safety** — Content validated via Astro Content Collections Schema
+- **Centered navbar** — Logo left, nav links centered, actions right
 - **Dark mode** — CSS variable based, auto-remembers user preference
 
 ### Limitations

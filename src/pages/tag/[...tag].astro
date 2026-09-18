@@ -25,7 +25,7 @@ const tagPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<BaseLayout title={`${tag} | 因特吧`}>
+<BaseLayout title={`${tag} | Atom Blog`}>
   <section class="listing-page">
     <div class="unified-page-header">
       <h1>{tag}</h1>

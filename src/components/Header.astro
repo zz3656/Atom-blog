@@ -1,7 +1,9 @@
 ---
-import { SOCIAL_LINKS } from '../consts';
+import { SITE_TITLE, SITE_NAME, SITE_LOGO } from '../consts';
 
 const base = import.meta.env.BASE_URL;
+const isRootBase = base === '/' || base === '';
+
 const currentPage = Astro.url.pathname.replace(base, '').replace(/\/$/, '') || '';
 
 const navLinks = [
@@ -12,17 +14,17 @@ const navLinks = [
   { label: '关于', active: currentPage === 'about' },
 ];
 
-const linkPaths = [base, base + '/blog', base + '/categories', base + '/tags', base + '/about'];
-const isRootBase = base === '/' || base === '';
-const rssUrl = isRootBase ? '/rss.xml' : `${base}/rss.xml`;
+const linkPaths = isRootBase ? ['/', '/blog', '/categories', '/tags', '/about'] : [base, base + '/blog', base + '/categories', base + '/tags', base + '/about'];
+const logoSrc = isRootBase ? SITE_LOGO : base + SITE_LOGO;
 ---
 
 <header class="site-header">
   <nav class="nav-container">
-    <a href={base} class="site-title">
-      <img src={base + '/favicon.svg'} alt="Logo" width="24" height="24" style="object-fit: contain;" />
-      因特吧
+    <a href={linkPaths[0]} class="site-title">
+      <img src={logoSrc} alt="Logo" class="site-logo" />
+      <span class="site-name-text">{SITE_NAME}</span>
     </a>
+
     <!-- Hamburger toggle button (mobile only) -->
     <button class="nav-toggle" id="nav-toggle" aria-label="切换菜单" aria-expanded="false">
       <span class="hamburger-line"></span>
@@ -34,21 +36,20 @@ const rssUrl = isRootBase ? '/rss.xml' : `${base}/rss.xml`;
       {navLinks.map((link, i) => (
         <a href={linkPaths[i]} class:list={['nav-link', link.active && 'active']}>{link.label}</a>
       ))}
-      <div class="nav-actions">
-        <div class="search-wrapper">
-          <input
-            type="text"
-            id="search-input"
-            class="search-input"
-            placeholder="搜索文章…"
-            aria-label="搜索文章"
-            autocomplete="off"
-          />
-          <div id="search-results" class="search-results"></div>
-        </div>
-        <div class="theme-toggle" id="theme-toggle" aria-label="切换暗黑模式" style="cursor:pointer;">🌙</div>
-        <a href={rssUrl} class="theme-toggle" aria-label="RSS 订阅" style="text-decoration:none;font-size:1.1rem;cursor:pointer;">📡</a>
+    </div>
+    <div class="nav-actions">
+      <div class="search-wrapper">
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder="搜索文章…"
+          aria-label="搜索文章"
+          autocomplete="off"
+        />
+        <div id="search-results" class="search-results"></div>
       </div>
+      <div class="theme-toggle" id="theme-toggle" aria-label="切换暗黑模式" style="cursor:pointer;">🌙</div>
     </div>
   </nav>
 </header>

@@ -9,7 +9,7 @@ const isGitHubPages = process.env.DEPLOY_TARGET === 'github' ||
 
 // GitHub Pages 自动从仓库名推导 base 路径
 // 例如: zz3656/Atom-blog → base='/Atom-blog'
-const REPO_NAME = process.env.REPO_NAME || 'Atom-blog';
+const REPO_NAME = process.env.REPO_NAME || 'Atom';
 
 // Cloudflare Pages 使用根路径
 const base = isGitHubPages ? `/${REPO_NAME}` : '';

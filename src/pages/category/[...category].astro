@@ -34,7 +34,7 @@ const categoryPosts = (await getCollection('blog'))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 ---
 
-<BaseLayout title={`${category} | 因特吧`}>
+<BaseLayout title={`${category} | Atom Blog`}>
   <section class="listing-page">
     <div class="unified-page-header">
       <h1>{category}</h1>

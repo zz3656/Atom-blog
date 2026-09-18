@@ -34,7 +34,7 @@
 | 📝 **Markdown 写作** | 原生支持，Shiki 代码语法高亮 |
 | 🤖 **CLI 工具** | `atom new` / `atom list` / `atom build` — 本地创建文章、一键构建推送 |
 | 📁 **分类 + 标签** | 分类（单数）组织文章大类，标签（可多）标注细分主题 |
-| 🚀 **GitHub Actions** | 推送代码自动构建部署 |
+| 🚀 **双平台部署** | GitHub Actions 自动构建，支持 GitHub Pages / Cloudflare Pages |
 | 🔍 **SEO 友好** | 语义化 HTML、Open Graph / Twitter Card / JSON-LD 结构化数据、Sitemap、RSS 订阅 |
 | 📦 **超小体积** | HTML 仅 ~3KB（单页） |
 | 💯 **Lighthouse 满分** | 性能、无障碍、SEO 全 100 |
@@ -47,6 +47,12 @@
 - Hero 区域：Atom 原子图标（紫色渐变轨道球体）+ 渐变大标题 + 背景光晕
 - 卡片网格布局：展示标题、描述、日期、分类、标签
 - 日间 / 夜间模式一键切换
+
+### 导航栏
+- 左侧：自定义 SVG Logo + 站点名称
+- 居中：导航链接（首页、文章、分类、标签、关于）
+- 右侧：搜索框 + 暗黑模式切换按钮
+- 页脚包含 RSS 订阅链接
 
 ### 移动端体验
 - **汉堡菜单**：768px 断点自动折叠导航为抽屉式菜单，带 X 形切换动画
@@ -83,7 +89,8 @@ Atom/
 │   ├── generate-rss.mjs       # RSS + Sitemap 生成脚本
 │   └── README.md              # 脚本使用文档
 ├── public/
-│   ├── favicon.svg            # 网站图标
+│   ├── favicon.svg            # 浏览器标签页图标
+│   ├── logos/                 # 导航栏 Logo 文件（支持 .svg / .png / .webp）
 │   ├── robots.txt             # 搜索引擎爬虫规则
 │   └── medias/reward/         # 打赏二维码（可选）
 ├── src/
@@ -195,7 +202,7 @@ node scripts/atom-cli.mjs build
 
 自动执行：
 1. 同步 `src/` 下所有 `.astro` 源文件到 `Atom-blog/`
-2. 在 `Atom-blog/` 执行 `npx astro build`
+2. 在 `Atom-blog/` 执行 `npx astro build`（支持 GitHub Pages / Cloudflare Pages 两种模式）
 3. `git add -A && git commit && git push origin main`
 
 ### 与 Hexo / Hugo 对比
@@ -338,39 +345,80 @@ Actions 会自动：`安装依赖 → 构建 → 部署`
 
 ## ⚙️ 自定义
 
-### 1. 站点基本信息
+### 1. 站点基本信息 / Logo / Favicon
 
-编辑 `src/consts.ts`：
+**所有站点客制化只需编辑 `src/consts.ts` 一个文件**：
 
 ```typescript
-export const SITE_TITLE = '我的博客';          // 站点标题
-export const SITE_DESCRIPTION = '我的个人博客';  // 站点描述
-export const AUTHOR = '张三';                   // 作者名
+export const SITE_TITLE = '我的博客';                    // 站点标题（SEO、OG 标签、RSS、页脚等）
+export const SITE_NAME = 'MyBlog';                       // 导航栏显示的名称
+export const SITE_DESCRIPTION = '我的个人博客';           // 站点描述
+export const AUTHOR = '张三';                            // 作者名
+
+export const SITE_LOGO = '/logos/logo.svg';              // 导航栏 Logo 文件路径
+export const SITE_FAVICON = '/favicon.svg';              // 浏览器 Favicon 文件路径
 
 export const SOCIAL_LINKS = {
-  github: 'https://github.com/yourusername',   // GitHub 地址
-  twitter: 'https://twitter.com/yourusername', // Twitter 地址（留空则不显示）
-  email: 'mailto:your@email.com',              // 邮箱地址（留空则不显示）
+  github: 'https://github.com/yourusername',
+  twitter: '',
+  email: '',
 };
 ```
 
-### 2. 部署地址
+> 💡 **替换 Logo 和 Favicon 各独立**：
+> 1. **Logo**（导航栏）：放入 `public/logos/logo.svg`（支持 .svg / .png / .webp），修改 `SITE_LOGO`
+> 2. **Favicon**（浏览器标签页）：放入 `public/favicon.svg`，修改 `SITE_FAVICON`
+> 3. 不需要再修改任何组件代码！
 
-编辑 `astro.config.mjs`，根据你的部署平台修改：
+### 2. 部署平台
 
-**GitHub Pages（自动检测仓库名）：**
+Atom 支持 **GitHub Pages** 和 **Cloudflare Pages** 两种部署方式，通过环境变量自动适配。
 
-```javascript
-// 设置环境变量即可，base 自动从 REPO_NAME 推导
-REPO_NAME=your-repo-name  // 仓库名（如 Atom-blog）
+#### GitHub Pages（推荐）
+
+通过 GitHub Actions 自动构建部署，只需：
+
+1. 推送代码到 GitHub 仓库
+2. 进入 **Settings → Pages → Source** 选择 **GitHub Actions**
+3. 进入 **Settings → Actions → General** 设置 Workflow permissions 为 **Read and write permissions**
+4. 推送代码到 `main` 分支 ✅
+
+#### Cloudflare Pages（推荐用于国内访问）
+
+**方式一：通过 GitHub 仓库绑定**
+
+1. Cloudflare Dashboard → Pages → **Create a project** → **Git**
+2. 连接 GitHub 仓库
+3. 配置构建设置：
+
+| 设置项 | 值 |
+|--------|---|
+| **Framework preset** | Astro |
+| **Build command** | `npm run build` |
+| **Build output directory** | `dist` |
+| **Environment variables** | `DEPLOY_TARGET` = `cf` |
+
+4. 点击 **Save and Deploy**
+
+**方式二：wrangler CLI 本地推送**
+
+```bash
+# 安装 wrangler
+npm install -d wrangler
+
+# Cloudflare Pages 模式构建
+DEPLOY_TARGET=cf npm run build
+
+# 本地部署
+npx wrangler pages deploy dist
 ```
 
-**Cloudflare Pages / 自定义域名：**
-
-```javascript
-// 不设置 DEPLOY_TARGET=github，base 自动为空字符串 '/'
-CF_DOMAIN='atom.inte8.top'  // 你的自定义域名
-```
+> 💡 **环境变量说明**：
+> - `DEPLOY_TARGET=github` — GitHub Pages 模式（需要 `REPO_NAME`）
+> - `DEPLOY_TARGET=cf` — Cloudflare Pages 模式（需要 `CF_DOMAIN`）
+> - 不设置 — 自动检测，优先 GitHub Pages
+> - `REPO_NAME` — GitHub Pages 子路径（默认 `Atom-blog`）
+> - `CF_DOMAIN` — Cloudflare 自定义域名（默认 `atom.inte8.top`）
 
 > ⚡ 如果默认值不满足需求，可以手动调整 `astro.config.mjs` 中的 `site` 和 `base` 字段。
 
@@ -387,19 +435,11 @@ export default defineConfig({
 });
 ```
 
-### 3. 导航栏
+### 4. 导航栏
 
-导航栏在 `src/components/Header.astro` 中配置，修改 `navLinks` 数组即可增删导航项：
+导航栏项在 `src/components/Header.astro` 中配置，修改 `navLinks` 数组即可增删导航项。
 
-```typescript
-const navLinks = [
-  { href: base, label: '首页', active: currentPage === '' },
-  { href: base + '/blog', label: '文章', active: currentPage.startsWith('blog') },
-  { href: base + '/categories', label: '分类', active: currentPage === 'categories' },
-  { href: base + '/tags', label: '标签', active: currentPage === 'tags' },
-  { href: base + '/about', label: '关于', active: currentPage === 'about' },
-];
-```
+布局：Logo + 站点名称在左侧，导航链接居中，搜索和主题切换在右侧。页脚已包含 RSS 订阅链接。
 
 ### 5. 页脚
 
