@@ -42,8 +42,8 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
     <ul class="post-list">
       {paginatedPosts.map((post, idx) => (
         <PostCard
-          key={post.slug}
-          slug={base + "/blog/" + post.slug + "/"}
+          key={post.id}
+          slug={base + "/blog/" + post.id + "/"}
           title={post.data.title}
           description={post.data.description}
           body={post.body}

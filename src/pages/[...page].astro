@@ -76,7 +76,7 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
     <ul class="post-grid">
       {pagePosts.map((post) => (
         <PostCard
-          slug={blogSlug(post.slug)}
+          slug={blogSlug(post.id)}
           title={post.data.title}
           description={post.data.description}
           body={post.body}

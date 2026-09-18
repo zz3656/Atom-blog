@@ -45,7 +45,7 @@ const categoryPosts = (await getCollection('blog'))
       <ul class="post-list">
         {categoryPosts.map((post) => (
           <PostCard
-            slug={blogSlug(post.slug)}
+            slug={blogSlug(post.id)}
             title={post.data.title}
           description={post.data.description}
           body={post.body}

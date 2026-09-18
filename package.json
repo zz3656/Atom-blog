@@ -8,6 +8,6 @@
     "postbuild": "node scripts/generate-rss.mjs && node scripts/fix-links.mjs"
   },
   "dependencies": {
-    "astro": "^4.16.0"
+    "astro": "^7.3.3"
   }
 }

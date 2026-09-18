@@ -7,6 +7,14 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 ### Changed
+- ⬆️ Upgraded Astro from 4.16.x to 7.3.3
+- Renamed `entry.slug` → `entry.id` (Astro 6+ breaking change)
+- Replaced `entry.render()` → `render(entry)` from `astro:content` (Astro 6+ breaking change)
+- Migrated content config: `type: 'content'` → `loader: glob()` (Astro 6+ breaking change)
+- Moved content config from `src/content/config.ts` → `src/content.config.ts`
+- Updated zod import from `astro:content` → `astro/zod`
+
+### Changed
 - Renamed project from `Atom-blog` to `Atom` (directory, package name, docs, URLs, code references)
 
 ### Added
