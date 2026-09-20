@@ -1,49 +1,26 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <!-- 紫罗兰渐变（atom 主题色） -->
+    <!-- 紫罗兰渐变 -->
     <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
       <stop offset="0%" style="stop-color:#6366f1"/>
       <stop offset="100%" style="stop-color:#8b5cf6"/>
     </linearGradient>
-    <!-- 地球仪径向高光 -->
-    <radialGradient id="globe" cx="35%" cy="30%" r="70%">
-      <stop offset="0%" style="stop-color:#ffffff" stop-opacity="0.95"/>
-      <stop offset="60%" style="stop-color:#c7d2fe" stop-opacity="0.85"/>
-      <stop offset="100%" style="stop-color:#818cf8" stop-opacity="0.75"/>
-    </radialGradient>
-    <!-- Wi-Fi 信号渐变（金色） -->
-    <linearGradient id="wave" x1="0%" y1="100%" x2="0%" y2="0%">
-      <stop offset="0%" style="stop-color:#fbbf24"/>
-      <stop offset="100%" style="stop-color:#f59e0b"/>
-    </linearGradient>
-    <!-- 阴影 -->
+    <!-- 阴影滤镜 -->
     <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
       <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#312e81" flood-opacity="0.4"/>
     </filter>
   </defs>
 
-  <!-- 圆角矩形（"吧" = 一个有边界的容器/空间） -->
-  <rect x="4" y="4" width="120" height="120" rx="28" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- 紫罗兰圆球 -->
+  <circle cx="64" cy="64" r="56" fill="url(#bg)" filter="url(#shadow)"/>
 
-  <!-- 地球仪（"因特" = Internet 的视觉象征） -->
-  <!-- 主球体 -->
-  <ellipse cx="64" cy="76" rx="28" ry="32" fill="url(#globe)" opacity="0.95"/>
-  <!-- 赤道 -->
-  <ellipse cx="64" cy="76" rx="28" ry="10" fill="none" stroke="#4f46e5" stroke-width="1.5" opacity="0.6"/>
+  <!-- 赤道（水平） -->
+  <ellipse cx="64" cy="64" rx="56" ry="14" fill="none" stroke="white" stroke-width="3.5" opacity="0.7"/>
+
   <!-- 经线（纵向） -->
-  <ellipse cx="64" cy="76" rx="10" ry="32" fill="none" stroke="#4f46e5" stroke-width="1.5" opacity="0.5"/>
-  <!-- 经线（45°） -->
-  <ellipse cx="64" cy="76" rx="28" ry="10" fill="none" stroke="#4f46e5" stroke-width="1.2" opacity="0.4" transform="rotate(-45 64 76)"/>
-  <!-- 经线（-45°） -->
-  <ellipse cx="64" cy="76" rx="28" ry="10" fill="none" stroke="#4f46e5" stroke-width="1.2" opacity="0.4" transform="rotate(45 64 76)"/>
+  <ellipse cx="64" cy="64" rx="14" ry="56" fill="none" stroke="white" stroke-width="3.5" opacity="0.55"/>
 
-  <!-- Wi-Fi 信号波纹（从右上角发出 = "吧"对外连接、信号发射） -->
-  <!-- 信号源 -->
-  <circle cx="96" cy="32" r="5" fill="url(#wave)"/>
-  <!-- 信号弧 1（最近） -->
-  <path d="M 88 28 Q 96 20 104 28" fill="none" stroke="url(#wave)" stroke-width="3.5" stroke-linecap="round" opacity="0.9"/>
-  <!-- 信号弧 2（中等） -->
-  <path d="M 80 24 Q 96 8 112 24" fill="none" stroke="url(#wave)" stroke-width="3.5" stroke-linecap="round" opacity="0.7"/>
-  <!-- 信号弧 3（最远） -->
-  <path d="M 72 20 Q 96 -4 120 20" fill="none" stroke="url(#wave)" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+  <!-- "我的位置" 标记（金色圆点 + 白色中心） -->
+  <circle cx="64" cy="40" r="8" fill="#fbbf24"/>
+  <circle cx="64" cy="40" r="3.5" fill="white"/>
 </svg>
