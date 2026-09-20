@@ -7,7 +7,7 @@
 export const SITE_TITLE = '因特吧'; // 站点标题（SEO 标题、OG 标签、RSS 名称等）
 export const SITE_NAME = '因特吧'; // 导航栏显示的名称（短名称，可用于 Logo 替换后仅显示文字）
 export const SITE_DESCRIPTION =
-  '一个简洁、快速、优雅的现代博客。基于 Astro 构建，零 JavaScript， Lighthouse 满分，为你的内容而生。';
+  '因特网里的一间小吧——聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。基于 Astro 构建，零 JavaScript，Lighthouse 满分。';
 export const AUTHOR = 'zz3656';
 
 // 首页 Hero 区域文案（可完全客制化，不依赖任何外部数据）
@@ -20,7 +20,7 @@ export const AUTHOR = 'zz3656';
 //   · hide   : true 则跳过该按钮（可选）
 export const HERO_TITLE = '因特吧';
 export const HERO_DESCRIPTION =
-  '一个简洁、快速、优雅的现代博客。基于 Astro 构建，零 JavaScript， Lighthouse 满分，为你的内容而生。';
+  '因特网里的一间小吧——聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。';
 export const HERO_ACTIONS: Array<{
   label: string;
   href: string;
@@ -39,7 +39,7 @@ export const HERO_ACTIONS: Array<{
 //               如需替换，放入 public/heroes/hero.svg（或 .png / .webp），修改 SITE_HERO_ICON 即可
 export const SITE_LOGO = '/logos/logo.svg'; // Logo 文件路径（对应 public/logos/logo.svg）
 export const SITE_FAVICON = '/favicon.svg'; // Favicon 文件路径（对应 public/favicon.svg）
-export const SITE_HERO_ICON = ''; // 首页 Hero 图标路径；留空则使用内置 Atom 原子 SVG
+export const SITE_HERO_ICON = '/heroes/hero.svg'; // 首页 Hero 图标路径；留空则使用内置 Atom 原子 SVG
 
 // 项目源代码仓库（Footer 的 🐙 GitHub 与 "站点标题" 链接使用）
 export const REPO_URL = 'https://github.com/zz3656/Atom';
