@@ -1,0 +1,90 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { POSTS_PER_PAGE } from '../../consts';
+import { getPublishedPosts } from '../../utils/collection';
+import { blogPostUrl, blogListUrl } from '../../utils/path';
+
+export async function getStaticPaths() {
+  const allPosts = await getPublishedPosts();
+  const totalPosts = allPosts.length;
+  const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE) || 1;
+
+  // 只为第 2 页及之后生成路径：第 1 页由 index.astro 负责
+  // 路径形如 /blog/2/、/blog/3/ ...
+  const paths = [];
+  for (let page = 2; page <= totalPages; page++) {
+    paths.push({
+      params: { page: String(page) },
+      props: {
+        allPosts,
+        currentPage: page,
+        totalPages,
+        totalPosts,
+      },
+    });
+  }
+  return paths;
+}
+
+const { allPosts, currentPage, totalPages, totalPosts } = Astro.props;
+const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
+const paginatedPosts = allPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+
+const getPageUrl = (p: number) => {
+  if (p <= 1) return blogListUrl();
+  return `${blogListUrl()}${p}/`;
+};
+const pageNumbers: number[] = [];
+for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
+---
+
+<BaseLayout title={`所有文章 | 第${currentPage}页`} description="查看所有文章">
+  <section class="blog-list">
+    <div class="unified-page-header">
+      <h1>所有文章</h1>
+      <p class="unified-page-subtitle">共 {totalPosts} 篇</p>
+    </div>
+    <ul class="post-list">
+      {paginatedPosts.map((post, idx) => (
+        <PostCard
+          slug={blogPostUrl(post.id)}
+          title={post.data.title}
+          description={post.data.description}
+          body={post.body}
+          pubDate={post.data.pubDate}
+          category={post.data.category}
+          tags={post.data.tags}
+          index={idx}
+        />
+      ))}
+    </ul>
+
+    {totalPages > 1 && (
+      <nav class="pagination" aria-label="文章分页">
+        {currentPage > 1 && (
+          <a href={getPageUrl(currentPage - 1)} class="page-btn prev">
+            ← 上一页
+          </a>
+        )}
+        <div class="page-numbers">
+          {pageNumbers.map((p) => (
+            <a
+              href={getPageUrl(p)}
+              class:list={['page-link', p === currentPage && 'active']}
+              aria-label={p === currentPage ? '当前页' : `第 ${p} 页`}
+              aria-current={p === currentPage ? 'page' : undefined}
+            >
+              {p}
+            </a>
+          ))}
+        </div>
+        {currentPage < totalPages && (
+          <a href={getPageUrl(currentPage + 1)} class="page-btn next">
+            下一页 →
+          </a>
+        )}
+      </nav>
+    )}
+  </section>
+</BaseLayout>

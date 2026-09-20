@@ -4,24 +4,12 @@ import PostCard from '../../components/PostCard.astro';
 import { POSTS_PER_PAGE } from '../../consts';
 import { getPublishedPosts } from '../../utils/collection';
 import { blogPostUrl, blogListUrl } from '../../utils/path';
+
 const allPosts = await getPublishedPosts();
 const totalPosts = allPosts.length;
 const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE) || 1;
-
-export async function getStaticPaths() {
-  const paths = [];
-  for (let page = 1; page <= totalPages; page++) {
-    paths.push({
-      params: { page: page === 1 ? undefined : String(page) },
-      props: { page },
-    });
-  }
-  return paths;
-}
-
-const currentPage = Astro.props.page || 1;
-const startIndex = (currentPage - 1) * POSTS_PER_PAGE;
-const paginatedPosts = allPosts.slice(startIndex, startIndex + POSTS_PER_PAGE);
+// 第 1 页：固定渲染前 POSTS_PER_PAGE 篇
+const paginatedPosts = allPosts.slice(0, POSTS_PER_PAGE);
 
 const getPageUrl = (p: number) => {
   if (p <= 1) return blogListUrl();
@@ -31,7 +19,7 @@ const pageNumbers: number[] = [];
 for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
 ---
 
-<BaseLayout title={`所有文章 | 第${currentPage}页`} description="查看所有文章">
+<BaseLayout title="所有文章 | Atom Blog" description="查看所有文章">
   <section class="blog-list">
     <div class="unified-page-header">
       <h1>所有文章</h1>
@@ -54,28 +42,21 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
 
     {totalPages > 1 && (
       <nav class="pagination" aria-label="文章分页">
-        {currentPage > 1 && (
-          <a href={getPageUrl(currentPage - 1)} class="page-btn prev">
-            ← 上一页
-          </a>
-        )}
         <div class="page-numbers">
           {pageNumbers.map((p) => (
             <a
               href={getPageUrl(p)}
-              class:list={['page-link', p === currentPage && 'active']}
-              aria-label={p === currentPage ? '当前页' : `第 ${p} 页`}
-              aria-current={p === currentPage ? 'page' : undefined}
+              class:list={['page-link', p === 1 && 'active']}
+              aria-label={p === 1 ? '当前页' : `第 ${p} 页`}
+              aria-current={p === 1 ? 'page' : undefined}
             >
               {p}
             </a>
           ))}
         </div>
-        {currentPage < totalPages && (
-          <a href={getPageUrl(currentPage + 1)} class="page-btn next">
-            下一页 →
-          </a>
-        )}
+        <a href={getPageUrl(2)} class="page-btn next">
+          下一页 →
+        </a>
       </nav>
     )}
   </section>
