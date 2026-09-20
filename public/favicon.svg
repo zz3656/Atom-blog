@@ -1,46 +1,41 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
   <defs>
-    <!-- Sphere gradient for depth -->
+    <!-- Sphere gradient: 黑色球体，IE7 桌面图标风格 -->
     <radialGradient id="globe" cx="40%" cy="35%" r="60%">
       <stop offset="0%" style="stop-color:#444444"/>
       <stop offset="60%" style="stop-color:#1a1a1a"/>
       <stop offset="100%" style="stop-color:#000000"/>
     </radialGradient>
-    <!-- Gloss highlight -->
+    <!-- 球体光泽高光 -->
     <radialGradient id="gloss" cx="35%" cy="25%" r="30%">
       <stop offset="0%" style="stop-color:rgba(255,255,255,0.5)"/>
       <stop offset="100%" style="stop-color:rgba(255,255,255,0)"/>
     </radialGradient>
-    <!-- E gradient -->
-    <linearGradient id="eGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#ffffff"/>
-      <stop offset="100%" style="stop-color:#cccccc"/>
-    </linearGradient>
-    <!-- E shadow -->
+    <!-- IE 图案阴影 -->
     <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity="0.5"/>
+      <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="#000" flood-opacity="0.7"/>
     </filter>
   </defs>
 
-  <!-- Globe circle -->
-  <circle cx="64" cy="64" r="54" fill="url(#globe)"/>
-  
-  <!-- Gloss overlay -->
-  <circle cx="64" cy="64" r="54" fill="url(#gloss)"/>
-  
-  <!-- Globe grid lines - horizontal -->
-  <ellipse cx="64" cy="64" rx="54" ry="22" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-  
-  <!-- Globe grid lines - vertical -->
-  <ellipse cx="64" cy="64" rx="22" ry="54" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
-  
-  <!-- Globe grid lines - diagonal 1 -->
-  <ellipse cx="64" cy="64" rx="54" ry="22" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" transform="rotate(45 64 64)"/>
-  
-  <!-- Globe grid lines - diagonal 2 -->
-  <ellipse cx="64" cy="64" rx="54" ry="22" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" transform="rotate(-45 64 64)"/>
-  
-  <!-- IE "e" letter -->
-  <text x="64" y="82" font-family="Georgia, 'Times New Roman', serif" font-size="72" font-weight="bold" 
-        fill="url(#eGrad)" text-anchor="middle" filter="url(#shadow)" transform="rotate(-12 64 64)">e</text>
+  <!-- 黑色球体 -->
+  <circle cx="64" cy="64" r="58" fill="url(#globe)"/>
+
+  <!-- 球体光泽 -->
+  <circle cx="64" cy="64" r="58" fill="url(#gloss)"/>
+
+  <!-- 球体网格线（保留原 IE 桌面图标的"地球"质感） -->
+  <ellipse cx="64" cy="64" rx="58" ry="24" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+  <ellipse cx="64" cy="64" rx="24" ry="58" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1.5"/>
+  <ellipse cx="64" cy="64" rx="58" ry="24" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" transform="rotate(45 64 64)"/>
+  <ellipse cx="64" cy="64" rx="58" ry="24" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1" transform="rotate(-45 64 64)"/>
+
+  <!-- IE 浏览器图标（白色，IE7 经典风格：圆环 + 斜线 + 圆点） -->
+  <g filter="url(#shadow)">
+    <!-- IE 圆环 -->
+    <circle cx="64" cy="64" r="28" fill="none" stroke="#fff" stroke-width="6"/>
+    <!-- IE 斜线（"e"中间横，IE 标志性元素） -->
+    <line x1="42" y1="64" x2="86" y2="64" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+    <!-- IE 圆点（"e"的口） -->
+    <circle cx="64" cy="64" r="5" fill="#fff"/>
+  </g>
 </svg>

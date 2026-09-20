@@ -4,8 +4,8 @@
 // ★ 客制化指南 ★
 // 只需修改此处，即可全局更新站点信息、Logo、Favicon 等
 
-export const SITE_TITLE = 'Atom Blog'; // 站点标题（SEO 标题、OG 标签、RSS 名称等）
-export const SITE_NAME = 'Atom'; // 导航栏显示的名称（短名称，可用于 Logo 替换后仅显示文字）
+export const SITE_TITLE = '因特吧'; // 站点标题（SEO 标题、OG 标签、RSS 名称等）
+export const SITE_NAME = '因特吧'; // 导航栏显示的名称（短名称，可用于 Logo 替换后仅显示文字）
 export const SITE_DESCRIPTION =
   'A modern, lightweight blog built with Astro — clean, fast, elegant';
 export const AUTHOR = 'zz3656';
