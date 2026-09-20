@@ -2,34 +2,48 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
 import HeroIcon from '../components/HeroIcon.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, POSTS_PER_PAGE } from '../consts';
+import {
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  SITE_HERO_ICON,
+  HERO_TITLE,
+  HERO_DESCRIPTION,
+  HERO_ACTIONS,
+  POSTS_PER_PAGE,
+} from '../consts';
 import { getPublishedPosts } from '../utils/collection';
-import { blogPostUrl, blogListUrl, aboutUrl } from '../utils/path';
+import { blogPostUrl, blogListUrl, baseAssetsPath } from '../utils/path';
 const allPosts = await getPublishedPosts();
 const pagePosts = allPosts.slice(0, POSTS_PER_PAGE);
 
 const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE) || 1;
 const totalPosts = allPosts.length;
+
+// 渲染时过滤掉被 hide 的按钮；空数组则不渲染整块 hero-actions
+const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
   <section class="hero">
     <h1>
-      <HeroIcon />
-      Atom 博客
+      <HeroIcon src={SITE_HERO_ICON} />
+      <Fragment set:html={HERO_TITLE} />
     </h1>
     <p class="hero-desc">
-      一个简洁、快速、优雅的现代博客。基于 Astro 构建，零 JavaScript， Lighthouse
-      满分，为你的内容而生。
+      {HERO_DESCRIPTION}
     </p>
-    <div class="hero-actions">
-      <a href={blogListUrl()} class="btn btn-primary">
-        浏览文章 →
-      </a>
-      <a href={aboutUrl()} class="btn btn-secondary">
-        关于此博客
-      </a>
-    </div>
+    {visibleHeroActions.length > 0 && (
+      <div class="hero-actions">
+        {visibleHeroActions.map((action) => (
+          <a
+            href={baseAssetsPath(action.href)}
+            class:list={['btn', `btn-${action.variant ?? 'primary'}`]}
+          >
+            {action.label}
+          </a>
+        ))}
+      </div>
+    )}
   </section>
 
   <section class="recent-posts">
