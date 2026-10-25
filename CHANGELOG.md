@@ -15,6 +15,10 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+### 📝 Content
+
+- **新文章《Atom Geek：把博客做成一台终端机——一套客制化主题的设计与安装说明》**：把 atom-geek 主题的**设计想法**（终端语义当信息架构、磷光终端/磷光纸双模、零圆角辉光代替投影、等宽字体只管真实数据、只留两条语义色通道）与**使用说明**（45 个 token 的契约、为什么版式必须走 overlay 而非主题包、两条安装路径、硬性红线）一次写全，并附实测数据：合规自查（0 `!important` / 0 组件选择器 / 0 布局 token 覆盖 / light-dark token 完全对齐 45）、WCAG 对比度实测表、移动端 48 组判定 0 不合格
+
 ## [1.6.0] — 2026-10-25
 
 ### ✨ Added
