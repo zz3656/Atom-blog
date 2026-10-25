@@ -109,16 +109,18 @@ Atom 的主题契约规定得很清楚：**主题目录只能放 CSS 变量**。
 2. **能力天花板**：上面那张表已经说明，版式差异在 token 体系里不可表达。
 3. **回退成本最低**：token 归主题包（可复用、可分发），选择器级差异归 overlay（可整份删除、零残留）。**删掉 overlay 不会让站点崩，只会退回普通版式。**
 
-overlay 一共 28 个文件：
+overlay 一共 46 个文件：
 
 ```
 overlay/
 ├── components/   9 个   TerminalBoot / TerminalAscii / CommandHeader / GrepHit / IndexSummary …
 ├── layouts/      2 个   BaseLayout / BlogPost
 ├── pages/       10 个   首页 / 文章页 / 标签页 / 分类页 / 404 / about …
-├── styles/       5 个   _terminal.css / _ls.css / _index.css / _theme-geek.css / global.css
+├── styles/      23 个   global.css + _theme-geek.css + 21 个 CSS 模块
 └── scripts/      1 个   app.js
 ```
+
+> ⚠️ **样式层必须整份覆盖，不能只覆盖组件。** 上游 v1.1.0 的 CSS 里一个 TUI class 都没有（`.term-window` / `.footer-status` / `.cmd-tree` … 全部缺失）——只换组件不换样式，等于给 TUI 组件套上旧版式的 CSS，版式会直接塌。这也是 overlay 里 `styles/_modules/` 占了 23 个文件、而不是只有 3 个新模块的原因。
 
 ---
 
@@ -234,7 +236,7 @@ cp -r ~/atom-geek/atom-geek ~/blog/src/themes/
 # 再按 overlay/README.md 覆盖 components / layouts / pages / styles / scripts
 ```
 
-**回退**：overlay 里每个文件都有上游对应物，回退即恢复原文件。
+**回退**：overlay 里除 3 个新增 CSS 模块外，其余文件都有上游对应物，回退即恢复原文件；3 个新增模块删掉即可（上游本来没有）。
 
 ### 硬性红线
 
