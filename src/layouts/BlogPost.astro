@@ -1,4 +1,9 @@
 ---
+// Atom Blog — 文章页（TUI: cat 输出）
+//
+// 刊头 = 命令回显：~/yinteba $ cat posts/<slug>.md
+// 刊头下方 = 文件元信息（大小 / 行数 / 日期 / 分类 / 阅读时长）
+// 正文   = cat 的输出，左侧带行号槽（纯装饰，app.js 渲染）
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import { AUTHOR, SITE_TITLE } from '../consts';
@@ -8,6 +13,7 @@ import { formatDateISO } from '../utils/date';
 
 interface Props {
   title: string;
+  slug?: string;
   pubDate: Date;
   updatedDate?: Date;
   description: string;
@@ -25,6 +31,7 @@ interface Props {
 
 const {
   title,
+  slug = '',
   pubDate,
   updatedDate,
   description,
@@ -40,6 +47,9 @@ const {
   toc = [],
 } = Astro.props;
 const readingMinutes = readingTime(body || '');
+// 文件元信息（真实数据）：字节数与行数都取自 Markdown 原文
+const fileSize = `${(new TextEncoder().encode(body || '').length / 1024).toFixed(1)}K`;
+const fileLines = body ? body.split('\n').length : 0;
 ---
 
 <BaseLayout
@@ -87,36 +97,59 @@ const readingMinutes = readingTime(body || '');
       <div class="reading-progress-fill"></div>
     </div>
   </div>
-  <article class="post">
-    <div class="post-header">
-      <p class="post-eyebrow">
-        <span class="post-eyebrow-mark"></span>
-        {category && <span class="post-category-tag">{category}</span>}
-        <span class="post-eyebrow-sep">/</span>
-        <time datetime={pubDate.toISOString()}>{formatDateISO(pubDate)}</time>
-        {readingMinutes > 0 && (
-          <>
-            <span class="post-eyebrow-sep">/</span>
-            <span>约 {readingMinutes} 分钟</span>
-          </>
-        )}
+  <article class="post" data-post-slug={slug}>
+    <header class="post-header">
+      <p class="post-command">
+        <span class="post-prompt" aria-hidden="true">~/yinteba $</span>
+        <span class="post-cmd">cat posts/{slug}.md</span>
       </p>
       <h1>{title}</h1>
-      <div class="rule rule--draw"></div>
       <p class="post-description">{description}</p>
-      <div class="post-meta">
-        {updatedDate && <span class="updated">更新于 {formatDateISO(updatedDate)}</span>}
-      </div>
+
+      <ul class="post-filemeta">
+        <li>
+          <span class="fm-key">size</span>
+          <span class="fm-val">{fileSize}</span>
+        </li>
+        <li>
+          <span class="fm-key">lines</span>
+          <span class="fm-val">{fileLines}</span>
+        </li>
+        <li>
+          <span class="fm-key">date</span>
+          <span class="fm-val">
+            <time datetime={pubDate.toISOString()}>{formatDateISO(pubDate)}</time>
+          </span>
+        </li>
+        {category && (
+          <li>
+            <span class="fm-key">cat</span>
+            <span class="fm-val fm-val--cat">{category}</span>
+          </li>
+        )}
+        <li>
+          <span class="fm-key">read</span>
+          <span class="fm-val">{readingMinutes} min</span>
+        </li>
+        {updatedDate && (
+          <li>
+            <span class="fm-key">upd</span>
+            <span class="fm-val fm-val--warn">updated {formatDateISO(updatedDate)}</span>
+          </li>
+        )}
+      </ul>
+
       {tags.length > 0 && (
         <div class="post-meta-extra">
           <span class="post-tags-row">
             {tags.map((tag) => (
-              <span class="tag">{tag}</span>
+              <span class="tag">#{tag}</span>
             ))}
           </span>
         </div>
       )}
-    </div>
+    </header>
+
     {heroImage && (
       <div class="hero-image">
         <img
@@ -129,12 +162,15 @@ const readingMinutes = readingTime(body || '');
         />
       </div>
     )}
+
     <div class="post-content-wrapper">
-      <TableOfContents headings={toc} />
+      <TableOfContents headings={toc} postSlug={slug} />
+      {/* 行号槽由 CSS counter 渲染（.post-content > *），零 JS */}
       <div class="post-content">
         <slot />
       </div>
     </div>
+
     {reward && (
       <div class="post-reward">
         <p class="reward-title">🤖 觉得文章有帮助？给因特吧加个油</p>
@@ -160,6 +196,7 @@ const readingMinutes = readingTime(body || '');
         </div>
       </div>
     )}
+
     {relatedPosts.length > 0 && (
       <section class="related-posts">
         <h3 class="related-title">📚 相关推荐</h3>
@@ -167,32 +204,36 @@ const readingMinutes = readingTime(body || '');
           {relatedPosts.map((p) => (
             <li>
               <a href={blogPostUrl(p.slug)} class="related-link">
+                <span class="related-link-path" aria-hidden="true">/posts/{p.slug}.md</span>
                 <span class="related-link-title">{p.title}</span>
-                <span class="related-link-arrow">→</span>
+                <span class="related-link-arrow" aria-hidden="true">→</span>
               </a>
             </li>
           ))}
         </ul>
       </section>
     )}
+
     {prevPost || nextPost ? (
       <nav class="post-nav">
         <div class="post-nav-links">
           {prevPost && (
             <a href={blogPostUrl(prevPost.slug)} class="post-nav-link prev">
-              ← <span class="nav-label">{prevPost.title}</span>
+              <span class="nav-label">{prevPost.title}</span>
+              <span class="post-nav-dir" aria-hidden="true">← prev</span>
             </a>
           )}
           {nextPost && (
             <a href={blogPostUrl(nextPost.slug)} class="post-nav-link next">
-              <span class="nav-label">{nextPost.title}</span> →
+              <span class="nav-label">{nextPost.title}</span>
+              <span class="post-nav-dir" aria-hidden="true">next →</span>
             </a>
           )}
         </div>
       </nav>
     ) : (
       <div class="post-nav">
-        <a href={rootPath()}>← 返回首页</a>
+        <a href={rootPath()}>← cd ~ 返回首页</a>
       </div>
     )}
   </article>

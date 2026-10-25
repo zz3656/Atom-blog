@@ -1,4 +1,9 @@
 ---
+// Atom Blog — 文章条目（TUI: ls -la 输出行）
+//
+// 一行 = 一个文件条目：
+//   [序号] 权限位  日期   大小   文件名(标题)          右侧分类徽标
+// 下一行是缩进的摘要与标签（终端里的续行）
 import { extractSummary } from '../utils/blog';
 import { formatDateISO } from '../utils/date';
 
@@ -18,30 +23,44 @@ const idx = 'index' in Astro.props ? Astro.props.index : undefined;
 
 // Auto-extract description from body if description is empty
 const postDesc = description || extractSummary(body);
-// 序号：传了 index 就用（01/02/03…），没传就从日期倒序自行编号
-const ordinal = idx != null ? String(idx + 1).padStart(2, '0') : null;
+// 序号：[01] 形式
+const ordinal = idx != null ? String(idx + 1).padStart(2, '0') : '';
+// 大小：正文真实字节数（KiB），与 ls 的 size 列同义
+const size = `${(new TextEncoder().encode(body || '').length / 1024).toFixed(1)}K`;
 ---
 
-<li class="log-row">
-  <a href={slug}>
-    {ordinal && <span class="log-index">{ordinal}</span>}
-    <span class="log-title">{title}</span>
-    <time class="log-date" datetime={pubDate.toISOString()}>
+<li class="ls-row">
+  <a href={slug} class="ls-entry">
+    {ordinal && <span class="ls-index">[{ordinal}]</span>}
+    <span class="ls-mode" aria-hidden="true">-rw-r--r--</span>
+    <time class="ls-date" datetime={pubDate.toISOString()}>
       {formatDateISO(pubDate)}
     </time>
-    {postDesc && <span class="log-desc">{postDesc}</span>}
-    {category && (
-      <span class="log-category">
-        <span class="post-category-tag">{category}</span>
-      </span>
-    )}
-    {tags.length > 0 && (
-      <span class="log-tags">
-        {tags.slice(0, 4).map((tag) => (
-          <span class="tag">{tag}</span>
-        ))}
-        {tags.length > 4 && <span class="tag">+{tags.length - 4}</span>}
-      </span>
-    )}
+    <span class="ls-size">{size}</span>
+    <span class="ls-name">
+      {title}<span class="ls-ext" aria-hidden="true">.md</span>
+    </span>
+    {
+      category && (
+        <span class="ls-cat">
+          <span class="post-category-tag">{category}</span>
+        </span>
+      )
+    }
   </a>
+  {
+    (postDesc || tags.length > 0) && (
+      <div class="ls-sub">
+        {postDesc && <span class="ls-desc">{postDesc}</span>}
+        {tags.length > 0 && (
+          <span class="ls-tags">
+            {tags.slice(0, 4).map((tag) => (
+              <span class="tag">#{tag}</span>
+            ))}
+            {tags.length > 4 && <span class="tag">+{tags.length - 4}</span>}
+          </span>
+        )}
+      </div>
+    )
+  }
 </li>

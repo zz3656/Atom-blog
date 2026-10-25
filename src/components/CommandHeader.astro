@@ -1,0 +1,21 @@
+---
+// Atom Blog — 终端命令式页头
+//
+// 用于归档 / 分类 / 标签等列表页：一行命令回显 + 标题 + 计数
+interface Props {
+  cmd: string;
+  title: string;
+  count?: string;
+}
+
+const { cmd, title, count } = Astro.props;
+---
+
+<header class="cmd-header">
+  <p class="cmd-header-line">
+    <span class="cmd-prompt" aria-hidden="true">~/yinteba $</span>
+    <span class="cmd-text">{cmd}</span>
+  </p>
+  <h1 class="cmd-title">{title}</h1>
+  {count && <p class="cmd-count">{count}</p>}
+</header>

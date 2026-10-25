@@ -1,0 +1,280 @@
+/* Atom Blog — TUI 原语
+ *
+ * 全站复用的终端构件：
+ *   .cmd-header  命令回显式页头（列表页统一标题区）
+ *   .dir-*       ls 目录列表（分类页）
+ *   .grep-*      grep 命中列表（标签页）
+ *   .nf-*        command not found（404 页）
+ */
+
+/* ===== 命令回显式页头 ===== */
+.cmd-header {
+  padding: 2.75rem 0 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cmd-header-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+.cmd-prompt {
+  color: var(--accent);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.cmd-text {
+  color: var(--text-bright);
+  overflow-wrap: anywhere;
+}
+
+.cmd-title {
+  font-family: var(--font-sans);
+  font-size: clamp(1.7rem, 4vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+  color: var(--text-bright);
+}
+
+.cmd-count {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== ls 目录列表 ===== */
+.dir-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.dir-row {
+  list-style: none;
+  border-bottom: 1px solid var(--border-light);
+}
+
+.dir-entry {
+  display: grid;
+  grid-template-columns: 6.4rem 2.4rem 3.4rem 5.8rem minmax(0, 1fr) auto;
+  column-gap: var(--term-gap);
+  align-items: baseline;
+  padding: 0.6rem 0.8rem 0.6rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  transition: background-color 0.18s ease;
+}
+
+.dir-mode {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.dir-links {
+  color: var(--text-secondary);
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.dir-group {
+  color: var(--cat-text);
+}
+
+.dir-date {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.dir-name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  color: var(--text-bright);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.dir-count {
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.dir-row:hover .dir-entry {
+  background: var(--accent-glow);
+}
+
+.dir-row:hover .dir-name {
+  color: var(--accent);
+}
+
+/* ===== grep 命中列表 ===== */
+.grep-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border-light);
+}
+
+.grep-row {
+  list-style: none;
+  border-bottom: 1px solid var(--border-light);
+  padding: 0.55rem 0.8rem 0.55rem 0;
+  transition: background-color 0.18s ease;
+}
+
+.grep-row:hover {
+  background: var(--accent-glow);
+}
+
+.grep-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+  line-height: 1.7;
+  overflow-wrap: anywhere;
+}
+
+.grep-count {
+  color: var(--accent);
+  font-weight: 700;
+  min-width: 3ch;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.grep-name {
+  color: var(--text-bright);
+  font-weight: 600;
+}
+
+.grep-path {
+  color: var(--cat-text);
+  flex-shrink: 0;
+}
+
+.grep-col {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.grep-text {
+  color: var(--text-secondary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.grep-hits {
+  color: var(--text-muted);
+  margin-left: auto;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+.grep-meta {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  padding-left: 3.45rem;
+  margin-top: 0.1rem;
+}
+
+.grep-row:hover .grep-name,
+.grep-row:hover .grep-text {
+  color: var(--accent);
+}
+
+/* ===== command not found（404）===== */
+.nf {
+  padding: 3rem 0 1rem;
+  font-family: var(--font-mono);
+  font-size: 0.92rem;
+  line-height: 1.9;
+}
+
+.nf-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  overflow-wrap: anywhere;
+}
+
+.nf-prompt {
+  color: var(--accent);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.nf-cmd {
+  color: var(--text-bright);
+}
+
+.nf-err {
+  color: var(--text-secondary);
+}
+
+.nf-err--bad {
+  color: var(--warning);
+  font-weight: 600;
+}
+
+.nf-path {
+  color: var(--cat-text);
+}
+
+.nf-blank {
+  height: 0.9rem;
+}
+
+.nf-suggest {
+  margin-top: 1.6rem;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--border-light);
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.nf-suggest-label {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.nf-sug-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.8rem;
+}
+
+.nf-sug-cmd {
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.nf-sug-cmd:hover {
+  text-decoration: underline;
+}
+
+.nf-sug-desc {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}

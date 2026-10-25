@@ -1,11 +1,24 @@
-/* Atom Blog — Main Layout & Animations */
+/* Atom Blog — Main Layout
+ *
+ * 整站被一个「终端窗口」包住：左右两条竖线是窗口边框，
+ * 顶部是标题栏（见 _header.css），底部是状态栏（见 _footer.css）。
+ */
+
+.term-window {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  border-left: 1px solid var(--border-color);
+  border-right: 1px solid var(--border-color);
+  background: var(--bg-primary);
+}
 
 main {
   flex: 1;
+  width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 2rem 1.75rem 3.5rem;
-  width: 100%;
+  padding: 0 1.75rem 3.25rem;
 }
 
 /* ===== 主题切换过渡（仅颜色，不影响布局）===== */
@@ -34,14 +47,9 @@ html body * {
 
 /* ===== Safe area support for modern phones ===== */
 @supports (padding: max(0px)) {
-  .nav-container {
-    padding-left: max(1.75rem, env(safe-area-inset-left));
-    padding-right: max(1.75rem, env(safe-area-inset-right));
-  }
-  main {
-    padding-left: max(1.75rem, env(safe-area-inset-left));
-    padding-right: max(1.75rem, env(safe-area-inset-right));
-  }
+  .nav-container,
+  .term-bar,
+  main,
   .site-footer {
     padding-left: max(1.75rem, env(safe-area-inset-left));
     padding-right: max(1.75rem, env(safe-area-inset-right));
@@ -53,15 +61,15 @@ html body * {
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--bg-card);
+  color: var(--accent);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-md);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
@@ -81,17 +89,8 @@ html body * {
 }
 
 .back-to-top:hover {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-  .back-to-top {
-    right: 1rem;
-    bottom: 1rem;
-    width: 38px;
-    height: 38px;
-  }
+  background: var(--accent);
+  color: var(--on-accent);
 }
 
 /* ===== TOC 锚点滚动补偿 ===== */
@@ -121,4 +120,18 @@ html body * {
 
 main:focus {
   outline: none;
+}
+
+@media (max-width: 768px) {
+  .back-to-top {
+    right: 1rem;
+    bottom: 1rem;
+    width: 36px;
+    height: 36px;
+  }
+
+  .term-window {
+    border-left: 0;
+    border-right: 0;
+  }
 }

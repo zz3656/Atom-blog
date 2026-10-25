@@ -1,9 +1,12 @@
-/* Atom Blog — Blog Post Content
+/* Atom Blog — Blog Post Content（TUI: cat 输出）
  *
- * 正文采用「刊头 + 刻度尺 + 首字下沉」的编辑排版，
- * 标题层级用一枚黄铜刻度做锚点，颜色交给 token。
+ * 刊头   = ~/yinteba $ cat posts/<slug>.md + 文件元信息
+ * 正文   = cat 的输出，左侧一行号槽（纯 CSS counter，零 JS）
+ * 引用   = 终端回显（绿色竖条 + > 前缀）
+ * 代码块 = 带标题栏的终端窗口（标题取 Shiki 的 data-language）
  */
 
+/* ===== 容器 ===== */
 .post {
   max-width: var(--content-width);
   margin: 0 auto;
@@ -11,58 +14,45 @@
 
 /* ===== 刊头 ===== */
 .post-header {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
-.post-eyebrow {
+.post-command {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
+  align-items: baseline;
+  gap: 0.55rem;
   font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 1rem;
-  flex-wrap: wrap;
+  font-size: 0.86rem;
+  line-height: 1.6;
+  margin-bottom: 0.85rem;
+  overflow-wrap: anywhere;
 }
 
-.post-eyebrow-mark {
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
+.post-prompt {
+  color: var(--accent);
+  font-weight: 600;
   flex-shrink: 0;
 }
 
-.post-eyebrow-sep {
-  color: var(--text-muted);
-  font-weight: 400;
+.post-cmd {
+  color: var(--text-bright);
 }
 
 .post-header h1 {
-  font-family: var(--font-display);
-  font-size: clamp(2rem, 5vw, 3.05rem);
+  font-family: var(--font-sans);
+  font-size: clamp(1.75rem, 4.4vw, 2.55rem);
   font-weight: 800;
-  font-variation-settings:
-    'wdth' 106,
-    'wght' 800;
-  letter-spacing: -0.035em;
-  line-height: 1.15;
+  letter-spacing: -0.028em;
+  line-height: 1.22;
   color: var(--text-bright);
-  margin-bottom: 1rem;
-}
-
-.post-header .rule {
-  margin-bottom: 1.15rem;
+  margin-bottom: 0.85rem;
 }
 
 .post-description {
-  font-size: 1.02rem;
+  font-size: 0.98rem;
   color: var(--text-secondary);
-  line-height: 1.75;
-  max-width: 38rem;
-  margin-bottom: 1.1rem;
+  line-height: 1.8;
+  margin-bottom: 1rem;
 }
 
 .post-meta {
@@ -76,13 +66,47 @@
   letter-spacing: 0.04em;
 }
 
-.post-meta span {
+.updated {
+  color: var(--warning);
+}
+
+/* ===== 文件元信息 ===== */
+.post-filemeta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1.15rem;
+  list-style: none;
+  padding: 0.55rem 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+}
+
+.post-filemeta li {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 0.35rem;
 }
 
-.updated {
+.fm-key {
+  color: var(--text-muted);
+}
+
+.fm-key::after {
+  content: ':';
+}
+
+.fm-val {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.fm-val--cat {
+  color: var(--cat-text);
+}
+
+.fm-val--warn {
   color: var(--warning);
 }
 
@@ -91,11 +115,11 @@
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-top: 0.85rem;
+  margin-top: 0.8rem;
 }
 
 .hero-image {
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border-color);
@@ -108,80 +132,88 @@
   display: block;
 }
 
-/* ===== 正文 ===== */
+/* ===== 正文（cat 输出 + 行号槽）===== */
 .post-content {
   line-height: 1.85;
   font-size: 1rem;
   color: var(--text-primary);
+  counter-reset: ln;
+  position: relative;
+  padding-left: var(--term-gutter);
 }
 
-/* 首字下沉 —— 仅当正文第一个元素是段落时生效 */
-.post-content > p:first-child::first-letter {
-  float: left;
-  font-family: var(--font-display);
-  font-size: 3.1em;
-  line-height: 0.82;
-  font-weight: 800;
-  font-variation-settings:
-    'wdth' 100,
-    'wght' 800;
-  color: var(--accent);
-  padding: 0.04em 0.1em 0 0;
-  margin-right: 0.04em;
+/* 行号槽里的竖线 */
+.post-content::before {
+  content: '';
+  position: absolute;
+  left: calc(var(--term-gutter) - 0.95rem);
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border-light);
+}
+
+/* 每个块级元素占一行号（li 不单独编号） */
+.post-content > * {
+  counter-increment: ln;
+  position: relative;
+}
+
+.post-content > *::before {
+  content: counter(ln, decimal-leading-zero);
+  position: absolute;
+  left: calc(-1 * var(--term-gutter));
+  width: calc(var(--term-gutter) - 1.35rem);
+  text-align: right;
+  top: 0.22em;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  line-height: 1.6;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.post-content p {
+  margin-bottom: 1.15rem;
 }
 
 .post-content h2 {
-  font-family: var(--font-display);
-  font-size: 1.45rem;
+  font-family: var(--font-sans);
+  font-size: 1.38rem;
   font-weight: 700;
-  font-variation-settings:
-    'wdth' 102,
-    'wght' 700;
   letter-spacing: -0.02em;
-  margin: 2.75rem 0 1rem;
+  margin: 2.5rem 0 0.95rem;
   color: var(--text-bright);
   line-height: 1.35;
-}
-
-/* 标题前的黄铜刻度锚点 */
-.post-content h2::before {
-  content: '';
-  display: inline-block;
-  width: 15px;
-  height: 2px;
-  background: var(--accent);
-  margin-right: 0.65rem;
-  vertical-align: 0.3em;
+  border-left: 2px solid var(--accent);
+  padding-left: 0.7rem;
 }
 
 .post-content h3 {
-  font-family: var(--font-display);
-  font-size: 1.18rem;
+  font-family: var(--font-sans);
+  font-size: 1.14rem;
   font-weight: 700;
   letter-spacing: -0.015em;
-  margin: 2.1rem 0 0.8rem;
+  margin: 1.9rem 0 0.75rem;
   color: var(--text-bright);
 }
 
 .post-content h4 {
-  font-size: 1.02rem;
+  font-size: 1rem;
   font-weight: 700;
-  margin: 1.6rem 0 0.6rem;
+  margin: 1.5rem 0 0.6rem;
   color: var(--text-bright);
-}
-
-.post-content p {
-  margin-bottom: 1.2rem;
 }
 
 .post-content ul,
 .post-content ol {
-  margin-bottom: 1.2rem;
-  padding-left: 1.5rem;
+  margin-bottom: 1.15rem;
+  padding-left: 1.4rem;
 }
 
 .post-content ul li::marker {
   color: var(--accent);
+  font-family: var(--font-mono);
 }
 
 .post-content ol li::marker {
@@ -194,11 +226,11 @@
   margin-bottom: 0.4rem;
 }
 
-/* 引用块 —— 不用斜体（中文斜体是伪斜体，很难看） */
+/* 引用块 —— 终端回显：绿色竖条 + > 前缀 */
 .post-content blockquote {
-  border-left: 3px solid var(--accent);
-  padding: 0.9rem 1.25rem;
-  margin: 1.75rem 0;
+  border-left: 2px solid var(--accent);
+  padding: 0.55rem 0 0.55rem 0.95rem;
+  margin: 1.6rem 0;
   background: var(--accent-glow);
   border-radius: 0 var(--radius) var(--radius) 0;
   color: var(--text-secondary);
@@ -208,9 +240,16 @@
   margin-bottom: 0;
 }
 
+.post-content blockquote p::before {
+  content: '> ';
+  font-family: var(--font-mono);
+  color: var(--accent);
+  font-weight: 700;
+}
+
 .post-content code {
   background: var(--bg-inline-code);
-  padding: 0.14rem 0.4rem;
+  padding: 0.1rem 0.32rem;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 0.87em;
@@ -218,39 +257,49 @@
   border: 1px solid var(--border-light);
 }
 
+/* ===== 代码块：带标题栏的终端窗口 ===== */
 .post-content pre {
-  margin: 1.6rem 0;
+  margin: 1.5rem 0;
   border-radius: var(--radius);
-  overflow-x: auto;
+  overflow: hidden;
   background: var(--code-bg);
   border: 1px solid var(--border-color);
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
-/* 代码块顶部的黄铜刻度 */
+/* 标题栏 —— 语言名取自 Shiki 输出的 data-language */
 .post-content pre::before {
-  content: '';
+  content: attr(data-language);
   display: block;
-  height: 2px;
-  background: linear-gradient(90deg, var(--accent), transparent 60%);
-  opacity: 0.45;
+  padding: 0.32rem 5.6rem 0.32rem 0.85rem;
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  border-bottom: 1px solid var(--border-color);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .post-content pre code {
   background: none;
-  padding: 1.2rem;
+  padding: 0.95rem 1rem;
   display: block;
+  overflow-x: auto;
   font-size: 0.82rem;
   line-height: 1.65;
   color: var(--text-primary);
   border: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .post-content img {
   border-radius: var(--radius);
-  margin: 1.6rem 0;
+  margin: 1.5rem 0;
   border: 1px solid var(--border-color);
-  box-shadow: var(--shadow);
 }
 
 .post-content a {
@@ -264,38 +313,19 @@
   text-decoration-color: var(--accent);
 }
 
-/* 分隔线 —— 用一小段刻度代替菱形 */
+/* 分隔线 —— 一行短横线 */
 .post-content hr {
   border: none;
-  border-top: 1px solid var(--border-color);
-  margin: 2.75rem 0;
-  position: relative;
   height: 1px;
+  background: var(--border-color);
+  margin: 2.5rem 0;
 }
 
-.post-content hr::after {
-  content: '';
-  position: absolute;
-  top: -3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30px;
-  height: 7px;
-  background-image: repeating-linear-gradient(
-    90deg,
-    var(--rule-tick-strong) 0 1px,
-    transparent 1px 6px
-  );
-}
-
-/* ===== 表格 =====
- * 表格被 rehype 插件包在 .table-scroll 里：窄屏时表格自己横向滚动，
- * 页面不会跟着横向溢出。边框与圆角由容器承担。
- */
+/* ===== 表格 ===== */
 .post-content .table-scroll {
   width: 100%;
   overflow-x: auto;
-  margin: 1.6rem 0;
+  margin: 1.5rem 0;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   -webkit-overflow-scrolling: touch;
@@ -316,21 +346,17 @@
 .post-content th,
 .post-content td {
   border: 1px solid var(--border-color);
-  padding: 0.6rem 1rem;
+  padding: 0.55rem 0.9rem;
   text-align: left;
 }
 
-/* 表头不换行；单元格允许换行，避免窄屏下表格被撑得过宽 */
 .post-content th {
   white-space: nowrap;
-}
-
-.post-content th {
   background: var(--bg-secondary);
   font-weight: 700;
   color: var(--text-bright);
   font-family: var(--font-mono);
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -342,18 +368,18 @@
 
 .code-copy-btn {
   position: absolute;
-  top: 0.6rem;
-  right: 0.6rem;
+  top: 0.26rem;
+  right: 0.42rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.3rem 0.55rem;
+  gap: 0.28rem;
+  padding: 0.24rem 0.48rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  font-size: 0.75rem;
-  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
   cursor: pointer;
   opacity: 0;
   transition:
@@ -377,12 +403,11 @@
 
 .code-copy-btn.copied {
   background: var(--success);
-  color: #fff;
+  color: var(--bg-primary);
   border-color: var(--success);
   opacity: 1;
 }
 
-/* 在移动端始终可见 */
 @media (max-width: 768px) {
   .code-copy-btn {
     opacity: 1;
@@ -408,7 +433,6 @@
   max-height: 95vh;
   object-fit: contain;
   border-radius: var(--radius);
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
   cursor: default;
 }
 
@@ -446,7 +470,7 @@
 
 /* ===== Shiki 双主题切换 =====
  * Astro/Shiki 输出的代码块结构:
- *   <pre class="astro-code github-light github-dark">
+ *   <pre class="astro-code github-light github-dark" data-language="js">
  *     <span style="color:#xxx;--shiki-dark:#yyy">token</span>
  *   </pre>
  *

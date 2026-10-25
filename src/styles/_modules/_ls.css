@@ -1,0 +1,166 @@
+/* Atom Blog — 文章列表（ls -la 输出）
+ *
+ * 一行 = 一个文件条目：
+ *   [01] -rw-r--r--  2026/09/19  4.2K  标题.md            [分类]
+ * 下一行是缩进的续行（摘要 + 标签）。
+ * hover 整行反色（终端的 reverse video），左侧浮出 `>` 指示器。
+ */
+
+.ls-list {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 1.15rem;
+  border-top: 1px solid var(--border-light);
+}
+
+.ls-row {
+  list-style: none;
+  position: relative;
+  border-bottom: 1px solid var(--border-light);
+}
+
+/* hover 指示器 —— 浮在列表左侧的留白里，不推挤内容 */
+.ls-row::before {
+  content: '>';
+  position: absolute;
+  left: 0;
+  top: 0.68rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0;
+  transition: opacity 0.18s ease;
+}
+
+.ls-row:hover::before {
+  opacity: 1;
+}
+
+.ls-entry {
+  display: grid;
+  grid-template-columns: 3.4rem 5.6rem 5.4rem 3.2rem minmax(0, 1fr) auto;
+  column-gap: var(--term-gap);
+  row-gap: 0.35rem;
+  align-items: baseline;
+  padding: 0.72rem 0.8rem 0.72rem 0;
+  color: var(--text-primary);
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease;
+}
+
+/* ===== 序号 ===== */
+.ls-index {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 权限位 ===== */
+.ls-mode {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ===== 日期 ===== */
+.ls-date {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 大小 ===== */
+.ls-size {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 文件名 ===== */
+.ls-name {
+  font-family: var(--font-sans);
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: -0.012em;
+  color: var(--text-bright);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ls-ext {
+  font-family: var(--font-mono);
+  font-size: 0.8em;
+  font-weight: 400;
+  color: var(--text-muted);
+  margin-left: 0.15em;
+}
+
+/* ===== 分类 ===== */
+.ls-cat {
+  justify-self: end;
+  align-self: center;
+}
+
+/* ===== 续行：摘要 + 标签 ===== */
+.ls-sub {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+  padding: 0 0.8rem 0.75rem 0;
+}
+
+.ls-desc {
+  flex: 1 1 20rem;
+  min-width: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ls-desc::before {
+  content: '↳ ';
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.ls-tags {
+  display: flex;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+/* ===== hover 反色（终端 reverse video）===== */
+.ls-entry:hover {
+  background: var(--accent);
+  color: var(--bg-primary);
+}
+
+.ls-entry:hover .ls-index,
+.ls-entry:hover .ls-mode,
+.ls-entry:hover .ls-date,
+.ls-entry:hover .ls-size,
+.ls-entry:hover .ls-name,
+.ls-entry:hover .ls-ext {
+  color: var(--bg-primary);
+}
+
+.ls-entry:hover .ls-cat .post-category-tag {
+  color: var(--bg-primary);
+  border-color: var(--bg-primary);
+  background: transparent;
+}

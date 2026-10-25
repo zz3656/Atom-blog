@@ -1,0 +1,41 @@
+---
+// Atom Blog — grep 命中行（TUI: grep -r "标签" ~/posts）
+//
+// 展示 grep 的真实输出形态：文件路径 : 行号 : 命中内容
+// 行号来自 Markdown 原文，是真实位置，不是编造的序号。
+import { formatDateISO } from '../utils/date';
+
+interface Props {
+  url: string;
+  file: string;
+  title: string;
+  body?: string;
+  tag: string;
+  pubDate: Date;
+}
+
+const { url, file, title, body, tag, pubDate } = Astro.props;
+
+// 标签在 Markdown 原文里第一次出现的行号
+const lines = (body || '').split('\n');
+let lineNo = 0;
+let lineText = '';
+for (let i = 0; i < lines.length; i++) {
+  if (lines[i].indexOf(tag) !== -1) {
+    lineNo = i + 1;
+    lineText = lines[i].trim();
+    break;
+  }
+}
+---
+
+<li class="grep-row">
+  <a href={url} class="grep-entry">
+    <span class="grep-path">~/posts/{file}.md</span>
+    <span class="grep-col">:{lineNo}:</span>
+    <span class="grep-text">{lineText}</span>
+  </a>
+  <p class="grep-meta">
+    {title} · {formatDateISO(pubDate)}
+  </p>
+</li>

@@ -1,80 +1,72 @@
 ---
-import { SITE_NAME, SITE_LOGO } from '../consts';
-import { baseAssetsPath } from '../utils/path';
+// Atom Blog — TUI 页头（终端窗口外壳）
+//
+// 两行结构：
+//   ① 状态栏 .term-bar  ：窗口按钮 ｜ yinteba@node:~ ｜ 实时站点数据 ｜ 日夜开关
+//   ② 命令行 .nav-row  ：提示符 + 站名 ｜ 命令式导航（~/posts）｜ grep 搜索
+//
+// 交互钩子（app.js 依赖，勿改 id / class）：
+//   #theme-toggle · .theme-icon-sun · .theme-icon-moon
+//   #nav-toggle · #nav-links · .nav-link
+//   #search-input · #search-results · .search-wrapper
+import { SITE_NAME, SITE_LOGO, SITE_VERSION, TUI_USER, TUI_HOST } from '../consts';
+import { baseAssetsPath, blogListUrl, categoriesUrl, tagsUrl, aboutUrl } from '../utils/path';
+import { getPublishedPosts } from '../utils/collection';
+import { normalizeCategory } from '../utils/blog';
 
 const logoSrc = baseAssetsPath(SITE_LOGO);
-
-// Active path detection
 const currentPath = Astro.url.pathname;
 
+// 状态栏的实时数据全部来自真实内容集合（构建期求值，不产生运行时请求）
+const posts = await getPublishedPosts();
+const categoryCount = new Set(posts.map((p) => normalizeCategory(p.data.category))).size;
+const tagCount = new Set(posts.flatMap((p) => p.data.tags ?? [])).size;
+
+// 路径归一化（去掉尾部斜杠），避免 /blog 与 /blog/ 判定不一致
+const norm = (p: string) => (p.length > 1 ? p.replace(/\/+$/, '') : p);
+const here = norm(currentPath);
+
+const homeHref = baseAssetsPath('/');
+const postsHref = blogListUrl();
+const catsHref = categoriesUrl();
+const tagsHref = tagsUrl();
+const aboutHref = aboutUrl();
+
+// 命令式导航：前缀 ~/ 由标记层给出，当前项前缀换成 >
 const navLinks = [
-  { label: '首页', href: '/', active: currentPath === '/' },
+  { label: '首页', path: '', href: homeHref, active: here === norm(homeHref) },
   {
     label: '文章',
-    href: '/blog',
-    active: currentPath === '/blog' || currentPath === '/blog/' || currentPath.startsWith('/blog/'),
+    path: 'posts',
+    href: postsHref,
+    active: here === norm(postsHref) || here.startsWith(`${norm(postsHref)}/`),
   },
-  {
-    label: '分类',
-    href: '/categories',
-    active: currentPath === '/categories' || currentPath === '/categories/',
-  },
-  { label: '标签', href: '/tags', active: currentPath === '/tags' || currentPath === '/tags/' },
-  { label: '关于', href: '/about', active: currentPath === '/about' || currentPath === '/about/' },
+  { label: '分类', path: 'cats', href: catsHref, active: here === norm(catsHref) },
+  { label: '标签', path: 'tags', href: tagsHref, active: here === norm(tagsHref) },
+  { label: '关于', path: 'about', href: aboutHref, active: here === norm(aboutHref) },
 ];
 ---
 
 <header class="site-header">
-  <nav class="nav-container">
-    <a href={baseAssetsPath('/')} class="site-title">
-      <img src={logoSrc} alt="" class="site-logo" width="26" height="26" />
-      <span class="site-name-text">{SITE_NAME}</span>
-      <span class="site-tagline">Precision Log</span>
-    </a>
-
-    <!-- Hamburger toggle button (mobile only) -->
-    <button class="nav-toggle" id="nav-toggle" aria-label="切换菜单" aria-expanded="false">
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-      <span class="hamburger-line"></span>
-    </button>
-
-    <div class="nav-links" id="nav-links">
-      {navLinks.map((link) => (
-        <a href={baseAssetsPath(link.href)} class:list={['nav-link', link.active && 'active']}>
-          {link.label}
-        </a>
-      ))}
+  {/* ① 窗口标题栏 */}
+  <div class="term-bar">
+    <div class="term-bar-left">
+      <span class="term-lights" aria-hidden="true"><i></i><i></i><i></i></span>
+      <img class="term-bar-logo" src={logoSrc} alt="" width="16" height="16" />
+      <span class="term-bar-host">{TUI_USER}@{TUI_HOST}:~</span>
     </div>
 
-    <div class="nav-actions">
-      <div class="search-wrapper">
-        <span class="search-icon" aria-hidden="true">
-          <svg
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2.2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="7"></circle>
-            <line x1="20" y1="20" x2="16.65" y2="16.65"></line>
-          </svg>
-        </span>
-        <input
-          type="text"
-          id="search-input"
-          class="search-input"
-          placeholder="搜索文章…"
-          aria-label="搜索文章"
-          autocomplete="off"
-          data-search-trigger
-        />
-        <div id="search-results" class="search-results"></div>
-      </div>
+    <p class="term-bar-stats">
+      <span class="term-stat">{posts.length} POSTS</span>
+      <span class="term-sep" aria-hidden="true">·</span>
+      <span class="term-stat">{String(categoryCount).padStart(2, '0')} CATS</span>
+      <span class="term-sep" aria-hidden="true">·</span>
+      <span class="term-stat">{String(tagCount).padStart(2, '0')} TAGS</span>
+      <span class="term-sep" aria-hidden="true">·</span>
+      <span class="term-stat">build v{SITE_VERSION}</span>
+    </p>
 
-      <!-- 主题开关：日 / 夜 双档。图标高亮由 CSS 依据 html[data-mode] 决定 -->
+    <div class="term-bar-right">
       <button type="button" class="theme-toggle" id="theme-toggle" aria-label="切换深色/浅色模式">
         <span class="theme-icon theme-icon-sun" aria-hidden="true">
           <svg
@@ -86,7 +78,9 @@ const navLinks = [
             stroke-linejoin="round"
           >
             <circle cx="12" cy="12" r="4.2"></circle>
-            <path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"></path>
+            <path
+              d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.2 5.2l1.4 1.4M17.4 17.4l1.4 1.4M18.8 5.2l-1.4 1.4M6.6 17.4l-1.4 1.4"
+            ></path>
           </svg>
         </span>
         <span class="theme-icon theme-icon-moon" aria-hidden="true">
@@ -102,6 +96,55 @@ const navLinks = [
           </svg>
         </span>
       </button>
+    </div>
+  </div>
+
+  {/* ② 命令行 */}
+  <nav class="nav-container">
+    <a href={homeHref} class="site-title">
+      <span class="site-prompt" aria-hidden="true">$</span>
+      <span class="site-name-text">{SITE_NAME}</span>
+    </a>
+
+    {/* 汉堡菜单（仅窄屏可见） */}
+    <button class="nav-toggle" id="nav-toggle" aria-label="切换菜单" aria-expanded="false">
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+      <span class="hamburger-line"></span>
+    </button>
+
+    <div class="nav-links" id="nav-links">
+      {
+        navLinks.map((link) => (
+          <a
+            href={link.href}
+            class:list={['nav-link', link.active && 'is-active']}
+            aria-current={link.active ? 'page' : undefined}
+          >
+            <span class="nav-caret" aria-hidden="true">
+              {link.active ? '>' : '~/'}
+            </span>
+            {link.path && <span class="nav-path">{link.path}</span>}
+            <span class="sr-only">{link.label}</span>
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="nav-actions">
+      <div class="search-wrapper">
+        <span class="search-prompt" aria-hidden="true">grep</span>
+        <input
+          type="text"
+          id="search-input"
+          class="search-input"
+          placeholder='-ri "关键词"'
+          aria-label="搜索文章"
+          autocomplete="off"
+          data-search-trigger
+        />
+        <div id="search-results" class="search-results"></div>
+      </div>
     </div>
   </nav>
 </header>

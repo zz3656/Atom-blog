@@ -30,25 +30,25 @@ export const SITE_VERSION = pkg.version;
 //   · hide   : true 则跳过该按钮（可选）
 export const HERO_TITLE = '因特吧';
 export const HERO_DESCRIPTION =
-  '因特网里的一间小吧——聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。';
-export const HERO_EYEBROW = 'PRECISION LOG';
-export const HERO_EYEBROW_SUB = '个人技术日志';
+  '因特网里的一间小吧 —— 聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。全部以终端会话的形式记录。';
+export const HERO_EYEBROW = 'SYSTEM READY';
+export const HERO_EYEBROW_SUB = 'astro static · zero-runtime';
 export const HERO_ACTIONS: Array<{
   label: string;
   href: string;
   variant?: 'primary' | 'secondary';
   hide?: boolean;
 }> = [
-  { label: '浏览文章 →', href: '/blog', variant: 'primary' },
-  { label: '关于此博客', href: '/about', variant: 'secondary' },
+  { label: '$ ls ~/posts', href: '/blog/', variant: 'primary' },
+  { label: '$ cat README.md', href: '/about/', variant: 'secondary' },
 ];
 
 // Logo 与 Favicon（三个独立文件）
 // - Logo      → 导航栏左侧图标。放入 public/logos/logo.svg（或 .png / .webp），修改 SITE_LOGO 即可
 // - Favicon   → 浏览器标签页图标。放入 public/favicon.svg，修改 SITE_FAVICON 即可
-// - Hero Icon → 首页 Hero 区域"Atom 博客"前面的图标。
-//               留空 '' 则使用内置的 Atom 原子 SVG（默认）；
-//               如需替换，放入 public/heroes/hero.svg（或 .png / .webp），修改 SITE_HERO_ICON 即可
+// - Hero Icon → 首页 Hero 区域的标识图形。
+//               TUI 版首页改用「因特吧」字符画（src/components/TerminalAscii.astro），
+//               默认不再渲染图片；此常量保留给需要恢复图片标识的客制化场景。
 //
 // 图形来源：内置标识由本机 Draw Things 生成原图，再描摹成矢量，颜色对齐设计系统 token。
 // 完整流水线见 DEVELOP.md「品牌图标（Draw Things 流水线）」。
@@ -68,6 +68,39 @@ export const SOCIAL_LINKS = {
 
 // 分页配置（首页与文章列表共用）
 export const POSTS_PER_PAGE = 12;
+
+/* ============================================================
+ * TUI（终端用户界面）身份常量
+ * ============================================================
+ * 全站外壳按终端会话来组织，这组常量是它的身份：
+ *   标题栏  user@host:~      ← TUI_USER / TUI_HOST
+ *   导航行  ~/ ~/posts ...    ← TUI_NAV
+ *   提示符  ~/yinteba $       ← TUI_PROMPT
+ * 值都是站点级配置，与主题包无关（主题包只管颜色 token）。
+ */
+
+/** 终端用户名 —— 标题栏 `user@host` 的前一段 */
+export const TUI_USER = 'zz3656';
+/** 终端主机名 */
+export const TUI_HOST = 'node';
+/** 工作目录 —— 提示符里显示的路径 */
+export const TUI_CWD = '~/yinteba';
+/** 家目录符号 */
+export const TUI_HOME = '~';
+/** 终端提示符（含尾部空格，渲染时再接光标） */
+export const TUI_PROMPT = `${TUI_CWD} $`;
+
+/**
+ * 导航行 —— 命令行形式的站点路径。
+ * href 用 key 表达，具体 URL 由 src/utils/path.ts 按部署 base 生成。
+ */
+export const TUI_NAV: Array<{ key: string; path: string; label: string }> = [
+  { key: 'home', path: '~/', label: '首页' },
+  { key: 'posts', path: '~/posts', label: '文章归档' },
+  { key: 'cats', path: '~/cats', label: '分类' },
+  { key: 'tags', path: '~/tags', label: '标签' },
+  { key: 'about', path: '~/about', label: '关于' },
+];
 
 /**
  * 站点默认主题 ID（构建期常量）。

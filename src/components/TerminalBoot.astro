@@ -1,0 +1,37 @@
+---
+// Atom Blog — 终端启动自检输出（TUI Hero）
+//
+// 逐行显现由 CSS 动画编排（nth-child 递增 delay），零 JS；
+// prefers-reduced-motion 下所有行直接可见。
+// 所有数值都来自真实内容集合，不写死。
+interface Props {
+  articles: number;
+  categories: number;
+  tags: number;
+  generator: string;
+}
+
+const { articles, categories, tags, generator } = Astro.props;
+---
+
+<div class="term-boot">
+  <p class="term-boot-line">
+    <span class="term-boot-key">kernel:</span>
+    <span class="term-boot-msg">{generator} · static output</span>
+    <span class="term-boot-status term-boot-status--ok">ok</span>
+  </p>
+  <p class="term-boot-line">
+    <span class="term-boot-key">articles:</span>
+    <span class="term-boot-msg">{articles} loaded</span>
+  </p>
+  <p class="term-boot-line">
+    <span class="term-boot-key">index:</span>
+    <span class="term-boot-msg">
+      {categories} cats · {tags} tags
+    </span>
+  </p>
+  <p class="term-boot-line">
+    <span class="term-boot-key">status:</span>
+    <span class="term-boot-status term-boot-status--online">online</span>
+  </p>
+</div>

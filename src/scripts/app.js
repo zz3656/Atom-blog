@@ -186,12 +186,17 @@
         var link = document.createElement('a');
         link.href = searchBase.replace(/\/+$/, '') + '/blog/' + r.item.slug + '/';
         link.className = 'search-result-item';
+        // 路径行 —— grep 输出的 "文件:行" 前缀
+        var pathEl = document.createElement('div');
+        pathEl.className = 'search-result-path';
+        pathEl.textContent = '~/posts/' + r.item.slug + '.md';
         var titleEl = document.createElement('div');
         titleEl.className = 'search-result-title';
         titleEl.innerHTML = highlightSafe(r.item.title, query);
         var descEl = document.createElement('div');
         descEl.className = 'search-result-desc';
         descEl.innerHTML = highlightSafe(r.item.description || '', query);
+        link.appendChild(pathEl);
         link.appendChild(titleEl);
         link.appendChild(descEl);
         fragment.appendChild(link);
@@ -486,6 +491,19 @@
       } else if (wideToc.addListener) {
         wideToc.addListener(syncToc);
       }
+    }
+  }
+
+  // ============================================================
+  // 9. 404 真实路径回填
+  // ============================================================
+  // 静态 404.html 在构建期拿不到访客请求的真实路径，
+  // 这里用 location.pathname 回填 [data-404-path] 占位符。
+  var notFoundPaths = document.querySelectorAll('[data-404-path]');
+  if (notFoundPaths.length > 0) {
+    var requestedPath = window.location.pathname;
+    for (var nfp = 0; nfp < notFoundPaths.length; nfp++) {
+      notFoundPaths[nfp].textContent = requestedPath;
     }
   }
 })();
