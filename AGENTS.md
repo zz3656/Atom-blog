@@ -21,9 +21,10 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（「因特吧」，�
 - `src/styles/_modules/` — 21 个共享 CSS 模块（布局/字体/刻度尺），**不含颜色**
 - `src/styles/_theme-geek.css` — 站点级作用域增补（L2）：直角化 / 等宽角色 / 终端标题栏 / CRT。**每条规则必须以 `html[data-theme='atom-geek']` 开头**，禁 `!important`、禁覆盖布局 token
 - `src/generated/` — 构建时生成的主题汇总入口（`themes.ts` 已被跟踪，但内容会被 build 重写，别手改）
-- `public/` — 静态资源（`logos/`、`favicon.svg`、`manifest.json`）
+- `src/assets/og/` — 社交卡片底板用的构建资产（等宽字体 + 许可），说明见 `src/assets/og/README.md`
+- `public/` — 静态资源（`logos/`、`favicon.svg`、`manifest.json`）；`public/og.jpg` 是社交卡片**底板**（不含文章计数，计数在构建期叠加）
 - `astro-plugins/` — remark/rehype 与构建期插件（`rehype-table-scroll` 等）
-- `scripts/` — 构建辅助与 CLI（`atom-cli.mjs`、`create-theme.mjs`、`vectorize-icon.mjs`）
+- `scripts/` — 构建辅助与 CLI（`atom-cli.mjs`、`create-theme.mjs`、`vectorize-icon.mjs`、`generate-og.mjs`）
 - `tests/` — Vitest 单元测试，`*.test.ts`
 - `docs/THEMING.md` — **主题作者契约**，改 token 必须同步改这里
 - `.github/workflows/` — `test.yml`（lint → test → build 三段依赖）、`deploy.yml`
@@ -66,3 +67,4 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（「因特吧」，�
 
 - 不要提交密钥。注意 **`.env` 目前不在 `.gitignore` 里**——本地建 `.env` 前先自己加进 ignore，CI 侧密钥一律走 GitHub Actions secrets
 - `scripts/vectorize-icon.mjs` 依赖 `sharp`，而 `sharp` **未列入 `package.json`**（只是 Astro 的传递依赖）——需要时临时 `npm i -D sharp`，用完卸掉
+- `scripts/generate-og.mjs`（构建期叠加社交卡片计数）同样依赖 `sharp`。`sharp` 在 lockfile 里是 Astro 的 **optionalDependency**，`npm ci` 会装上；但它随时可能消失，所以脚本必须**优雅降级**：字体缺失 / sharp 不可用 / 渲染异常都只打警告并保留底板，绝不中断构建

@@ -1,6 +1,6 @@
 {
   "name": "atom",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "type": "module",
   "scripts": {
     "dev": "astro dev",
@@ -16,7 +16,7 @@
     "new": "node scripts/atom-cli.mjs new",
     "list": "node scripts/atom-cli.mjs list",
     "theme:create": "node scripts/create-theme.mjs",
-    "postbuild": "node --experimental-strip-types scripts/generate-rss.mjs && node scripts/fix-sitemap.mjs"
+    "postbuild": "node --experimental-strip-types scripts/generate-rss.mjs && node scripts/fix-sitemap.mjs && node scripts/generate-og.mjs"
   },
   "engines": {
     "node": ">=22.23.4",

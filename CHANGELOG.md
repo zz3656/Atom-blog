@@ -15,10 +15,25 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+## [1.6.0] — 2026-10-25
+
+### ✨ Added
+
+- **社交卡片计数改为构建期实时生成**：新增 `scripts/generate-og.mjs`（postbuild 阶段执行），统计 `src/content/blog/`（排除 `draft`）得到文章数 / 分类数 / 标签数，渲染成 `25 POSTS · 08 CATS · 58 TAGS` 叠加到卡片底板上 —— 文章增减后卡片数字自动跟随，不再像以前那样烤死在图片里
+  - 计数行用 **sharp 的 `text` 选项**（底层 Pango）渲染，`fontfile` 指向仓库内自带的 JetBrains Mono → 字体被内嵌，**不依赖构建机装没装字体，也不依赖网络**，CI 与本地产出完全一致
+  - 排版常数（dpi 80 / 墨迹右缘 1163 / 上缘 33）按底板标题栏的 13px JetBrains Mono 标定，计数行与标题栏 host 文本同基线、同字号
+  - **优雅降级**：字体缺失 / sharp 不可用 / 渲染异常一律只打警告并保留底板，绝不中断构建（社交卡片是装饰，不是构建产物的前置条件）
+
+### ✨ Changed
+
+- **社交卡片底板重做**：`public/og.jpg` 现在是**不含计数**的底板（AI 生成的 CRT 背景氛围 + 终端窗口外壳 + logo + 站名/副标题/提示符），计数在构建期叠加
+  - 顺带修掉一个隐藏问题：上一版卡片的等宽字其实**不是 JetBrains Mono**，而是无头 Chrome 拿不到 Google Fonts 后回落出来的系统字体 —— 现在底板把字体以 base64 内联进 HTML，计数行走 Pango 内嵌字体，两边同一款字体
+
 ### 📚 Documentation
 
 - **第三方主题仓链接**：`docs/THEMING.md` 的「主题的去向」改写为远端真实状态（此前还写着 `zz3656/atom-themes` 未建仓的过时提示），新增「第三方主题仓」小节与「发布到社区」的参考样例；`README.md` 的主题特性行与「主题 / 换肤」章节加入指向 [zz3656/atom-geek](https://github.com/zz3656/atom-geek) / [zz3656/atom-themes](https://github.com/zz3656/atom-themes) 的链接
 - 明确记录「两条安装路径不等价」：Atom 主题契约规定主题目录只能放 CSS token，复制 `atom-geek/` 只得到配色，TUI 版式必须靠覆盖组件层实现
+- 新增 `src/assets/og/README.md` 记录社交卡片资产管线（底板 / 字体 / 构建期叠加 / 降级策略）；`AGENTS.md` 补充 `src/assets/og/` 目录说明与 sharp 依赖的降级约定
 
 ## [1.5.0] — 2026-10-25
 
