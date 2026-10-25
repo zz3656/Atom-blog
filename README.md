@@ -36,7 +36,7 @@
 | 特性                   | 说明                                                                           |
 | ---------------------- | ------------------------------------------------------------------------------ |
 | ⚡ **Astro 驱动**      | 静态 HTML + ~8.7KB minified 交互脚本（defer 加载，首屏渲染零阻塞），加载极快             |
-| 🎨 **主题系统**         | 默认主题（冷轧钢 + 黄铜指示灯），一键切换深/浅色；CSS Token 体系让开发者可拓展自定义主题          |
+| 🎨 **主题系统**         | 单主题站点：唯一主题 `atom-geek`（暗色磷光绿 + 亮色磷光纸），一键切换深/浅色；CSS Token 体系让开发者可拓展自定义主题          |
 | 📱 **响应式设计**      | 手机汉堡菜单、平板、桌面完美适配，iOS 安全区域支持                             |
 | 📝 **Markdown 写作**   | 原生支持，Shiki 代码语法高亮                                                   |
 | 🤖 **CLI 工具**        | `npm run new` / `npm run list` / `npm run theme:create <id>` — 本地创建文章、生成主题       |
@@ -126,7 +126,7 @@ Atom/
 │   ├── _assets/               # 搜索索引（构建时生成）
 │   └── medias/reward/         # 打赏二维码（可选）
 ├── src/
-│   ├── themes/                # 🎨 主题目录（默认 atom-default，开发者可扩展）
+│   ├── themes/                # 🎨 主题目录（唯一主题 atom-geek）
 │   ├── components/            # Astro 组件
 │   │   ├── Header.astro       # 导航栏
 │   │   ├── Footer.astro       # 页脚
@@ -529,7 +529,7 @@ public/medias/reward/
 
 ### 6. 主题 / 换肤
 
-Atom 自带一套精心调校的默认主题：**冷轧钢 + 黄铜指示灯**（日间镀锌灰 + 深棕黄铜，夜间枪铁灰 + 琥珀黄铜）。
+因特吧自带一套精心调校的主题：**磷光终端**（暗色近黑底 `#05070a` + 磷光绿 `#00e88f`，亮色磷光纸 `#f2f6f3` + 深磷光绿 `#00794c`，青色作分类通道）。
 
 右上角一键切换深色 / 浅色模式，**首次访问跟随系统设置**，之后记忆用户选择。
 
@@ -545,7 +545,7 @@ npm run theme:create ocean
 npm run theme:create ocean --no-dark
 ```
 
-然后编辑 `src/themes/ocean/light.css`（及 dark.css）。**默认只安装 atom-default 一个主题**；生成的第三方主题存放在 `src/themes/<id>/`，构建时自动被扫描加入。
+然后编辑 `src/themes/ocean/light.css`（及 dark.css）。**本站只安装 atom-geek 一个主题**（单主题站点）；生成的第三方主题存放在 `src/themes/<id>/`，构建时自动被扫描加入。
 
 如需在 UI 暴露主题选择菜单，开发者可自行扩展 `src/components/Header.astro`——基础设施（themes 数组 + data-theme 属性切换）已就绪。
 

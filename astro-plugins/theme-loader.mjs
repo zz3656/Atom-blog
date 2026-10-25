@@ -70,12 +70,10 @@ function scan() {
       console.warn(`[theme-loader] Skipping "${id}":`, e.message);
     }
   }
-  // 排序: atom-default 优先
-  themes.sort((a, b) => {
-    if (a.id === 'atom-default') return -1;
-    if (b.id === 'atom-default') return 1;
-    return a.id.localeCompare(b.id);
-  });
+  // 排序: 按 id 字典序（通用规则，不对任何具体主题 id 做特例）。
+  // 与 src/utils/themes.ts 的 scanThemes() 保持同一顺序。
+  // 站点默认主题由 src/consts.ts 的 DEFAULT_THEME_ID 决定，与排序无关。
+  themes.sort((a, b) => a.id.localeCompare(b.id));
   return themes;
 }
 

@@ -5,18 +5,6 @@ import type { ThemeManifest } from '../utils/themes';
 
 export const themes: ThemeManifest[] = [
   {
-    "id": "atom-default",
-    "name": "Atom Default",
-    "author": "zz3656",
-    "version": "1.0.0",
-    "description": "默认主题：日间镀锌钢 + 夜间枪铁灰，强调色为黄铜指示灯",
-    "modes": [
-      "light",
-      "dark"
-    ],
-    "preview": "/logos/logo.svg"
-  },
-  {
     "id": "atom-geek",
     "name": "Atom Geek",
     "author": "zz3656",

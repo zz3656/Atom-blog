@@ -7,6 +7,29 @@
 
 ---
 
+## ⚠️ 变更公告 CN-01（2026-10-25 晚 / 分支 `feat/sole-theme`）
+
+**决策**：周杰伦拍板「客制化 = 每个页面板块彻底重写，不是换配色」，方向 A = TUI 终端形态，**放弃多主题并存**。
+
+**因此本方案有 3 处结论作废**（下面给出勘误后的真值；本文其余部分仍然有效）：
+
+| 原结论 | 位置 | 现状态 | 影响 |
+|---|---|---|---|
+| 「`atom-default` 保留不删，作为回退与对比基准」 | §0 / §5.3 / §7 / §8.3 | ❌ 作废。`atom-default` **已移出本站**（`git rm -r src/themes/atom-default`，分支 `feat/sole-theme`） | 本站变单主题站点；§5.3 行为矩阵中「回退到 `themes[0]` = atom-default」一行改为「回退到 `themes[0]` = atom-geek」；§7 的「禁止触碰 `atom-default/`」变为「已删除，文件保留在 git 历史 `1d6073b` + 本地 `~/Documents/GitHub/atom-themes/atom-default/`」 |
+| 「L1 主题包 / L2 站点级增补 分层」 | §2 / §6 | ✅ **仍然成立，但定位变了** | 分层不再是为了「多主题并存」，而是为了**组件层与视觉层解耦**：本站只装 `atom-geek`，但 token 仍在主题包（L1）、选择器级差异仍在站点级文件（L2）——这让 `docs/THEMING.md` 的 token 契约继续有效，也让将来加主题时不必推倒重来 |
+| 「L2 作用域锁 `html[data-theme='atom-geek']` 以免污染 `atom-default`」 | §6.1 | ✅ 铁律不变，**动机变了** | 动机从「不污染另一个主题」变成「主题包仍然只装 token，站点级文件可整份删除回退」 |
+
+**连带改变的架构事实**（本次一并落地）：
+
+1. **站点默认主题机制（§5.2）不变**，只是回退链的兜底值从硬编码 `'atom-default'` 改为 `DEFAULT_THEME_ID` 本身（`atom-default` 已不存在，硬编码它会指向一个不存在的 theme id）。
+2. **排序规则通用化**：`src/utils/themes.ts` 与 `astro-plugins/theme-loader.mjs` 里「`atom-default` 固定首位」的特例删除，改为纯 id 字典序（两处必须同序）。站点默认主题由 `DEFAULT_THEME_ID` 决定，与排序无关。
+3. **单主题站点的必然收益**：所有主题 CSS 会被 `global.css` 汇总 `@import` 并因 `inlineStylesheets:'always'` 内联进每页 HTML——删掉 `atom-default` 后，每页 HTML 直接少背约 6KB 原文（§8.3 的体积账因此改写为**净减少**）。
+4. **验收口径**：不再是「与默认主题对比」（参照系已不存在），改为「**每个板块是否真的换了信息架构与交互形态**」+「作用域静态审计」（选择器必须锁 `data-theme='atom-geek'`、禁 `!important`、禁覆盖布局 token）。
+
+**不变的部分**：§4 的 45 token 取值表与 WCAG 核验、§4.4 的 token→组件消费映射、§6.2 的 L2 规则清单、§8 的体积核算方法、§9 的风险框架——这些在 TUI 重做中继续作为配色与作用域的硬约束使用（暗色 `#00e88f` on `#05070a`、亮色 `#00794c` on `#f2f6f3`、青色分类通道，均已按 AA 核验）。
+
+---
+
 ## 0. 方案摘要（一屏读完）
 
 | # | 结论 |
@@ -14,7 +37,7 @@
 | 分层 | **L1 主题包**（`src/themes/atom-geek/`）只放 token；**L2 站点级增补**（`src/styles/_theme-geek.css`）放"极客质感"，作用域锁定 `html[data-theme='atom-geek']` |
 | 默认主题 | 在 `src/consts.ts` 增 `DEFAULT_THEME_ID = 'atom-geek'`，`BaseLayout.astro` 优先取它；**不改** theme-loader 排序、**不改** manifest schema、**不改** `themes.ts` 生成逻辑 |
 | 契约边界 | 主题包保持 45 个 token 纯定义（0 组件选择器、0 `!important`）；L2 全部 CSS，**0 新增 JS、0 新增字体请求、0 新依赖** |
-| 改动量 | 新增 4 个文件 + 修改 2 个文件（`src/consts.ts`、`src/layouts/BaseLayout.astro`）+ `global.css` 加 1 行 import；**不动** `atom-default/`、不动 `src/pages/about.astro`、`src/styles/_modules/_about.css` |
+| 改动量 | 新增 4 个文件 + 修改 2 个文件（`src/consts.ts`、`src/layouts/BaseLayout.astro`）+ `global.css` 加 1 行 import；**不动** `src/pages/about.astro`、`src/styles/_modules/_about.css`。⚠️ CN-01 后：`atom-default/` 已移出本站 |
 | 体积 | 主题包 ≈6.0KB（预算 16KB）；L2 ≈5.5KB 源码 ≈4KB 压缩（预算 8KB）。注意 `inlineStylesheets:'always'`——CSS 内联进每个 HTML，L2 成本 × 页面数 |
 | 与需求的偏差 | **3 处**（亮色 `--accent`/`--text-muted`/`--success` 等 6 个 token 为满足 WCAG AA 做了改值；`theme-color` meta 暂不跟随主题；命令面板 P2 不做）→ 见 §3 的 D-04 / D-08 / D-09 |
 
@@ -29,16 +52,16 @@
 | 主题包结构契约 | `docs/THEMING.md:33-50` | 目录**只能**含 `manifest.json` + `light.css` + `dark.css`，内容只能是通过 `html[data-theme='x'][data-mode='y']` 定义的 CSS 变量 |
 | 必需 token 清单 | `docs/THEMING.md:52-139` | 43 个必需 + 2 个可选 = 45 个 |
 | 主题自动注册 | `astro-plugins/theme-loader.mjs:31-80,101-131` | 构建时扫描 `src/themes/*/`，生成 `src/generated/themes.{ts,css}`；**新增主题零配置** |
-| 主题排序 | `astro-plugins/theme-loader.mjs:73-78` | `atom-default` 固定第 1 位，其余 `localeCompare` |
-| 默认主题解析 | `src/layouts/BaseLayout.astro:32-34` | `defaultThemeId = themeIds[0] \|\| 'atom-default'` |
+| 主题排序 | `astro-plugins/theme-loader.mjs:73-78` | 基线：`atom-default` 固定第 1 位。⚠️ CN-01 后改为纯 id 字典序（无 per-id 特例） |
+| 默认主题解析 | `src/layouts/BaseLayout.astro:32-34` | 基线：`defaultThemeId = themeIds[0] \|\| 'atom-default'`。⚠️ CN-01 后为 `DEFAULT_THEME_ID` 优先 + `themes[0] \|\| DEFAULT_THEME_ID` |
 | 运行时应用主题 | `src/layouts/BaseLayout.astro:97-113` | 内联同步脚本：读 `localStorage.themeId` → 无效则用 `defaultThemeId`；再写 `data-theme` / `data-mode` |
 | 模式（明暗）机制 | `src/scripts/app.js:76-121` | 只写 `localStorage.themeMode` / `themeModeAuto`；**从不写 `themeId`** → 当前 UI 无主题切换入口 |
 | 共享布局 token | `src/styles/_modules/_variables.css:9-44` | `--radius*`、`--font-*`、`--max-width`、`--rule-*` 定义在 `:root`，**主题不得覆盖**（`docs/THEMING.md:151-156`） |
 | 站点"极客"结构已存在 | `_background.css`（网格 `body::before` + 角落辉光 `body::after`）、`_variables.css:47-63`（`.rule` 刻度尺）、`_log.css:18-26`（日志脊线） | **换色 + 换字体角色 + 加质感**，不要重画 UI |
 | CSS 内联策略 | `astro.config.mjs:39` | `inlineStylesheets: 'always'` → 所有 CSS 进 HTML，无独立缓存文件 |
 | 现有主题包体积 | `src/themes/atom-default/*` | light 2914B + dark 2580B + manifest 258B = 5752B |
-| 现有单测约束 | `tests/themes.test.ts:73-76` | **断言 `themes[0].id === 'atom-default'`** → 改排序会破测试 |
-| 目录扫描顺序 | 实测 `readdirSync` 在本机 APFS 返回字典序 | `atom-default` < `atom-geek`，新增主题后该断言仍成立（但属**隐式依赖**，见 D-03） |
+| 现有单测约束 | `tests/themes.test.ts:73-76` | 基线：**断言 `themes[0].id === 'atom-default'`** → 改排序会破测试。⚠️ CN-01 后该断言已改为「唯一主题 atom-geek」+「按 id 字典序」的通用规则断言 |
+| 目录扫描顺序 | 实测 `readdirSync` 在本机 APFS 返回字典序 | 基线成立但属**隐式依赖**（见 D-03）。⚠️ CN-01 后排序已显式化，不再依赖此事实 |
 | 工作区状态 | `git status --porcelain` | 仅 `?? IDEA.md`、`?? docs/REQUIREMENTS-ATOM-GEEK.md`；about 页改动**已在 69959a2 提交**，OUT-06 降级为"仍不要改动 about 相关文件" |
 
 ---
@@ -241,9 +264,9 @@
 ### 5.1 现状链路
 
 ```
-构建: theme-loader.mjs 扫描 → themes.ts = [atom-default, ...] (atom-default 排第 1)
+构建: theme-loader.mjs 扫描 → themes.ts = [atom-geek]（⚠️ CN-01 后按 id 字典序）
                                         ↓
-渲染: BaseLayout.astro:32-34  defaultThemeId = themeIds[0] || 'atom-default'
+渲染: BaseLayout.astro:32-34  defaultThemeId = DEFAULT_THEME_ID（缺失时回退 themes[0]）
                                         ↓
 运行时: BaseLayout.astro:97-113 内联脚本
         id = localStorage.themeId
@@ -270,10 +293,13 @@ export const DEFAULT_THEME_ID = 'atom-geek';
 
 ```ts
 const themeIds = themes.map((t) => t.id);
-// 默认主题：优先站点配置 DEFAULT_THEME_ID；未注册时回退清单首个（atom-default）
-const defaultThemeId =
-  themeIds.includes(DEFAULT_THEME_ID) ? DEFAULT_THEME_ID : themeIds[0] || 'atom-default';
+// 默认主题：优先站点配置 DEFAULT_THEME_ID；未注册时回退清单首个
+const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
+  ? DEFAULT_THEME_ID
+  : themeIds[0] || DEFAULT_THEME_ID;
 ```
+
+> **勘误（CN-01）**：原写法末位兜底是硬编码 `'atom-default'`。`atom-default` 已移出本站后，硬编码它会指向一个不存在的 theme id，兜底值必须改为 `DEFAULT_THEME_ID` 本身。
 
 **内联脚本 `BaseLayout.astro:97-113` 不需要任何改动** —— 它的逻辑已经是"localStorage 有效值优先，否则用 defaultThemeId"，天然满足"老访客的选择不被覆盖"。
 
@@ -283,10 +309,10 @@ const defaultThemeId =
 |---|---|---|---|
 | 新访客（无存储） | 无 | 无 | `atom-geek` + 跟随系统明暗 ✅ FN-05 |
 | 老访客（只存过模式） | 无（UI 从不写此键） | `light`/`dark` | `atom-geek` + **保留原模式** ✅ 不覆盖老访客选择 |
-| 老访客（历史存过 `atom-default`） | `atom-default` | 任意 | `atom-default` + 原模式 ✅ 选择不被覆盖 |
+| 老访客（历史存过 `atom-default`） | `atom-default` | 任意 | ⚠️ **勘误（CN-01）**：`atom-default` 已不在清单内 → 内联脚本校验失败 → 回退 `atom-geek`（模式仍保留）。这是单主题化的**必然行为变化**：老访客的「主题选择」不再可保留，但「日/夜选择」始终保留 |
 | 非法/过期主题 ID | `xxx` | 任意 | 回退 `atom-geek` ✅（内联脚本 `themeIds.indexOf(id) === -1`） |
-| `atom-geek` 主题目录被删除 | 无 | 任意 | `themeIds.includes()` 为 false → 回退 `themes[0]` = `atom-default` ✅ 回退验证通过 |
-| 手动设 `themeId='atom-default'` | `atom-default` | 任意 | `atom-default` ✅ FN-05 第 2 条 |
+| `atom-geek` 主题目录被删除 | 无 | 任意 | 清单为空 → 兜底 `DEFAULT_THEME_ID`（主题 CSS 缺失，页面退化为无主题态）⚠️ 勘误（CN-01）：原写「回退 `themes[0]` = atom-default」已不成立 |
+| 手动设 `themeId='atom-default'` | `atom-default` | 任意 | 同上，回退 `atom-geek` ✅ |
 
 ### 5.4 被否方案
 
@@ -402,7 +428,7 @@ src/
 │   ├── _theme-geek.css                ← 新增：L2 全部规则（作用域锁定 atom-geek）
 │   └── _modules/                      ← 不动（含 _about.css）
 ├── themes/
-│   ├── atom-default/                  ← 不动（OUT-05）
+│   ├── (atom-default 已移出本站，CN-01)
 │   └── atom-geek/                     ← 新增：3 个文件
 │       ├── manifest.json
 │       ├── light.css
@@ -417,7 +443,9 @@ docs/
 └── THEMING.md                         ← 可选：补一段"L2 站点级增补"约定说明
 ```
 
-**禁止触碰**：`src/themes/atom-default/**`、`src/pages/about.astro`、`src/styles/_modules/_about.css`、`src/scripts/app.js`、`src/generated/**`、`package.json`。
+**禁止触碰**：`src/pages/about.astro`、`src/styles/_modules/_about.css`、`src/scripts/app.js`、`src/generated/**`、`package.json`。
+
+⚠️ CN-01：`src/themes/atom-default/` 已删除（文件保留在 git 历史 `1d6073b` 与本地 `~/Documents/GitHub/atom-themes/atom-default/`）。
 
 ---
 
@@ -493,7 +521,7 @@ docs/
 
 **阶段 2 — 默认主题机制**
 5. `src/consts.ts` + `src/layouts/BaseLayout.astro` 按 §5.2 改（2 个文件，共 3 行）
-6. 验收：`localStorage` 清空 → 首屏即极客；存 `themeMode` → 模式保留；存 `themeId='atom-default'` → 保留 atom-default
+6. 验收：`localStorage` 清空 → 首屏即极客；存 `themeMode` → 模式保留；存已失效的 `themeId` → 回退 atom-geek
    → 验收锚点：FN-04 / FN-05 第 1 条
 
 **阶段 3 — L2 增补**
@@ -508,8 +536,8 @@ docs/
 
 **给测试工程师的三个硬锚点**（对应需求的 A–F 清单）：
 - A. `src/generated/themes.ts` 存在 `atom-geek` 且 modes 含 light+dark；主题包 CSS 内**无组件选择器、无 `!important`**
-- B. 10 路由 × 2 模式截图；`atom-default` 观感与改动前**逐像素对比无差异**（可用 `git stash` 对照）
-- C. 移除 `src/themes/atom-geek/` 后 `npm run build` 仍成功且站点回退 `atom-default`（回退验证）
+- B. 10 路由 × 2 模式截图；⚠️ CN-01 后**不再有「与 atom-default 对比」**（参照系已移出）→ 改为「每个板块的信息架构与交互形态是否真的改变」+ 作用域静态审计
+- C. 移除 `src/themes/atom-geek/` 后 `npm run build` 仍成功（空清单兜底 `DEFAULT_THEME_ID`，站点不崩）
 
 ---
 
@@ -518,7 +546,7 @@ docs/
 | 编号 | 问题 | 架构侧意见 | 影响 |
 |---|---|---|---|
 | **Q-01** | 是否放行 L2 站点级作用域增补 | **建议放行**。不放行则 FN-13/14/15/16/17/18/19/20 共 8 条需求作废，主题退化为"换色" | 不放行 → 方案只保留 L1 + §5 默认主题机制 |
-| **Q-02** | 主题生效方式 | **建议 (a)**：设为站点默认 + 保留 `atom-default` 可回退。本方案 §5 已按 (a) 实现，且**不引入主题选择器 UI**（不改 `Header.astro`） | (b) 需额外设计选择器 UI + `localStorage.themeId` 写入路径，是独立需求 |
+| **Q-02** | 主题生效方式 | ✅ 已定：单主题站点，`atom-geek` 为唯一主题且默认生效；`atom-default` 移出本站（CN-01）。**不引入主题选择器 UI**（不改 `Header.astro`） | 若日后要访客自选，需重新引入多主题 + 选择器 UI（独立需求） |
 | **Q-03** | 主色方向 | **采用需求建议的磷光绿 + 青**（暗色 `#00e88f` + `#22d3ee`）。**但亮色已按 AA 降饱和**（§4.3），需用户确认接受 | 若用户坚持亮色原色 → 需改为"链接加下划线 + 加粗"补偿方案 |
 | **Q-05** | 终端化文案是否允许改硬编码文案（`Precision Log`、导航标签） | 本方案 v1 **不动任何 HTML 文案**；FN-17 用 CSS 装饰前缀实现；若判定不可动，FN-17 降级为"等宽 + 激活高亮" | 影响 FN-17 / FN-18 / FN-19 的达成度 |
 | **Q-06**（新增） | `theme-color` 浏览器色条是否跟随主题 | 建议**本次不做**，作为独立小改（改 `BaseLayout.astro:48-49` + 内联脚本，不增请求） | 影响"换肤即换站感"的完整度 |
