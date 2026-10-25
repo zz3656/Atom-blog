@@ -1,11 +1,11 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PostCard from '../components/PostCard.astro';
-import HeroIcon from '../components/HeroIcon.astro';
+import TerminalAscii from '../components/TerminalAscii.astro';
+import TerminalBoot from '../components/TerminalBoot.astro';
 import {
   SITE_TITLE,
   SITE_DESCRIPTION,
-  SITE_HERO_ICON,
   HERO_TITLE,
   HERO_DESCRIPTION,
   HERO_EYEBROW,
@@ -15,7 +15,6 @@ import {
 } from '../consts';
 import { getPublishedPosts } from '../utils/collection';
 import { normalizeCategory } from '../utils/blog';
-import { formatDateISO } from '../utils/date';
 import { blogPostUrl, blogListUrl, baseAssetsPath } from '../utils/path';
 
 const allPosts = await getPublishedPosts();
@@ -25,30 +24,43 @@ const totalPages = Math.ceil(allPosts.length / POSTS_PER_PAGE) || 1;
 const totalPosts = allPosts.length;
 
 // ===== 站点数据（全部来自真实内容，不做假数据）=====
-const categorySet = new Set(allPosts.map((p) => normalizeCategory(p.data.category)));
-const tagSet = new Set(allPosts.flatMap((p) => p.data.tags ?? []));
-const latestDate = allPosts.length > 0 ? allPosts[0].data.pubDate : null;
+const categoryCount = new Set(allPosts.map((p) => normalizeCategory(p.data.category))).size;
+const tagCount = new Set(allPosts.flatMap((p) => p.data.tags ?? [])).size;
 
 // 渲染时过滤掉被 hide 的按钮；空数组则不渲染整块 hero-actions
 const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
-  <section class="hero">
+  <section class="hero hero--tui">
     <div class="hero-inner">
-      <div class="hero-main">
-        <p class="hero-eyebrow">
-          <span class="hero-eyebrow-mark"></span>
-          {HERO_EYEBROW}
-          {HERO_EYEBROW_SUB && <span class="hero-eyebrow-sub">{HERO_EYEBROW_SUB}</span>}
-        </p>
-        <h1>
-          <HeroIcon src={SITE_HERO_ICON} />
-          <Fragment set:html={HERO_TITLE} />
-        </h1>
-        <div class="rule rule--draw"></div>
-        <p class="hero-desc">{HERO_DESCRIPTION}</p>
-        {visibleHeroActions.length > 0 && (
+      <p class="hero-eyebrow">
+        <span class="hero-eyebrow-mark" aria-hidden="true"></span>
+        {HERO_EYEBROW}
+        {HERO_EYEBROW_SUB && <span class="hero-eyebrow-sub">{HERO_EYEBROW_SUB}</span>}
+      </p>
+
+      <h1 class="hero-title">
+        <TerminalAscii />
+        <span class="sr-only" set:html={HERO_TITLE} />
+      </h1>
+
+      <TerminalBoot
+        articles={totalPosts}
+        categories={categoryCount}
+        tags={tagCount}
+        generator={Astro.generator}
+      />
+
+      <p class="hero-desc">{HERO_DESCRIPTION}</p>
+
+      <p class="hero-prompt">
+        <span class="hero-prompt-path" aria-hidden="true">~/yinteba $</span>
+        <span class="cursor-block" aria-hidden="true"></span>
+      </p>
+
+      {
+        visibleHeroActions.length > 0 && (
           <div class="hero-actions">
             {visibleHeroActions.map((action) => (
               <a
@@ -59,46 +71,21 @@ const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
               </a>
             ))}
           </div>
-        )}
-      </div>
-
-      <aside class="hero-telemetry" aria-label="站点数据">
-        <p class="telemetry-label">Telemetry</p>
-        <dl class="telemetry-list">
-          <div class="telemetry-row">
-            <dt>Posts</dt>
-            <dd>{String(totalPosts).padStart(2, '0')}</dd>
-          </div>
-          <div class="telemetry-row">
-            <dt>Categories</dt>
-            <dd>{String(categorySet.size).padStart(2, '0')}</dd>
-          </div>
-          <div class="telemetry-row">
-            <dt>Tags</dt>
-            <dd>{String(tagSet.size).padStart(2, '0')}</dd>
-          </div>
-          {latestDate && (
-            <div class="telemetry-row telemetry-row--wide">
-              <dt>Latest</dt>
-              <dd>{formatDateISO(latestDate)}</dd>
-            </div>
-          )}
-        </dl>
-      </aside>
+        )
+      }
     </div>
   </section>
 
   <section class="recent-posts">
     <div class="section-header">
       <div class="section-heading">
-        <span class="section-eyebrow">Latest Entries</span>
+        <span class="section-eyebrow">ls -la ~/posts</span>
         <h2 class="section-title">最新文章</h2>
       </div>
-      <span class="section-count">共 {totalPosts} 篇</span>
+      <span class="section-count">{totalPosts} entries</span>
     </div>
-    <div class="rule section-rule rule--draw"></div>
 
-    <ul class="log-list">
+    <ul class="ls-list">
       {pagePosts.map((post, idx) => (
         <PostCard
           slug={blogPostUrl(post.id)}
@@ -117,7 +104,7 @@ const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
       <nav class="pagination" aria-label="文章分页">
         {pagePosts.length < allPosts.length && (
           <a href={blogListUrl()} class="page-btn next">
-            更多文章 →
+            $ ls ~/posts/2 →
           </a>
         )}
       </nav>

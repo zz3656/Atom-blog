@@ -186,12 +186,17 @@
         var link = document.createElement('a');
         link.href = searchBase.replace(/\/+$/, '') + '/blog/' + r.item.slug + '/';
         link.className = 'search-result-item';
+        // 路径行 —— grep 输出的 "文件:行" 前缀
+        var pathEl = document.createElement('div');
+        pathEl.className = 'search-result-path';
+        pathEl.textContent = '~/posts/' + r.item.slug + '.md';
         var titleEl = document.createElement('div');
         titleEl.className = 'search-result-title';
         titleEl.innerHTML = highlightSafe(r.item.title, query);
         var descEl = document.createElement('div');
         descEl.className = 'search-result-desc';
         descEl.innerHTML = highlightSafe(r.item.description || '', query);
+        link.appendChild(pathEl);
         link.appendChild(titleEl);
         link.appendChild(descEl);
         fragment.appendChild(link);
@@ -302,9 +307,57 @@
       '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 
     var pres = postContent.querySelectorAll('pre');
+
+    // 代码块标题栏的文件名：文章 slug + 块序号 + 语言扩展名。
+    // 三个来源都是真实数据 —— slug 来自文章、序号是块在正文里的次序、
+    // 扩展名来自 Shiki 输出的 data-language。
+    var postEl = document.querySelector('.post');
+    var fileBase = (postEl && postEl.getAttribute('data-post-slug')) || 'snippet';
+    var LANG_EXT = {
+      bash: 'sh',
+      sh: 'sh',
+      shell: 'sh',
+      zsh: 'sh',
+      console: 'sh',
+      js: 'js',
+      javascript: 'js',
+      ts: 'ts',
+      typescript: 'ts',
+      json: 'json',
+      yaml: 'yml',
+      yml: 'yml',
+      toml: 'toml',
+      html: 'html',
+      css: 'css',
+      scss: 'scss',
+      md: 'md',
+      markdown: 'md',
+      py: 'py',
+      python: 'py',
+      rb: 'rb',
+      go: 'go',
+      rs: 'rs',
+      rust: 'rs',
+      sql: 'sql',
+      dockerfile: 'dockerfile',
+      nginx: 'conf',
+      conf: 'conf',
+      ini: 'ini',
+      diff: 'diff',
+      text: 'txt',
+      txt: 'txt',
+      plaintext: 'txt',
+    };
+
+    var codeIndex = 0;
     for (var pi = 0; pi < pres.length; pi++) {
       var pre = pres[pi];
       if (pre.parentElement && pre.parentElement.classList.contains('code-wrapper')) continue;
+      codeIndex++;
+      var lang = (pre.getAttribute('data-language') || '').toLowerCase();
+      var ext = LANG_EXT[lang] || (lang && lang.length <= 6 ? lang : 'txt');
+      var seq = codeIndex < 10 ? '0' + codeIndex : String(codeIndex);
+      pre.setAttribute('data-file', fileBase + '-' + seq + '.' + ext);
       var wrapper = document.createElement('div');
       wrapper.className = 'code-wrapper';
       pre.parentNode.insertBefore(wrapper, pre);
@@ -486,6 +539,19 @@
       } else if (wideToc.addListener) {
         wideToc.addListener(syncToc);
       }
+    }
+  }
+
+  // ============================================================
+  // 9. 404 真实路径回填
+  // ============================================================
+  // 静态 404.html 在构建期拿不到访客请求的真实路径，
+  // 这里用 location.pathname 回填 [data-404-path] 占位符。
+  var notFoundPaths = document.querySelectorAll('[data-404-path]');
+  if (notFoundPaths.length > 0) {
+    var requestedPath = window.location.pathname;
+    for (var nfp = 0; nfp < notFoundPaths.length; nfp++) {
+      notFoundPaths[nfp].textContent = requestedPath;
     }
   }
 })();

@@ -1,4 +1,13 @@
-/* Atom Blog — About Page */
+/* Atom Blog — About Page（TUI: cat README.md）
+ *
+ * 页头由 CommandHeader 组件渲染（命令回显 + 标题 + 计数，见 _terminal.css）。
+ * 本文件负责 README 正文区的终端语法：
+ *   · 二级标题 = 命令行小节标题（左边条 + 等宽标记）
+ *   · 数据条   = df -h 风格的真实站点数据
+ *   · 主题卡   = 终端面板（左侧强调边）
+ *   · 列表     = '#' 标记，键名等宽
+ * 所有颜色走 token，不写死色值。
+ */
 
 .about {
   max-width: var(--content-width);
@@ -6,40 +15,7 @@
 }
 
 .about-content {
-  margin-top: 1.5rem;
   line-height: 1.85;
-  text-align: left;
-}
-
-.about-content h2 {
-  margin-top: 2.75rem;
-  margin-bottom: 0.9rem;
-  font-family: var(--font-display);
-  font-size: 1.35rem;
-  font-weight: 700;
-  font-variation-settings:
-    'wdth' 102,
-    'wght' 700;
-  letter-spacing: -0.02em;
-  color: var(--text-bright);
-  text-align: left;
-}
-
-/* 标题前的黄铜刻度锚点（与正文 h2 同一语法） */
-.about-content h2::before {
-  content: '';
-  display: inline-block;
-  width: 15px;
-  height: 2px;
-  background: var(--accent);
-  margin-right: 0.65rem;
-  vertical-align: 0.3em;
-}
-
-.about-bio {
-  font-size: 1rem;
-  line-height: 1.9;
-  color: var(--text-secondary);
 }
 
 .about-content p,
@@ -51,55 +27,62 @@
   margin-bottom: 1rem;
 }
 
-.about-content ul {
-  margin-bottom: 1rem;
-  padding-left: 1.5rem;
+/* ===== 二级标题 ===== */
+.about-content h2 {
+  margin: 2.6rem 0 0.95rem;
+  font-family: var(--font-sans);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--text-bright);
+  line-height: 1.4;
+  padding-left: 0.7rem;
+  border-left: 2px solid var(--accent);
 }
 
-.about-content li {
-  margin-bottom: 0.5rem;
+/* ===== 首段 ===== */
+.about-bio {
+  font-size: 1rem;
+  line-height: 1.9;
+  color: var(--text-secondary);
 }
 
-.about-content li::marker {
+.about-bio strong {
   color: var(--accent);
+  font-weight: 700;
 }
 
-.about-links {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: 1.75rem;
-  justify-content: center;
-}
-
-/* ===== About — Stats（真实数据条） ===== */
+/* ===== 数据条（df -h 风格）===== */
 .about-stats {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
   gap: 1px;
   background: var(--border-light);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius);
   overflow: hidden;
-  margin-bottom: 2rem;
+  margin: 1.6rem 0 2.2rem;
 }
 
 .about-stat {
   background: var(--bg-card);
-  padding: 0.95rem 1.15rem;
+  padding: 0.85rem 1rem;
 }
 
 .about-stat dt {
   font-family: var(--font-mono);
   font-size: 0.66rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  letter-spacing: 0.12em;
   color: var(--text-muted);
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.3rem;
+}
+
+.about-stat dt::after {
+  content: ':';
 }
 
 .about-stat dd {
   font-family: var(--font-mono);
-  font-size: 1.12rem;
+  font-size: 1.08rem;
   font-weight: 700;
   color: var(--text-bright);
   font-variant-numeric: tabular-nums;
@@ -107,113 +90,47 @@
 }
 
 .about-stat dd .unit {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 500;
   color: var(--text-muted);
   margin-left: 0.2rem;
 }
 
-/* ===== About — Projects ===== */
-.about-projects {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.project-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  padding: 1.4rem;
-  transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease,
-    transform 0.25s ease;
-  display: flex;
-  flex-direction: column;
-  min-height: 160px;
-}
-
-.project-card:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-glow);
-  box-shadow: var(--shadow-md);
-}
-
-.project-emoji {
-  font-size: 1.6rem;
-  margin-bottom: 0.6rem;
-  line-height: 1;
-}
-
-.project-card h3 {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-  color: var(--text-bright);
-}
-
-.project-card p {
-  font-size: 0.86rem;
-  color: var(--text-secondary);
-  line-height: 1.7;
-  margin-bottom: auto;
-}
-
-.project-card p code {
-  background: var(--bg-inline-code);
-  padding: 0.1rem 0.3rem;
-  border-radius: 3px;
-  font-size: 0.8rem;
-  color: var(--accent);
-}
-
-.project-links {
-  display: flex;
-  gap: 0.4rem;
-  flex-wrap: wrap;
-  padding-top: 0.9rem;
-  margin-top: 0.9rem;
-  border-top: 1px solid var(--border-light);
-}
-
-.project-links .tag {
-  font-size: 0.74rem;
-  padding: 0.16rem 0.5rem;
-}
-
-/* ===== About — Topics ===== */
+/* ===== 主题面板 ===== */
 .about-topics {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1rem;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
   margin-bottom: 2rem;
 }
 
 .topic-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  padding: 1.25rem;
+  border-left: 2px solid var(--accent);
+  padding: 1.1rem 1.15rem;
   transition:
-    border-color 0.25s ease,
-    box-shadow 0.25s ease;
+    border-color 0.2s ease,
+    background-color 0.2s ease;
   display: flex;
-  flex-direction: column;
-  min-height: 130px;
+  gap: 0.8rem;
+  align-items: flex-start;
 }
 
 .topic-card:hover {
   border-color: var(--border-glow);
-  box-shadow: var(--shadow-md);
+  border-left-color: var(--accent);
+  background: var(--bg-card-hover);
 }
 
 .topic-icon {
-  font-size: 1.5rem;
-  margin-bottom: 0.5rem;
-  line-height: 1;
+  font-size: 1.25rem;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.topic-info {
+  min-width: 0;
 }
 
 .topic-info strong {
@@ -221,39 +138,63 @@
   font-size: 0.95rem;
   font-weight: 700;
   color: var(--text-bright);
-  margin-bottom: 0.4rem;
+  margin-bottom: 0.35rem;
 }
 
 .topic-info span {
-  font-size: 0.84rem;
+  font-size: 0.85rem;
   color: var(--text-secondary);
-  line-height: 1.65;
+  line-height: 1.7;
+  display: block;
 }
 
-/* ===== About — Skills ===== */
-.about-skills {
+.project-links {
   display: flex;
+  gap: 0.35rem;
   flex-wrap: wrap;
-  gap: 0.45rem;
-  margin-bottom: 2rem;
+  padding-top: 0.7rem;
+  margin-top: 0.7rem;
+  border-top: 1px solid var(--border-light);
 }
 
-.skill-tag {
-  display: inline-block;
-  padding: 0.3rem 0.75rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  font-size: 0.8rem;
+.project-links .tag {
+  font-size: 0.72rem;
+  padding: 0.14rem 0.45rem;
+}
+
+/* ===== 规矩列表（'#' 标记）===== */
+.about-rules {
+  list-style: none;
+  margin-bottom: 1.2rem;
+  padding: 0;
+}
+
+.about-rules li {
+  position: relative;
+  padding-left: 1.45rem;
+  margin-bottom: 0.55rem;
+  line-height: 1.75;
+}
+
+.about-rules li::before {
+  content: '#';
+  position: absolute;
+  left: 0;
+  top: 0;
   font-family: var(--font-mono);
-  color: var(--text-secondary);
-  transition:
-    border-color 0.2s ease,
-    color 0.2s ease;
-  cursor: default;
+  color: var(--accent);
+  font-weight: 700;
 }
 
-.skill-tag:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+.about-rules strong {
+  color: var(--text-bright);
+  font-weight: 700;
+}
+
+/* ===== 末尾命令按钮 ===== */
+.about-links {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 2rem;
+  flex-wrap: wrap;
 }

@@ -1,9 +1,11 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CommandHeader from '../../components/CommandHeader.astro';
 import { SITE_TITLE } from '../../consts';
 import { normalizeCategory } from '../../utils/blog';
 import { getPublishedPosts } from '../../utils/collection';
 import { getCategoryUrl } from '../../utils/path';
+import { formatDateISO } from '../../utils/date';
 
 const posts = await getPublishedPosts();
 
@@ -16,31 +18,47 @@ posts.forEach((post) => {
 });
 
 const sortedCategories = [...categoryMap.entries()].sort((a, b) => b[1].length - a[1].length);
+
+// 每个分类目录的最后修改时间 = 该分类下最新一篇文章的日期
+const categoryDate = (catPosts: typeof posts) => {
+  if (catPosts.length === 0) return '—';
+  const latest = catPosts.reduce(
+    (max, p) => (p.data.pubDate > max ? p.data.pubDate : max),
+    catPosts[0].data.pubDate,
+  );
+  return formatDateISO(latest);
+};
 ---
 
 <BaseLayout title={`所有分类 | ${SITE_TITLE}`}>
   <section class="listing-page">
-    <div class="unified-page-header">
-      <p class="unified-page-eyebrow">Taxonomy</p>
-      <h1>所有分类</h1>
-      <div class="rule"></div>
-      <p class="unified-page-subtitle">
-        共 <span class="accent">{sortedCategories.length}</span> 个分类 ·{' '}
-        <span class="accent">{posts.length}</span> 篇文章
-      </p>
-    </div>
+    <CommandHeader
+      cmd="ls ~/cats"
+      title="所有分类"
+      count={`共 ${sortedCategories.length} 个目录 · ${posts.length} 篇文章`}
+    />
 
-    {sortedCategories.length > 0 ? (
-      <div class="category-grid">
-        {sortedCategories.map(([category, catPosts]) => (
-          <a href={getCategoryUrl(category)} class="category-card">
-            <span class="category-card-name">{category}</span>
-            <span class="category-card-count">{catPosts.length}</span>
-          </a>
-        ))}
-      </div>
-    ) : (
-      <p class="empty-state">暂无分类</p>
-    )}
+    {
+      sortedCategories.length > 0 ? (
+        <ul class="dir-list">
+          {sortedCategories.map(([category, catPosts]) => (
+            <li class="dir-row">
+              <a href={getCategoryUrl(category)} class="dir-entry">
+                <span class="dir-mode" aria-hidden="true">
+                  drwxr-xr-x
+                </span>
+                <span class="dir-links">{sortedCategories.length}</span>
+                <span class="dir-group">cats</span>
+                <span class="dir-date">{categoryDate(catPosts)}</span>
+                <span class="dir-name">{category}</span>
+                <span class="dir-count">{catPosts.length} 篇</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="empty-state">暂无分类</p>
+      )
+    }
   </section>
 </BaseLayout>

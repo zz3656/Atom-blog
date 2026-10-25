@@ -1,37 +1,46 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { rootPath, blogListUrl } from '../utils/path';
+import { rootPath, blogListUrl, categoriesUrl } from '../utils/path';
 ---
 
 <BaseLayout
-  title="404 - 页面不存在"
+  title="404 - command not found"
   description="你访问的页面走丢了"
   type="website"
   pageUrl={String(Astro.site)}
 >
-  <section class="hero">
-    <div class="hero-inner hero-inner--single">
-      <div class="hero-main">
-        <p class="hero-eyebrow">
-          <span class="hero-eyebrow-mark"></span>
-          Error 404
-        </p>
-        <h1>404</h1>
-        <div class="rule rule--draw"></div>
-        <p class="hero-desc">
-          你访问的页面走丢了。
-          <br />
-          就像 IE 浏览器偶尔也会……嗯，好吧，因特吧从不会走丢。
-        </p>
-        <div class="hero-actions">
-          <a href={rootPath()} class="btn btn-primary">
-            回到首页 →
-          </a>
-          <a href={blogListUrl()} class="btn btn-secondary">
-            浏览文章
-          </a>
-        </div>
-      </div>
+  <section class="nf">
+    <p class="nf-line">
+      <span class="nf-prompt" aria-hidden="true">~/yinteba $</span>
+      <span class="nf-cmd">cat <span class="nf-path" data-404-path>/404</span></span>
+    </p>
+
+    <p class="nf-line nf-err">
+      cat: <span class="nf-path" data-404-path>/404</span>: No such file or directory
+    </p>
+
+    <p class="nf-blank" aria-hidden="true"></p>
+
+    <p class="nf-line">
+      <span class="nf-err nf-err--bad"
+        >yinteba: command not found: <span class="nf-path" data-404-path>/404</span></span
+      >
+    </p>
+
+    <div class="nf-suggest">
+      <p class="nf-suggest-label">try one of these</p>
+      <p class="nf-sug-item">
+        <a class="nf-sug-cmd" href={blogListUrl()}><span aria-hidden="true">$</span> ls ~/posts</a>
+        <span class="nf-sug-desc">浏览全部文章</span>
+      </p>
+      <p class="nf-sug-item">
+        <a class="nf-sug-cmd" href={categoriesUrl()}><span aria-hidden="true">$</span> ls ~/cats</a>
+        <span class="nf-sug-desc">分类目录</span>
+      </p>
+      <p class="nf-sug-item">
+        <a class="nf-sug-cmd" href={rootPath()}><span aria-hidden="true">$</span> cd ~</a>
+        <span class="nf-sug-desc">回到首页</span>
+      </p>
     </div>
   </section>
 </BaseLayout>

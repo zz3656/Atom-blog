@@ -1,27 +1,26 @@
 /* Atom Blog — Buttons
  *
- * 两种实心度：primary 是黄铜实心块，secondary 是发丝描边。
- * 不使用渐变填充 —— 实色更像仪表上的实体按键。
+ * CTA 在 TUI 里就是一条命令：`$ ls ~/posts`。
+ * primary = 实心（当前输入的强调），secondary = 描边（备选命令）。
  */
 
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.6rem 1.25rem;
+  padding: 0.5rem 1rem;
   border-radius: var(--radius);
-  font-family: var(--font-sans);
+  font-family: var(--font-mono);
   font-weight: 600;
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   line-height: 1.4;
   cursor: pointer;
   border: 1px solid transparent;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
 }
 
 .btn-primary {
@@ -35,12 +34,11 @@
   border-color: var(--accent-hover);
   color: var(--on-accent);
   transform: translateY(-1px);
-  box-shadow: var(--shadow-glow);
 }
 
 .btn-secondary {
   background: transparent;
-  color: var(--text-primary);
+  color: var(--accent);
   border-color: var(--border-color);
 }
 

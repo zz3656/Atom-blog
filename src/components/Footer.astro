@@ -1,5 +1,9 @@
 ---
-import { REPO_URL, SOCIAL_LINKS, SITE_NAME, SITE_VERSION } from '../consts';
+// Atom Blog — TUI 页脚（系统状态栏）
+//
+// 三段式：左侧版权与作者 ｜ 中间构建信息 ｜ 右侧社交与订阅
+// 底部一行真实存在的快捷键提示（app.js 里实现的键位，不夸大）
+import { REPO_URL, SOCIAL_LINKS, SITE_NAME, SITE_VERSION, AUTHOR } from '../consts';
 import { rssUrl, aboutUrl } from '../utils/path';
 
 const year = new Date().getFullYear();
@@ -11,56 +15,59 @@ const FRAMEWORK_NAME = 'Atom';
 // 个人社交链接（不包含 GitHub —— GitHub 单独处理）
 const socialLinks = [
   SOCIAL_LINKS.twitter
-    ? { href: SOCIAL_LINKS.twitter, label: 'Twitter', target: '_blank', rel: 'noopener' }
+    ? { href: SOCIAL_LINKS.twitter, label: 'twitter', target: '_blank', rel: 'noopener' }
     : null,
-  SOCIAL_LINKS.email ? { href: `mailto:${SOCIAL_LINKS.email}`, label: 'Email' } : null,
+  SOCIAL_LINKS.email ? { href: `mailto:${SOCIAL_LINKS.email}`, label: 'mail' } : null,
 ].filter(Boolean);
 ---
 
 <footer class="site-footer">
   <div class="footer-content">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <span class="footer-brand-name">{SITE_NAME}</span>
-        <span class="footer-brand-tag">Precision Log</span>
-      </div>
-      <div class="footer-links">
-        {SOCIAL_LINKS.github && (
-          <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener" title="作者 GitHub">
-            GitHub
-          </a>
-        )}
-        {socialLinks.map(
-          (link) =>
-            link && (
-              <a href={link.href} target={link.target || undefined} rel={link.rel || undefined}>
-                {link.label}
-              </a>
-            ),
-        )}
+    <div class="footer-status">
+      <p class="footer-left">
+        <span class="footer-copy">© {year} {SITE_NAME}</span>
+        <span class="term-sep" aria-hidden="true">·</span>
+        <span class="footer-tagline">TERMINAL SESSION</span>
+        <span class="term-sep" aria-hidden="true">·</span>
+        <span class="footer-author">{AUTHOR}</span>
+      </p>
+
+      <p class="footer-mid">
+        <span class="footer-build">build {SITE_VERSION}</span>
+        <span class="term-sep" aria-hidden="true">·</span>
+        <a href="https://astro.build" target="_blank" rel="noopener">astro</a>
+        <span class="term-sep" aria-hidden="true">·</span>
+        <span>static</span>
+      </p>
+
+      <nav class="footer-right" aria-label="站点链接">
+        {
+          SOCIAL_LINKS.github && (
+            <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener" title="作者 GitHub">
+              github
+            </a>
+          )
+        }
+        {
+          socialLinks.map(
+            (link) =>
+              link && (
+                <a href={link.href} target={link.target || undefined} rel={link.rel || undefined}>
+                  {link.label}
+                </a>
+              ),
+          )
+        }
         <a href={rssUrl()} target="_blank" rel="noopener">
-          RSS
+          rss
         </a>
-        <a href={aboutUrl()}>关于</a>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <span class="footer-built">
-        © {year}{' '}
+        <a href={aboutUrl()}>about</a>
         <a href={REPO_URL} target="_blank" rel="noopener">
           {FRAMEWORK_NAME}
         </a>
-      </span>
-      <span class="footer-meta">
-        {/* 版本号是真实数据 —— 沿用页脚的 mono 字体 */}
-        <span class="footer-version" title={`Atom Blog v${SITE_VERSION}`}>v{SITE_VERSION}</span>
-        <span>
-          Powered by{' '}
-          <a href="https://astro.build" target="_blank" rel="noopener">
-            Astro
-          </a>
-        </span>
-      </span>
+      </nav>
     </div>
+
+    <p class="footer-keys">$ [↑↓] 切换搜索结果 · [Enter] 打开 · [Esc] 关闭</p>
   </div>
 </footer>

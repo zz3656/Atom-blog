@@ -7,23 +7,25 @@
  *  3. _reset       → 浏览器默认样式重置
  *  4. _background  → 页面背景纹理
  *  5. _scrollbar   → 自定义滚动条
- *  6. _header      → 导航栏
- *  7. _search      → 搜索框
- *  8. _hero        → 首屏 Hero 区域
- *  9. _buttons     → 按钮
- * 10. _sections    → 页面标题/计数
- * 11. _log         → 日志列表（文章列表）
- * 12. _tags        → 标签 & 分类
- * 13. _pages       → 分类/标签列表页
- * 14. _post        → 文章正文内容
- * 15. _post-extras → 打赏/上一篇下一篇
- * 16. _pagination  → 分页
- * 17. _progress    → 阅读进度条
- * 18. _about       → 关于页
- * 19. _footer      → 页脚
- * 20. _layout      → 全局布局 & 动画
- * 21. _responsive  → 响应式断点
- * 22. _theme-geek  → 主题作用域增补（atom-geek，可整份删除回退）
+ *  6. _header      → 终端标题栏 + 命令行导航
+ *  7. _search      → grep 搜索框与结果面板
+ *  8. _hero        → 终端启动 Hero（字标 / 自检 / 提示符）
+ *  9. _buttons     → 命令式按钮
+ * 10. _sections    → 区块标题
+ * 11. _ls          → 文章列表（ls -la 输出行）
+ * 12. _terminal    → TUI 原语（命令页头 / 目录行 / grep 命中 / 404）
+ * 13. _tags        → 标签 & 分类
+ * 14. _pages       → 页面壳（About 页头 / 空态 / 返回）
+ * 15. _post        → 文章正文（cat 输出 + 行号槽）
+ * 16. _post-extras → 打赏/上一篇下一篇/相关推荐
+ * 17. _toc         → 文章目录（命令树）
+ * 18. _pagination  → 分页
+ * 19. _progress    → 阅读进度条
+ * 20. _about       → 关于页（冻结文件）
+ * 21. _footer      → 系统状态栏
+ * 22. _layout      → 全局布局 & 动画
+ * 23. _responsive  → 响应式断点
+ * 24. _theme-geek  → 主题作用域增补（atom-geek，可整份删除）
  */
 
 /* 1. Shared variables (layout, typography, radius — 跨主题共享) */
@@ -56,41 +58,44 @@
 /* 10. Section Headers */
 @import './_modules/_sections.css';
 
-/* 11. Log List (文章日志列表) */
-@import './_modules/_log.css';
+/* 11. Article List (ls -la 输出行) */
+@import './_modules/_ls.css';
 
-/* 12. Tags */
+/* 12. Terminal Primitives */
+@import './_modules/_terminal.css';
+
+/* 13. Tags */
 @import './_modules/_tags.css';
 
-/* 13. Pages (Category/Tag listing) */
+/* 14. Page Shells */
 @import './_modules/_pages.css';
 
-/* 14. Post Content (Markdown styles) */
+/* 15. Post Content (cat 输出 + 行号槽) */
 @import './_modules/_post.css';
 
-/* 15. Post Extras (Reward, Navigation) */
+/* 16. Post Extras (Reward, Navigation) */
 @import './_modules/_post-extras.css';
 
-/* 15b. Table of Contents */
+/* 17. Table of Contents (命令树) */
 @import './_modules/_toc.css';
 
-/* 16. Pagination */
+/* 18. Pagination */
 @import './_modules/_pagination.css';
 
-/* 17. Reading Progress */
+/* 19. Reading Progress */
 @import './_modules/_progress.css';
 
-/* 18. About Page */
+/* 20. About Page（cat README.md 形态）*/
 @import './_modules/_about.css';
 
-/* 19. Footer */
+/* 21. Footer */
 @import './_modules/_footer.css';
 
-/* 20. Layout & Animations */
+/* 22. Layout & Animations */
 @import './_modules/_layout.css';
 
-/* 21. Responsive */
+/* 23. Responsive */
 @import './_modules/_responsive.css';
 
-/* 22. Theme-scoped augmentations（站点级；作用域锁定单个主题，可整份删除） */
+/* 24. Theme-scoped augmentations（站点级；作用域锁定单个主题，可整份删除） */
 @import './_theme-geek.css';

@@ -1,25 +1,25 @@
 /* Atom Blog — Tags & Categories
  *
- * 色彩约定：分类 = 冷钢青（结构性归档），标签 = 中性描边（主题词）。
+ * 色彩约定：分类 = 青色通道（结构性归档），标签 = 中性描边（主题词）。
  * 全站只有这两条语义通道，不再有第三种彩色。
  */
 
 .tag {
   display: inline-block;
-  padding: 0.22rem 0.5rem;
+  padding: 0.08rem 0.38rem;
   background: var(--tag-bg);
   color: var(--tag-text);
   border: 1px solid var(--tag-border);
   border-radius: var(--radius-sm);
-  font-size: 0.72rem;
+  font-size: 0.71rem;
   font-weight: 500;
   font-family: var(--font-mono);
-  line-height: 1.5;
+  line-height: 1.6;
   white-space: nowrap;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .tag:hover {
@@ -30,24 +30,25 @@
 
 .post-category-tag {
   display: inline-block;
-  padding: 0.22rem 0.55rem;
+  padding: 0.1rem 0.42rem;
   background: var(--cat-bg);
   color: var(--cat-text);
   border: 1px solid var(--cat-border);
   border-radius: var(--radius-sm);
-  font-size: 0.74rem;
+  font-size: 0.73rem;
   font-weight: 600;
   font-family: var(--font-mono);
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   white-space: nowrap;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease;
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .post-category-tag:hover {
   background: var(--cat-active-bg);
-  border-color: var(--cat-text);
+  color: var(--cat-text);
 }
 
 .post-tags-row {

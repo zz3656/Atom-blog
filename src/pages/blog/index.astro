@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import PostCard from '../../components/PostCard.astro';
+import CommandHeader from '../../components/CommandHeader.astro';
 import { POSTS_PER_PAGE, SITE_TITLE } from '../../consts';
 import { getPublishedPosts } from '../../utils/collection';
 import { blogPostUrl, blogListUrl } from '../../utils/path';
@@ -21,13 +22,12 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
 
 <BaseLayout title={`所有文章 | ${SITE_TITLE}`} description="查看所有文章">
   <section class="blog-list">
-    <div class="unified-page-header">
-      <p class="unified-page-eyebrow">Archive</p>
-      <h1>所有文章</h1>
-      <div class="rule"></div>
-      <p class="unified-page-subtitle">共 {totalPosts} 篇</p>
-    </div>
-    <ul class="log-list">
+    <CommandHeader
+      cmd="ls -la ~/posts"
+      title="所有文章"
+      count={`共 ${totalPosts} 篇 · ${totalPages} pages`}
+    />
+    <ul class="ls-list">
       {paginatedPosts.map((post, idx) => (
         <PostCard
           slug={blogPostUrl(post.id)}
@@ -57,7 +57,7 @@ for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
           ))}
         </div>
         <a href={getPageUrl(2)} class="page-btn next">
-          下一页 →
+          $ ls ~/posts/2 →
         </a>
       </nav>
     )}

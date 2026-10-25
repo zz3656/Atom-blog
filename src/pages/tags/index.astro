@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import CommandHeader from '../../components/CommandHeader.astro';
 import { SITE_TITLE } from '../../consts';
 import { getPublishedPosts } from '../../utils/collection';
 import { getTagUrl } from '../../utils/path';
@@ -20,27 +21,27 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].lengt
 
 <BaseLayout title={`所有标签 | ${SITE_TITLE}`}>
   <section class="listing-page">
-    <div class="unified-page-header">
-      <p class="unified-page-eyebrow">Taxonomy</p>
-      <h1>所有标签</h1>
-      <div class="rule"></div>
-      <p class="unified-page-subtitle">
-        共 <span class="accent">{sortedTags.length}</span> 个标签 ·{' '}
-        <span class="accent">{posts.length}</span> 篇文章
-      </p>
-    </div>
+    <CommandHeader
+      cmd="grep -h '^tags:' ~/posts/*.md | sort | uniq -c | sort -rn"
+      title="所有标签"
+      count={`共 ${sortedTags.length} 个标签 · ${posts.length} 篇文章`}
+    />
 
-    {sortedTags.length > 0 ? (
-      <div class="tag-grid">
-        {sortedTags.map(([tag, tagPosts]) => (
-          <a href={getTagUrl(tag)} class="tag-card">
-            <span class="tag-card-label">{tag}</span>
-            <span class="tag-card-count">{tagPosts.length}</span>
-          </a>
-        ))}
-      </div>
-    ) : (
-      <p class="empty-state">暂无标签</p>
-    )}
+    {
+      sortedTags.length > 0 ? (
+        <ul class="grep-list">
+          {sortedTags.map(([tag, tagPosts]) => (
+            <li class="grep-row">
+              <a href={getTagUrl(tag)} class="grep-entry">
+                <span class="grep-count">{tagPosts.length}</span>
+                <span class="grep-name">#{tag}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p class="empty-state">暂无标签</p>
+      )
+    }
   </section>
 </BaseLayout>

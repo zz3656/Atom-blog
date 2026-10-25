@@ -1,245 +1,31 @@
 /* Atom Blog — 主题作用域增补（L2）: atom-geek
  *
- * 站点级文件，非主题包。主题包只允许定义 token；直角化 / 等宽角色 / 终端标题栏 /
- * CRT 质感属「选择器级」差异，无法用 token 表达，故落在这里。
+ * 站点级文件，非主题包。主题包只允许定义 token（45 个契约 token，勿动）。
+ * 本文件承载「选择器级」的主题味道 —— 等宽角色、CRT 质感、焦点辉光。
+ * 圆角已由站点骨架层（_variables.css 的 --radius* = 0）统一拉直。
  *
- * 铁律（docs/ARCHITECTURE-ATOM-GEEK.md §6.1）：每条规则以 html[data-theme='atom-geek']
- * 开头；不用 !important；不改 --radius* / --font-* / --max-width / --content-width /
- * --rule-* / --log-gutter；删掉本文件 = 完整回退到纯 token 形态。
+ * 铁律：每条规则以 html[data-theme='atom-geek'] 开头；不用 !important；
+ * 不改 --radius* / --font-* / --max-width / --content-width / --rule-* / --log-gutter；
+ * 删掉本文件 = 回到「纯 token + 站点骨架」形态。
  * 零 JS、零新依赖、零新字体请求（复用已加载的 JetBrains Mono）。
  */
 
 /* == ① 直角化（FN-13）==
- * 38 处 --radius* token 驱动的圆角（grep -h "border-radius" src/styles/_modules/*.css
- * | grep -c "var(--radius" = 38）。不改 token 本身，只在作用域内写 border-radius: 0，
- * atom-default 观感不受影响。行号 = 源文件出处。
- */
+ * 终端没有圆角：--radius* 已经在站点骨架层（_variables.css）统一为 0，
+ * 主题层不需要再逐个组件覆盖。
+ * 保留圆角的都是刻意为之：窗口按钮（50%）、图片灯箱关闭键（50%）、
+ * 滚动条滑块（4px）、汉堡菜单线（1px）。 */
 
-/* 正文/代码/图片：_post.css:99,203,214,223,250,300,353,410 + _reset.css:79 */
-html[data-theme='atom-geek'] img,
-html[data-theme='atom-geek'] .post-content img,
-html[data-theme='atom-geek'] .post-content pre,
-html[data-theme='atom-geek'] .post-content code,
-html[data-theme='atom-geek'] .post-content .table-scroll,
-html[data-theme='atom-geek'] .post-content blockquote,
-html[data-theme='atom-geek'] .hero-image,
-html[data-theme='atom-geek'] .code-copy-btn,
-html[data-theme='atom-geek'] .image-zoom-overlay .image-zoom-img {
-  border-radius: 0;
-}
-
-/* 目录：_toc.css:27,141 */
-html[data-theme='atom-geek'] .toc,
-html[data-theme='atom-geek'] .toc-link {
-  border-radius: 0;
-}
-
-/* 搜索：_search.css:27,63 */
-html[data-theme='atom-geek'] .search-input,
-html[data-theme='atom-geek'] .search-results {
-  border-radius: 0;
-}
-
-/* 按钮/导航：_buttons.css:12, _header.css:148, _layout.css:63,110, _responsive.css:72 */
-html[data-theme='atom-geek'] .btn,
-html[data-theme='atom-geek'] .theme-toggle,
-html[data-theme='atom-geek'] .nav-toggle,
-html[data-theme='atom-geek'] .skip-link,
-html[data-theme='atom-geek'] .back-to-top {
-  border-radius: 0;
-}
-
-/* 列表/分页：_pages.css:75,109,163, _pagination.css:21,53 */
-html[data-theme='atom-geek'] .category-card,
-html[data-theme='atom-geek'] .tag-card,
-html[data-theme='atom-geek'] .category-card-count,
-html[data-theme='atom-geek'] .tag-card-count,
-html[data-theme='atom-geek'] .view-all a,
-html[data-theme='atom-geek'] .page-btn,
-html[data-theme='atom-geek'] .page-link {
-  border-radius: 0;
-}
-
-/* 文章周边：_post-extras.css:8,37,69,95,139,166 */
-html[data-theme='atom-geek'] .post-reward,
-html[data-theme='atom-geek'] .reward-item img,
-html[data-theme='atom-geek'] .post-nav a,
-html[data-theme='atom-geek'] .post-nav-link,
-html[data-theme='atom-geek'] .related-posts,
-html[data-theme='atom-geek'] .related-link {
-  border-radius: 0;
-}
-
-/* 标签：_tags.css:13,37 */
-html[data-theme='atom-geek'] .tag,
-html[data-theme='atom-geek'] .post-category-tag {
-  border-radius: 0;
-}
-
-/* 页脚：_footer.css:97,142,160 */
-html[data-theme='atom-geek'] .footer-links a,
-html[data-theme='atom-geek'] .footer-version,
-html[data-theme='atom-geek'] .footer-bottom a {
-  border-radius: 0;
-}
-
-/* 关于页：_about.css:81,127,198,246 —— 不改 _about.css，只覆盖其圆角 */
-html[data-theme='atom-geek'] .about-stats,
-html[data-theme='atom-geek'] .project-card,
-html[data-theme='atom-geek'] .topic-card,
-html[data-theme='atom-geek'] .skill-tag {
-  border-radius: 0;
-}
-
-/* 保留圆角：.footer-built::before(50%)、.image-zoom-close(50%)、
- * .search-result-title mark(2px)、:focus-visible(2px)、
- * .hamburger-line(1px)、.theme-toggle .theme-icon(3px 固定值) */
-
-/* == ② 等宽角色（FN-14）== 站点已有 31 处，L2 只补 6 处；不新增字体 */
-html[data-theme='atom-geek'] .nav-link,
-html[data-theme='atom-geek'] .search-input,
-html[data-theme='atom-geek'] .code-copy-btn,
-html[data-theme='atom-geek'] .hero-eyebrow-mark,
-html[data-theme='atom-geek'] .post-eyebrow-mark,
-html[data-theme='atom-geek'] .post-eyebrow-sep {
+/* == ② 等宽角色（FN-14）==
+ * 站点骨架层已经给数据位上了等宽；这里只补 About 数据条。 */
+html[data-theme='atom-geek'] .about-stat dd,
+html[data-theme='atom-geek'] .about-stat dt {
   font-family: var(--font-mono);
-}
-
-/* 数据类元素统一等宽数字 */
-html[data-theme='atom-geek'] .log-index,
-html[data-theme='atom-geek'] .log-date,
-html[data-theme='atom-geek'] .section-count,
-html[data-theme='atom-geek'] .telemetry-row dd,
-html[data-theme='atom-geek'] .post-meta,
-html[data-theme='atom-geek'] .tag-card-count,
-html[data-theme='atom-geek'] .about-stat dd {
   font-variant-numeric: tabular-nums;
 }
 
-/* 只补原本没有字距的三个；其余已有 0.04–0.1em，不覆盖既有排版 */
-html[data-theme='atom-geek'] .telemetry-row dd,
-html[data-theme='atom-geek'] .tag-card-count,
-html[data-theme='atom-geek'] .about-stat dd {
-  letter-spacing: 0.06em;
-}
-
-/* == ③ 终端标题栏（FN-15）== 纯 CSS 伪元素，零 DOM 改动。
- * 状态点复用语义色 token（--success / --warning / --cat-text，两模式均 ≥3:1）。 */
-html[data-theme='atom-geek'] .site-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--accent) 0%,
-    var(--accent-secondary) 20%,
-    transparent 52%
-  );
-  opacity: 0.7;
-  pointer-events: none;
-}
-
-/* 页头右上角状态点：pointer-events:none，不挡导航与汉堡菜单 */
-html[data-theme='atom-geek'] .site-header::after {
-  content: '';
-  position: absolute;
-  top: 5px;
-  right: 1.75rem;
-  width: 26px;
-  height: 6px;
-  pointer-events: none;
-  background-image:
-    radial-gradient(circle at 3px 3px, var(--success) 2.5px, transparent 2.6px),
-    radial-gradient(circle at 11px 3px, var(--warning) 2.5px, transparent 2.6px),
-    radial-gradient(circle at 19px 3px, var(--cat-text) 2.5px, transparent 2.6px);
-}
-
-/* 代码块左上角状态点（.code-wrapper 由 app.js 运行时创建） */
-html[data-theme='atom-geek'] .code-wrapper::before {
-  content: '';
-  position: absolute;
-  top: 8px;
-  left: 12px;
-  width: 26px;
-  height: 6px;
-  z-index: 2;
-  pointer-events: none;
-  background-image:
-    radial-gradient(circle at 3px 3px, var(--success) 2.5px, transparent 2.6px),
-    radial-gradient(circle at 11px 3px, var(--warning) 2.5px, transparent 2.6px),
-    radial-gradient(circle at 19px 3px, var(--cat-text) 2.5px, transparent 2.6px);
-}
-
-/* == ④ 命令行导航（FN-17）== 装饰前缀用 CSS content 生成，不改 HTML 文案
- * （Q-05 未拍板前不动 DOM）。激活项换成 '>'；min-width 固定，切换不位移。 */
-html[data-theme='atom-geek'] .nav-link {
-  font-family: var(--font-mono);
-}
-
-html[data-theme='atom-geek'] .nav-link::before {
-  content: '~/';
-  display: inline-block;
-  min-width: 1.2em;
-  opacity: 0.5;
-}
-
-html[data-theme='atom-geek'] .nav-link.active::before {
-  content: '>';
-  opacity: 1;
-  color: var(--accent);
-}
-
-/* == ⑥ 404 空态（FN-19）== .hero-inner--single 只出现在 src/pages/404.astro
- * （首页用 .hero-inner），是 404 专属 CSS 钩子 —— 无需改 404.astro 的 HTML。 */
-html[data-theme='atom-geek'] .hero-inner--single {
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
-  padding: 2rem 1.75rem;
-  box-shadow: var(--shadow-glow);
-}
-
-html[data-theme='atom-geek'] .hero-inner--single h1 {
-  font-family: var(--font-mono);
-  color: var(--accent);
-  letter-spacing: 0.02em;
-}
-
-/* eyebrow 末尾一个光标块（纯装饰，不加文案） */
-html[data-theme='atom-geek'] .hero-inner--single .hero-eyebrow::after {
-  content: '';
-  display: inline-block;
-  width: 0.5em;
-  height: 1em;
-  background: var(--accent);
-  align-self: flex-end;
-}
-
-/* == ⑦ 快捷键提示条（FN-20）== 静态条，零 JS。如实展示 app.js 里真实存在的
- * 快捷键：↑↓ 切换搜索结果 / Enter 打开 / Esc 关闭（搜索结果、图片浮层）。
- * 刻意不写 Ctrl/⌘+K 与全局 '/' —— app.js 里没有实现。 */
-html[data-theme='atom-geek'] .footer-content::before {
-  content: '$ [↑↓] 切换搜索结果 · [Enter] 打开 · [Esc] 关闭';
-  display: block;
-  padding-bottom: 0.65rem;
-  border-bottom: 1px dashed var(--border-light);
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  color: var(--text-muted);
-}
-
-/* == ⑧ 焦点环（FN-11）== _reset.css 已用 --focus-ring 画 2px 描边，这里加辉光 */
-html[data-theme='atom-geek'] :focus-visible {
-  outline: 2px solid var(--focus-ring);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 4px var(--accent-glow);
-}
-
-/* == ⑤ CRT 叠层（FN-16）== 作用于 html 自身的伪元素，故不能与其他规则同组。
- * 不复用 body::before(网格) / body::after(环境辉光)。
+/* == ③ CRT 叠层（FN-16）==
+ * 作用于 html 自身的伪元素，故不能与其他规则同组。
  * 负 z-index 栈层序：画布底 → 扫描线 → 网格 → 环境辉光 → 正文。 */
 html[data-theme='atom-geek']::after {
   content: '';
@@ -247,10 +33,71 @@ html[data-theme='atom-geek']::after {
   inset: 0;
   z-index: -1;
   pointer-events: none;
-  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.028) 0 1px, transparent 1px 3px);
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 3px);
 }
 
-/* == ⑨ 降级路径 == */
+/* == ④ 焦点环（FN-11）== _reset.css 已用 --focus-ring 画 2px 描边，这里加辉光 */
+html[data-theme='atom-geek'] :focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+/* == ⑤ About 页终端化覆盖 ==
+ * src/pages/about.astro 与 _modules/_about.css 是架构师冻结的文件（内容与文案不归本层改），
+ * 这里只把它的观感拉回终端语法。 */
+
+/* 二级标题：与正文 h2 同款左边条 */
+html[data-theme='atom-geek'] .about-content h2::before {
+  width: 3px;
+  height: 0.95em;
+  vertical-align: -0.1em;
+  margin-right: 0.6rem;
+}
+
+/* 数据条：df -h 风格 */
+html[data-theme='atom-geek'] .about-stats {
+  border-radius: 0;
+  background: var(--border-light);
+}
+
+html[data-theme='atom-geek'] .about-stat {
+  background: var(--bg-card);
+  padding: 0.85rem 1rem;
+}
+
+html[data-theme='atom-geek'] .about-stat dt {
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* 卡片：终端面板 */
+html[data-theme='atom-geek'] .project-card,
+html[data-theme='atom-geek'] .topic-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 2px solid var(--accent);
+}
+
+html[data-theme='atom-geek'] .project-card:hover,
+html[data-theme='atom-geek'] .topic-card:hover {
+  border-color: var(--border-glow);
+  border-left-color: var(--accent);
+  box-shadow: var(--shadow-md);
+}
+
+html[data-theme='atom-geek'] .project-emoji,
+html[data-theme='atom-geek'] .topic-icon {
+  font-family: var(--font-mono);
+}
+
+html[data-theme='atom-geek'] .skill-tag {
+  border: 1px solid var(--border-color);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+}
+
+/* == ⑥ 降级路径 == */
 
 /* 动效降级：CRT 扫描线整体移除 */
 @media (prefers-reduced-motion: reduce) {
@@ -259,12 +106,9 @@ html[data-theme='atom-geek']::after {
   }
 }
 
-/* 强制颜色模式：关闭装饰性辉光与状态点，保留边框与焦点环 */
+/* 强制颜色模式：关闭装饰性叠层，保留边框与焦点环 */
 @media (forced-colors: active) {
-  html[data-theme='atom-geek']::after,
-  html[data-theme='atom-geek'] .site-header::before,
-  html[data-theme='atom-geek'] .site-header::after,
-  html[data-theme='atom-geek'] .code-wrapper::before {
+  html[data-theme='atom-geek']::after {
     display: none;
   }
 }
@@ -274,21 +118,5 @@ html[data-theme='atom-geek']::after {
   html[data-theme='atom-geek'] {
     --border-color: var(--text-secondary);
     --border-light: var(--text-muted);
-  }
-}
-
-/* == ⑩ 响应式微调 == */
-
-/* 400px：状态点跟随导航容器内边距对齐 */
-@media (max-width: 400px) {
-  html[data-theme='atom-geek'] .site-header::after {
-    right: 1rem;
-  }
-}
-
-/* 768px 以下：隐藏快捷键提示条（触屏无物理键盘） */
-@media (max-width: 768px) {
-  html[data-theme='atom-geek'] .footer-content::before {
-    display: none;
   }
 }

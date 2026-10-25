@@ -1,13 +1,17 @@
-/* Atom Blog — Unified Page Header & Listing Pages
+/* Atom Blog — Page Shells
  *
- * 列表页（分类 / 标签）的标题区统一为「eyebrow + 标题 + 刻度尺」，
- * 与首页区块保持同一套语法。
+ * 列表页的标题区统一由 CommandHeader 组件渲染（.cmd-header，见 _terminal.css）。
+ * 本文件保留两处仍然在用的语法：
+ *   ① .unified-page-*  —— About 页（src/pages/about.astro 为冻结文件，不改标记）
+ *   ② 空态与"返回"链接 —— 分类 / 标签页
  */
 
+/* ===== About 页页头（与命令回显同构）===== */
 .unified-page-header {
-  padding: 3rem 0 1.25rem;
-  position: relative;
-  margin-bottom: 0;
+  padding: 2.75rem 0 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
 }
 
 .unified-page-eyebrow {
@@ -15,107 +19,32 @@
   align-items: center;
   gap: 0.55rem;
   font-family: var(--font-mono);
-  font-size: 0.66rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent);
-  margin-bottom: 0.9rem;
 }
 
 .unified-page-eyebrow::before {
-  content: '';
-  width: 6px;
-  height: 6px;
-  background: var(--accent);
-  flex-shrink: 0;
+  content: '~/yinteba $';
+  color: var(--text-muted);
+  letter-spacing: 0.04em;
 }
 
 .unified-page-header h1 {
-  font-family: var(--font-display);
-  font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+  font-family: var(--font-sans);
+  font-size: clamp(1.7rem, 4vw, 2.35rem);
   font-weight: 800;
-  font-variation-settings:
-    'wdth' 108,
-    'wght' 800;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
   color: var(--text-bright);
-  margin-bottom: 0.85rem;
-}
-
-.unified-page-header .rule {
-  margin-bottom: 0.9rem;
 }
 
 .unified-page-subtitle {
   font-family: var(--font-mono);
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
+  font-size: 0.74rem;
   color: var(--text-muted);
-}
-
-/* ===== Category / Tag Grid ===== */
-.category-grid,
-.tag-grid {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-  padding: 1.75rem 0 2rem;
-}
-
-.category-card,
-.tag-card {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  padding: 0.5rem 0.85rem;
-  background: var(--bg-card);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius);
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    transform 0.2s ease;
-  text-decoration: none;
-}
-
-.category-card:hover,
-.tag-card:hover {
-  border-color: var(--accent);
-  background: var(--bg-card-hover);
-  transform: translateY(-1px);
-}
-
-.category-card-name,
-.tag-card-label {
-  font-size: 0.88rem;
-  font-weight: 600;
-  color: var(--text-bright);
-  font-family: var(--font-mono);
-}
-
-.category-card-name {
-  color: var(--cat-text);
-}
-
-.category-card-count,
-.tag-card-count {
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  background: var(--bg-secondary);
-  border: 1px solid var(--border-light);
-  padding: 0.05rem 0.4rem;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-mono);
-  white-space: nowrap;
-  font-variant-numeric: tabular-nums;
-}
-
-.category-card:hover .category-card-count,
-.tag-card:hover .tag-card-count {
-  border-color: var(--accent);
-  color: var(--accent);
 }
 
 /* ===== Empty State ===== */
@@ -124,54 +53,55 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 4rem 1rem;
-  gap: 0.8rem;
+  padding: 3.5rem 1rem;
+  gap: 0.75rem;
 }
 
 .empty-list-icon {
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   color: var(--text-muted);
-  opacity: 0.5;
+  opacity: 0.6;
   font-family: var(--font-mono);
 }
 
 .empty-list-text {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   color: var(--text-muted);
+  font-family: var(--font-mono);
 }
 
 .empty-state {
   text-align: center;
-  padding: 3.5rem 0;
+  padding: 3rem 0;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
+/* ===== 返回链接 ===== */
 .view-all {
-  text-align: center;
-  margin-top: 2.5rem;
+  margin-top: 2rem;
 }
 
 .view-all a {
   display: inline-flex;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.55rem 1.15rem;
+  gap: 0.35rem;
+  padding: 0.45rem 0.95rem;
   color: var(--accent);
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   font-family: var(--font-mono);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease;
+    background-color 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease;
 }
 
 .view-all a:hover {
-  background: var(--accent);
+  background: var(--accent-glow);
   border-color: var(--accent);
-  color: var(--on-accent);
+  color: var(--accent);
 }

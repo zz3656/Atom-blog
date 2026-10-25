@@ -1,7 +1,8 @@
-/* Atom Blog — Background */
-/*
- * 底纹：极淡的制图纸网格 + 首屏角落的一小片黄铜辉光。
+/* Atom Blog — Background
+ *
+ * 终端底纹：极淡的字符网格 + 左上角一盏磷光指示灯的辉光。
  * 网格线用 --grid-line token，深浅模式共用同一套结构，只是色值不同。
+ * 真正的 CRT 扫描线在主题层（_theme-geek.css），这里只负责"纸面"。
  */
 
 body::before {
@@ -18,14 +19,14 @@ body::before {
   pointer-events: none;
 }
 
-/* 首屏左上角的暖光，暗示"指示灯"的存在 */
+/* 左上角的冷光，暗示"显示器还开着" */
 body::after {
   content: '';
   position: fixed;
-  top: -220px;
-  left: -160px;
-  width: 640px;
-  height: 540px;
+  top: -240px;
+  left: -180px;
+  width: 720px;
+  height: 620px;
   z-index: -1;
   background: radial-gradient(ellipse at center, var(--ambient-glow) 0%, transparent 68%);
   pointer-events: none;

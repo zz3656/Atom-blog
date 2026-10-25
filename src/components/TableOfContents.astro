@@ -1,6 +1,9 @@
 ---
-// 表格内容（TOC）组件
-// 显示文章的 h2/h3 标题列表，点击平滑滚动
+// Atom Blog — 文章目录（TUI: 命令树）
+//
+// 结构：$ tree posts/<slug>
+// 每个条目是一根树枝：├─ / └─；子层级带 │ 引导线。
+// 宽度由 CSS 固定（.toc-branch），即使回退字体字宽不同也不会错位。
 interface Heading {
   depth: number;
   slug: string;
@@ -8,28 +11,47 @@ interface Heading {
 }
 interface Props {
   headings: Heading[];
+  postSlug?: string;
 }
-const { headings } = Astro.props;
+
+const { headings, postSlug = '' } = Astro.props;
+
+// 树枝前缀：最后一项用 └─，其余用 ├─；子层级补一段引导线
+const branchOf = (index: number, depth: number) => {
+  const isLast = index === headings.length - 1;
+  const indent = depth >= 3 ? (isLast ? '   ' : '│  ') : '';
+  return `${indent}${isLast ? '└─' : '├─'}`;
+};
 ---
 
-{headings.length > 0 && (
-  <nav class="toc" aria-label="文章目录">
-    {/*
-      默认收起。窄屏（<1280px）目录是正文上方的折叠条，展开会占掉一大块版面；
-      宽屏（>=1280px）由 app.js 自动展开成左侧刻度栏。
-      没 JS 时用户仍可手动点开。
-    */}
-    <details data-toc-details>
-      <summary class="toc-title">Contents</summary>
-      <ol class="toc-list">
-        {headings.map((h) => (
-          <li class:list={['toc-item', `toc-depth-${h.depth}`]}>
-            <a href={`#${h.slug}`} class="toc-link" data-toc-link={h.slug}>
-              {h.text}
-            </a>
-          </li>
-        ))}
-      </ol>
-    </details>
-  </nav>
-)}
+{
+  headings.length > 0 && (
+    <nav class="toc" aria-label="文章目录">
+      {/*
+        默认收起。窄屏（<1280px）目录是正文上方的折叠条，展开会占掉一大块版面；
+        宽屏（>=1280px）由 app.js 自动展开成左侧刻度栏。
+        没 JS 时用户仍可手动点开。
+      */}
+      <details data-toc-details>
+        <summary class="toc-title">
+          <span class="toc-prompt" aria-hidden="true">
+            $
+          </span>
+          <span class="toc-cmd">tree posts/{postSlug}</span>
+        </summary>
+        <ol class="toc-list">
+          {headings.map((h, i) => (
+            <li class:list={['toc-item', `toc-depth-${h.depth}`]}>
+              <a href={`#${h.slug}`} class="toc-link" data-toc-link={h.slug}>
+                <span class="toc-branch" aria-hidden="true">
+                  {branchOf(i, h.depth)}
+                </span>
+                <span class="toc-text">{h.text}</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </details>
+    </nav>
+  )
+}

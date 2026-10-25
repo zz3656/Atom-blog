@@ -33,6 +33,7 @@ const tocItems = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
 
 <BlogPost
   title={post.data.title}
+  slug={post.id}
   pubDate={post.data.pubDate}
   updatedDate={post.data.updatedDate}
   description={post.data.description}
