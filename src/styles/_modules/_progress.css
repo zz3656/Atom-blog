@@ -19,13 +19,6 @@
 .reading-progress-fill {
   height: 2px;
   width: 0%;
-  background: var(--accent-gradient);
+  background: var(--accent);
   transition: width 0.08s linear;
-}
-
-html:not([data-mode="dark"]) .reading-progress-fill {
-  box-shadow: none;
-}
-html[data-mode="dark"] .reading-progress-fill {
-  box-shadow: 0 0 6px var(--accent);
 }

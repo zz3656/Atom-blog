@@ -121,7 +121,8 @@ html[data-theme='${themeId}'][data-mode='light'] {
   --accent-gradient: linear-gradient(135deg, ${accent}, ${accent});
   --accent-glow: ${hexToRgba(accent, 0.08)};
   --accent-glow-strong: ${hexToRgba(accent, 0.15)};
-  --purple-glow: ${hexToRgba(accent, 0.06)};
+  --glow-secondary: ${hexToRgba(accent, 0.06)};
+  --purple-glow: ${hexToRgba(accent, 0.06)}; /* 旧别名，保留兼容 */
 
   /* Tags */
   --tag-bg: ${hexToRgba(accent, 0.06)};
@@ -145,6 +146,18 @@ html[data-theme='${themeId}'][data-mode='light'] {
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.08);
   --shadow-glow: 0 4px 20px ${hexToRgba(accent, 0.08)}, 0 1px 3px rgba(0, 0, 0, 0.04);
+
+  /* 语义表面 token（必需，详见 docs/THEMING.md） */
+  --on-accent: ${pickReadableTextColor(accent)};
+  --header-bg: rgba(240, 242, 245, 0.86);
+  --panel-bg: #f4f6f8;
+  --code-bg: #eff1f3;
+  --grid-line: rgba(26, 29, 35, 0.035);
+  --highlight: ${hexToRgba(accent, 0.16)};
+  --ambient-glow: ${hexToRgba(accent, 0.05)};
+  --rule-tick: rgba(26, 29, 35, 0.22);
+  --rule-tick-strong: ${hexToRgba(accent, 0.55)};
+  --focus-ring: ${accent};
 }
 `;
 }
@@ -183,7 +196,8 @@ html[data-theme='${themeId}'][data-mode='dark'] {
   --accent-gradient: linear-gradient(135deg, ${accent}, ${accent});
   --accent-glow: ${hexToRgba(accent, 0.15)};
   --accent-glow-strong: ${hexToRgba(accent, 0.3)};
-  --purple-glow: ${hexToRgba(accent, 0.15)};
+  --glow-secondary: ${hexToRgba(accent, 0.15)};
+  --purple-glow: ${hexToRgba(accent, 0.15)}; /* 旧别名，保留兼容 */
 
   /* Tags */
   --tag-bg: ${hexToRgba(accent, 0.08)};
@@ -207,6 +221,18 @@ html[data-theme='${themeId}'][data-mode='dark'] {
   --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
   --shadow-lg: 0 8px 30px rgba(0, 0, 0, 0.55);
   --shadow-glow: 0 0 20px ${hexToRgba(accent, 0.15)};
+
+  /* 语义表面 token（必需，详见 docs/THEMING.md） */
+  --on-accent: ${pickReadableTextColor(accent)};
+  --header-bg: rgba(10, 10, 15, 0.86);
+  --panel-bg: #1a1a25;
+  --code-bg: #16161f;
+  --grid-line: rgba(226, 232, 240, 0.028);
+  --highlight: ${hexToRgba(accent, 0.22)};
+  --ambient-glow: ${hexToRgba(accent, 0.05)};
+  --rule-tick: rgba(226, 232, 240, 0.2);
+  --rule-tick-strong: ${hexToRgba(accent, 0.6)};
+  --focus-ring: ${accent};
 }
 `;
 }
@@ -224,7 +250,7 @@ function generateManifest({ id, name, author, description, noDark }) {
       preview: '',
     },
     null,
-    2
+    2,
   );
 }
 
@@ -254,21 +280,29 @@ function main() {
   const accent = args.accent || COLORS.indigo;
 
   mkdirSync(themeDir, { recursive: true });
-  writeFileSync(join(themeDir, 'manifest.json'), generateManifest({ id, name, author, description, noDark: args.noDark }) + '\n', 'utf-8');
+  writeFileSync(
+    join(themeDir, 'manifest.json'),
+    generateManifest({ id, name, author, description, noDark: args.noDark }) + '\n',
+    'utf-8',
+  );
   writeFileSync(join(themeDir, 'light.css'), generateLightCss(id, accent), 'utf-8');
   if (!args.noDark) {
     writeFileSync(join(themeDir, 'dark.css'), generateDarkCss(id, accent), 'utf-8');
   }
 
   console.log(`✅ 主题已生成: src/themes/${id}/`);
-  console.log(`   ├── manifest.json    (id: ${id}, modes: ${args.noDark ? '["light"]' : '["light","dark"]'})`);
+  console.log(
+    `   ├── manifest.json    (id: ${id}, modes: ${args.noDark ? '["light"]' : '["light","dark"]'})`,
+  );
   console.log(`   ├── light.css`);
   if (!args.noDark) console.log(`   └── dark.css`);
   console.log(``);
   console.log(`下一步:`);
   console.log(`  1. 编辑 src/themes/${id}/light.css 与 dark.css，自定义你的 token`);
   console.log(`  2. 运行 npm run dev — 主题会自动出现在右上角菜单中`);
-  console.log(`  3. 无需修改 global.css：theme-loader 会在构建时自动把新主题加入 src/generated/themes.css`);
+  console.log(
+    `  3. 无需修改 global.css：theme-loader 会在构建时自动把新主题加入 src/generated/themes.css`,
+  );
 }
 
 main();

@@ -114,10 +114,29 @@ src/themes/atom-default/
 | `--shadow-lg` | 大阴影 |
 | `--shadow-glow` | 主题光晕阴影 |
 
+### 语义表面 token（v3 新增，必需）
+
+v3 起，组件层**不再写死任何颜色**——所有"结构性"的表面与刻度都通过下面这组 token 表达。
+没有它们，导航栏底色、代码块底色、刻度尺颜色会退化成写死的值，第三方主题将无法正确着色。
+
+| Token | 用途 | 典型值 |
+|-------|------|--------|
+| `--on-accent` | 强调色实心块上的文字色 | `#ffffff` / `#12161a` |
+| `--header-bg` | 吸顶导航栏底色（半透明）| `rgba(236,237,239,.86)` |
+| `--panel-bg` | 目录 / 面板类容器底色 | `#f4f5f6` |
+| `--code-bg` | 代码块底色 | `#eff1f3` |
+| `--grid-line` | 页面底纹网格线 | `rgba(0,0,0,.035)` |
+| `--highlight` | 搜索命中高亮 | `rgba(accent,.16)` |
+| `--ambient-glow` | 页面角落的暖光 | `rgba(accent,.05)` |
+| `--rule-tick` | 刻度尺的短刻度线 | `rgba(0,0,0,.22)` |
+| `--rule-tick-strong` | 刻度尺的长刻度线（主色）| `rgba(accent,.55)` |
+| `--focus-ring` | 键盘焦点环颜色 | 与 `--accent` 同色 |
+| `--glow-secondary` | 副色辉光（分类通道）| `rgba(accent-secondary,.09)` |
+
 ### 可选补充 token
 
 - `--accent-glow-strong`（accent 光晕加强版）
-- `--purple-glow`（紫色光晕，用于 hero 区）
+- `--purple-glow`（副色辉光的旧别名，等价于 `--glow-secondary`）
 
 ---
 
@@ -130,9 +149,11 @@ src/themes/atom-default/
 | `--accent-glow-strong` | `rgba(accent, 0.15)` | 强光晕（用于 active 态）|
 
 布局相关 token（**必须**留在 `_variables.css`，**不要**在主题里覆盖）：
-- `--font-sans` / `--font-mono` / `--font-serif`
+- `--font-display` / `--font-sans` / `--font-mono`
 - `--radius` / `--radius-lg` / `--radius-sm`
 - `--max-width` / `--content-width` / `--header-height`
+- `--rule-height` / `--rule-major` / `--rule-minor`（刻度尺几何）
+- `--log-gutter`（日志列表序号槽宽度）
 
 ---
 
@@ -261,7 +282,8 @@ html[data-theme='ocean'][data-mode='light'] {
   --accent-gradient: linear-gradient(135deg, #1e90ff, #00bcd4);
   --accent-glow: rgba(30, 144, 255, 0.1);
   --accent-glow-strong: rgba(30, 144, 255, 0.2);
-  --purple-glow: rgba(0, 188, 212, 0.1);
+  --glow-secondary: rgba(0, 188, 212, 0.1);
+  --purple-glow: rgba(0, 188, 212, 0.1); /* 旧别名，保留兼容 */
 
   --tag-bg: rgba(30, 144, 255, 0.08);
   --tag-text: #1e90ff;
@@ -281,6 +303,18 @@ html[data-theme='ocean'][data-mode='light'] {
   --shadow-md: 0 4px 16px rgba(10, 37, 64, 0.1);
   --shadow-lg: 0 8px 30px rgba(10, 37, 64, 0.12);
   --shadow-glow: 0 4px 20px rgba(30, 144, 255, 0.12);
+
+  /* 语义表面 token（v3 起必需） */
+  --on-accent: #ffffff;
+  --header-bg: rgba(240, 248, 255, 0.86);
+  --panel-bg: #f4faff;
+  --code-bg: #f0f6fc;
+  --grid-line: rgba(10, 37, 64, 0.035);
+  --highlight: rgba(30, 144, 255, 0.16);
+  --ambient-glow: rgba(30, 144, 255, 0.05);
+  --rule-tick: rgba(10, 37, 64, 0.22);
+  --rule-tick-strong: rgba(30, 144, 255, 0.55);
+  --focus-ring: #1e90ff;
 }
 ```
 
@@ -413,11 +447,24 @@ A: 现代 CSS Variables 在 IE11 不支持。Atom 默认放弃 IE11。
 
 ## 参考现有主题
 
-- `src/themes/atom-default/` — 双模式、紫罗兰 + 赛博朋克青
-- `src/themes/solarized/` — 双模式、Ethan Schoonover 的 Solarized
-- `src/themes/sepia/` — 单模式、复古棕褐
+仓库默认只附带一个主题：
 
-复制其中一个作为模板开始改造是最佳起点。
+- `src/themes/atom-default/` — 双模式、冷轧钢 + 黄铜指示灯
+
+它同时也是**最完整的 token 参考实现**——复制这个目录改名，就是一个合规的新主题起点。
+其余主题（Solarized、Sepia 等）放在独立仓库 `atom-themes/`，需要时单独安装。
+
+### 版本要求
+
+| 项目 | 版本 |
+|---|---|
+| Atom | v3（语义表面 token） |
+| Astro | 7.x |
+| `@astrojs/markdown-remark` | 7.x（Astro 7 的 **peer dependency**，需显式安装）|
+
+> ⚠️ 主题只依赖 CSS 变量，**不需要**任何 JS 或构建步骤。但如果你要沿用本仓库的
+> `markdown.processor: unified({...})` 配置，记得 `@astrojs/markdown-remark` 要装在
+> `devDependencies` 里——Astro 7 不再把它作为传递依赖暴露出来。
 
 ---
 

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../../consts';
 import { normalizeCategory } from '../../utils/blog';
 import { getPublishedPosts } from '../../utils/collection';
 import { getCategoryUrl } from '../../utils/path';
@@ -17,10 +18,12 @@ posts.forEach((post) => {
 const sortedCategories = [...categoryMap.entries()].sort((a, b) => b[1].length - a[1].length);
 ---
 
-<BaseLayout title="所有分类 | Atom Blog">
+<BaseLayout title={`所有分类 | ${SITE_TITLE}`}>
   <section class="listing-page">
     <div class="unified-page-header">
+      <p class="unified-page-eyebrow">Taxonomy</p>
       <h1>所有分类</h1>
+      <div class="rule"></div>
       <p class="unified-page-subtitle">
         共 <span class="accent">{sortedCategories.length}</span> 个分类 ·{' '}
         <span class="accent">{posts.length}</span> 篇文章
@@ -31,7 +34,7 @@ const sortedCategories = [...categoryMap.entries()].sort((a, b) => b[1].length -
       <div class="category-grid">
         {sortedCategories.map(([category, catPosts]) => (
           <a href={getCategoryUrl(category)} class="category-card">
-            <span class="category-card-name">📁 {category}</span>
+            <span class="category-card-name">{category}</span>
             <span class="category-card-count">{catPosts.length}</span>
           </a>
         ))}

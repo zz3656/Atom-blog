@@ -5,13 +5,13 @@
 本脚本将 Hexo 博客源文章转换为 Astro (Atom 博客) 格式。
 
 - **源目录**: `../../zz3656.github.io/source/_posts/`（Hexo 文章）
-- **目标目录**: `../../Atom-blog/src/content/blog/`（Astro Content Collections）
+- **目标目录**: `../src/content/blog/`（本仓库的 Astro Content Collections）
 - **主题**: [hexo-theme-matery](https://github.com/blinkfox/hexo-theme-matery)
 
 ## 使用方法
 
 ```bash
-# 在 Atom-blog 目录下运行
+# 在 Atom 仓库目录下运行
 node scripts/convert-hexo.mjs
 ```
 

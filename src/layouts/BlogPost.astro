@@ -1,10 +1,10 @@
 ---
 import BaseLayout from './BaseLayout.astro';
-import FormattedDate from '../components/FormattedDate.astro';
 import TableOfContents from '../components/TableOfContents.astro';
 import { AUTHOR, SITE_TITLE } from '../consts';
 import { blogPostUrl, rootPath, baseAssetsPath } from '../utils/path';
 import { readingTime, countWords } from '../utils/blog';
+import { formatDateISO } from '../utils/date';
 
 interface Props {
   title: string;
@@ -89,29 +89,33 @@ const readingMinutes = readingTime(body || '');
   </div>
   <article class="post">
     <div class="post-header">
+      <p class="post-eyebrow">
+        <span class="post-eyebrow-mark"></span>
+        {category && <span class="post-category-tag">{category}</span>}
+        <span class="post-eyebrow-sep">/</span>
+        <time datetime={pubDate.toISOString()}>{formatDateISO(pubDate)}</time>
+        {readingMinutes > 0 && (
+          <>
+            <span class="post-eyebrow-sep">/</span>
+            <span>约 {readingMinutes} 分钟</span>
+          </>
+        )}
+      </p>
       <h1>{title}</h1>
+      <div class="rule rule--draw"></div>
       <p class="post-description">{description}</p>
       <div class="post-meta">
-        <span>
-          📅 <FormattedDate date={pubDate} />
-        </span>
-        {updatedDate && (
-          <span class="updated">
-            🔄 更新于 <FormattedDate date={updatedDate} />
-          </span>
-        )}
-        {readingMinutes > 0 && <span class="reading-time">⏱️ 约 {readingMinutes} 分钟</span>}
+        {updatedDate && <span class="updated">更新于 {formatDateISO(updatedDate)}</span>}
       </div>
-      <div class="post-meta-extra">
-        {category && <span class="post-category-tag">📁 {category}</span>}
-        {tags.length > 0 && (
+      {tags.length > 0 && (
+        <div class="post-meta-extra">
           <span class="post-tags-row">
             {tags.map((tag) => (
               <span class="tag">{tag}</span>
             ))}
           </span>
-        )}
-      </div>
+        </div>
+      )}
     </div>
     {heroImage && (
       <div class="hero-image">

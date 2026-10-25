@@ -14,7 +14,9 @@
  * 每个模块都是独立 IIFE，DOM 探测后才运行——同一份 JS 适配所有页面，
  * 用不到的模块零开销。
  *
- * 体积（gzip 前 ~6KB → gzip 后 ~2KB），由 Astro <script> 内联到需要的页面。
+ * 体积：源文件 ~18.3KB → esbuild 压缩后 ~8.7KB（gzip ~3.4KB）。
+ * 构建时由 scripts/minify-app-js.mjs 生成 public/js/app.js，
+ * 以外部文件 <script defer> 引入，全站共用一份（不是内联）。
  */
 (function () {
   'use strict';
@@ -72,24 +74,27 @@
   // 简单点击：light ↔ dark。
   // 系统主题跟随：用户未手动设置时自动跟随 prefers-color-scheme。
   var themeToggle = document.getElementById('theme-toggle');
-  var themeToggleIcon = document.getElementById('theme-toggle-icon');
   var root = document.documentElement;
 
   function currentMode() {
     return root.getAttribute('data-mode') || 'light';
   }
-  function syncThemeIcon() {
-    if (!themeToggleIcon) return;
-    themeToggleIcon.textContent = currentMode() === 'dark' ? '\u2600\uFE0F' : '\uD83C\uDF19';
+  // 图标高亮由 CSS 依据 html[data-mode] 决定，这里只同步无障碍标签
+  function syncThemeLabel() {
+    if (!themeToggle) return;
+    themeToggle.setAttribute(
+      'aria-label',
+      currentMode() === 'dark' ? '切换到浅色模式' : '切换到深色模式'
+    );
   }
   function setMode(mode) {
     root.setAttribute('data-mode', mode);
     try { localStorage.setItem('themeMode', mode); } catch (e) {}
-    syncThemeIcon();
+    syncThemeLabel();
   }
 
   if (themeToggle) {
-    syncThemeIcon();
+    syncThemeLabel();
 
     // 点击切换
     themeToggle.addEventListener('click', function () {
@@ -462,5 +467,25 @@
       window.scrollTo({ top: top, behavior: prefersReducedMotion ? 'auto' : 'smooth' });
       history.replaceState(null, '', '#' + targetId);
     });
+
+    // ============================================================
+    // 9. TOC 展开状态跟随视口
+    // ============================================================
+    // 目录默认收起（窄屏时是正文上方的折叠条，展开会吃掉一大块版面）。
+    // 宽屏（>=1280px）目录变成左侧刻度栏，此时自动展开；
+    // 视口跨过断点时同步切换，用户在同一档位内手动折叠不会被覆盖。
+    var tocDetails = document.querySelector('[data-toc-details]');
+    if (tocDetails && window.matchMedia) {
+      var wideToc = window.matchMedia('(min-width: 1280px)');
+      var syncToc = function (e) {
+        tocDetails.open = e.matches;
+      };
+      syncToc(wideToc);
+      if (wideToc.addEventListener) {
+        wideToc.addEventListener('change', syncToc);
+      } else if (wideToc.addListener) {
+        wideToc.addListener(syncToc);
+      }
+    }
   }
 })();

@@ -4,14 +4,15 @@ main {
   flex: 1;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 2rem 1.5rem 3rem;
+  padding: 2rem 1.75rem 3.5rem;
   width: 100%;
 }
 
-/* 平滑主题切换过渡（仅色背景，不影响布局） */
+/* ===== 主题切换过渡（仅颜色，不影响布局）===== */
 html {
   transition: background-color 0.25s ease;
 }
+
 html body,
 html body * {
   transition:
@@ -20,51 +21,31 @@ html body * {
     color 0.15s ease;
 }
 
-/* 遧免主题切换闪烁：用户偏好的减少动画 */
+/* 用户偏好的减少动画 */
 @media (prefers-reduced-motion: reduce) {
   html,
   html body,
   html body * {
     transition: none !important;
+    animation: none !important;
+    scroll-behavior: auto !important;
   }
 }
 
-/* Safe area support for modern phones */
+/* ===== Safe area support for modern phones ===== */
 @supports (padding: max(0px)) {
   .nav-container {
-    padding-left: max(1.5rem, env(safe-area-inset-left));
-    padding-right: max(1.5rem, env(safe-area-inset-right));
+    padding-left: max(1.75rem, env(safe-area-inset-left));
+    padding-right: max(1.75rem, env(safe-area-inset-right));
   }
   main {
-    padding-left: max(1.5rem, env(safe-area-inset-left));
-    padding-right: max(1.5rem, env(safe-area-inset-right));
+    padding-left: max(1.75rem, env(safe-area-inset-left));
+    padding-right: max(1.75rem, env(safe-area-inset-right));
   }
   .site-footer {
-    padding-left: max(1.5rem, env(safe-area-inset-left));
-    padding-right: max(1.5rem, env(safe-area-inset-right));
+    padding-left: max(1.75rem, env(safe-area-inset-left));
+    padding-right: max(1.75rem, env(safe-area-inset-right));
   }
-}
-
-/* ===== Animations ===== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(15px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-html:not([data-mode="dark"]) .hero,
-html[data-mode="dark"] .hero {
-  animation: fadeInUp 0.5s ease-out;
-}
-
-html:not([data-mode="dark"]) .post-card,
-html[data-mode="dark"] .post-card {
-  animation: fadeInUp 0.4s ease-out;
 }
 
 /* ===== Back to Top Button ===== */
@@ -72,14 +53,14 @@ html[data-mode="dark"] .post-card {
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--accent);
-  color: #fff;
-  border-radius: 50%;
+  color: var(--on-accent);
+  border-radius: var(--radius);
   box-shadow: var(--shadow-md);
   cursor: pointer;
   opacity: 0;
@@ -101,12 +82,7 @@ html[data-mode="dark"] .post-card {
 
 .back-to-top:hover {
   background: var(--accent-hover);
-  transform: translateY(-3px);
-}
-
-html[data-mode="dark"] .back-to-top {
-  color: #000;
-  box-shadow: var(--shadow-glow);
+  transform: translateY(-2px);
 }
 
 @media (max-width: 768px) {
@@ -118,7 +94,7 @@ html[data-mode="dark"] .back-to-top {
   }
 }
 
-/* TOC 错位滚动补偿 — 让锚点跳转后标题不被头部遮挡 */
+/* ===== TOC 锚点滚动补偿 ===== */
 .post-content :is(h1, h2, h3, h4, h5, h6) {
   scroll-margin-top: calc(var(--header-height) + 1rem);
 }
@@ -126,14 +102,15 @@ html[data-mode="dark"] .back-to-top {
 /* ===== Skip to Content Link (a11y) ===== */
 .skip-link {
   position: absolute;
-  top: -40px;
+  top: -48px;
   left: 1rem;
   background: var(--accent);
-  color: #fff;
-  padding: 0.5rem 1rem;
+  color: var(--on-accent);
+  padding: 0.55rem 1rem;
   border-radius: var(--radius-sm);
   text-decoration: none;
   font-weight: 600;
+  font-size: 0.88rem;
   z-index: 9999;
   transition: top 0.2s ease;
 }
@@ -142,7 +119,6 @@ html[data-mode="dark"] .back-to-top {
   top: 1rem;
 }
 
-/* Ensure main content can receive focus for skip link to work */
 main:focus {
   outline: none;
 }

@@ -27,3 +27,9 @@ npm-debug.log*
 # 测试覆盖率
 coverage/
 src/generated/
+
+# Astro dev server 缓存（.astro 下其余类型文件是被 git 跟踪的）
+.astro/data-store.json
+.astro/dev.json
+.astro/settings.json
+.astro/preview.json

@@ -14,8 +14,13 @@ const { headings } = Astro.props;
 
 {headings.length > 0 && (
   <nav class="toc" aria-label="文章目录">
-    <details open>
-      <summary class="toc-title">📑 目录</summary>
+    {/*
+      默认收起。窄屏（<1280px）目录是正文上方的折叠条，展开会占掉一大块版面；
+      宽屏（>=1280px）由 app.js 自动展开成左侧刻度栏。
+      没 JS 时用户仍可手动点开。
+    */}
+    <details data-toc-details>
+      <summary class="toc-title">Contents</summary>
       <ol class="toc-list">
         {headings.map((h) => (
           <li class:list={['toc-item', `toc-depth-${h.depth}`]}>

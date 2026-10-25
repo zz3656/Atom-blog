@@ -3,7 +3,7 @@
  * convert-hexo.mjs
  *
  * 将 Hexo 源文件 (zz3656.github.io/source/_posts/*.md) 转换为 Astro 格式
- * 输出到 Atom-blog/src/content/blog/
+ * 输出到 Atom/src/content/blog/
  *
  * 转换规则（依据 hexo-theme-matery 官方 Front-matter 文档）：
  *   https://github.com/blinkfox/hexo-theme-matery
@@ -29,7 +29,8 @@ import { fileURLToPath } from 'node:url';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const HEXO_POSTS_DIR = join(__dirname, '../../zz3656.github.io/source/_posts');
-const ATOM_BLOG_DIR = join(__dirname, '../../Atom-blog/src/content/blog');
+// 基于脚本自身位置解析，仓库改名（Atom-blog → Atom）后依然指向本仓库的文章目录
+const ATOM_BLOG_DIR = join(__dirname, '../src/content/blog');
 
 // ─── Hexo frontmatter 解析 ────────────────────────────────────
 function parseFrontmatter(content) {

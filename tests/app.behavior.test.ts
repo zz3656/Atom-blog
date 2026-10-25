@@ -81,7 +81,8 @@ describe('theme toggle', () => {
       `
       <body>
         <button id="theme-toggle" aria-label="切换深色/浅色模式">
-          <span id="theme-toggle-icon">🌙</span>
+          <span class="theme-icon theme-icon-sun"><svg></svg></span>
+          <span class="theme-icon theme-icon-moon"><svg></svg></span>
         </button>
       </body>
     `,
@@ -89,9 +90,17 @@ describe('theme toggle', () => {
     );
   });
 
-  it('initial toggle icon reflects current mode (moon in light)', () => {
-    const icon = document.getElementById('theme-toggle-icon');
-    expect(icon?.textContent).toBe('\uD83C\uDF19'); // moon
+  it('renders both sun and moon icons (CSS picks the active one)', () => {
+    expect(document.querySelector('.theme-icon-sun')).not.toBeNull();
+    expect(document.querySelector('.theme-icon-moon')).not.toBeNull();
+  });
+
+  it('toggle label reflects the mode that clicking will switch to', () => {
+    const btn = document.getElementById('theme-toggle') as HTMLButtonElement;
+    // 当前 light → 点击后进入 dark，标签应提示"切换到深色模式"
+    expect(btn.getAttribute('aria-label')).toBe('切换到深色模式');
+    btn.click();
+    expect(btn.getAttribute('aria-label')).toBe('切换到浅色模式');
   });
 
   it('clicking toggle switches mode from light to dark', () => {
@@ -105,7 +114,14 @@ describe('theme toggle', () => {
 
   it('clicking toggle switches mode from dark back to light', () => {
     setupPage(
-      `<body><button id="theme-toggle"><span id="theme-toggle-icon">🌙</span></button></body>`,
+      `
+      <body>
+        <button id="theme-toggle" aria-label="切换深色/浅色模式">
+          <span class="theme-icon theme-icon-sun"><svg></svg></span>
+          <span class="theme-icon theme-icon-moon"><svg></svg></span>
+        </button>
+      </body>
+    `,
       { theme: 'atom-default', mode: 'dark' },
     );
     const btn = document.getElementById('theme-toggle') as HTMLButtonElement;
@@ -115,13 +131,14 @@ describe('theme toggle', () => {
     expect(localStorage.getItem('themeMode')).toBe('light');
   });
 
-  it('toggle icon updates when mode changes', () => {
+  it('theme mode drives which icon the stylesheet highlights', () => {
     const btn = document.getElementById('theme-toggle') as HTMLButtonElement;
-    const icon = document.getElementById('theme-toggle-icon');
-    btn.click(); // light → dark
-    expect(icon?.textContent).toBe('\u2600\uFE0F'); // sun in dark mode
-    btn.click(); // dark → light
-    expect(icon?.textContent).toBe('\uD83C\uDF19'); // moon in light mode
+    // 高亮由 CSS 依据 html[data-mode] 决定，JS 只负责切换属性
+    expect(document.documentElement.getAttribute('data-mode')).toBe('light');
+    btn.click();
+    expect(document.documentElement.getAttribute('data-mode')).toBe('dark');
+    btn.click();
+    expect(document.documentElement.getAttribute('data-mode')).toBe('light');
   });
 
   it('persists mode to localStorage on toggle', () => {

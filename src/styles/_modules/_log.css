@@ -1,0 +1,191 @@
+/* Atom Blog — Log List（日志列表）
+ *
+ * 全站唯一的文章列表形态：一条带刻度的「标尺脊线」立在序号列右侧，
+ * 每一篇文章是一个刻度点。悬停时该刻度伸长并点亮为黄铜色。
+ *
+ *   01 ─│  Atom 博客的技术架构解析                        2026/09/19
+ *       │  从 Astro 内容集合、构建流水线……                 tutorial
+ *       │  [Astro] [架构] [GitHub Pages]
+ */
+
+.log-list {
+  list-style: none;
+  position: relative;
+  --log-gutter: 4.5rem;
+}
+
+/* 标尺脊线 */
+.log-list::before {
+  content: '';
+  position: absolute;
+  top: 1.1rem;
+  bottom: 1.1rem;
+  left: var(--log-gutter);
+  width: 1px;
+  background: var(--rule-tick);
+}
+
+.log-row {
+  list-style: none;
+  position: relative;
+}
+
+/* 行与行之间的发丝分隔 */
+.log-row + .log-row {
+  border-top: 1px solid var(--border-light);
+}
+
+.log-row a {
+  display: grid;
+  grid-template-columns: var(--log-gutter) minmax(0, 1fr) auto;
+  column-gap: 1.35rem;
+  row-gap: 0.45rem;
+  align-items: baseline;
+  padding: 1.3rem 0.75rem 1.3rem 0;
+  color: inherit;
+  transition: background-color 0.2s ease;
+}
+
+.log-row a:hover {
+  background: var(--accent-glow);
+  color: inherit;
+}
+
+/* ===== 序号 + 刻度 ===== */
+.log-index {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  position: relative;
+  text-align: right;
+  padding-right: 1.3rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  transition: color 0.2s ease;
+}
+
+/* 伸向脊线的刻度线 */
+.log-index::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  width: 14px;
+  height: 1px;
+  transform: translateY(-50%);
+  background: var(--rule-tick);
+  transition:
+    width 0.25s cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 0.2s ease;
+}
+
+.log-row a:hover .log-index {
+  color: var(--accent);
+}
+
+.log-row a:hover .log-index::after {
+  width: 24px;
+  background: var(--accent);
+}
+
+/* ===== 标题 ===== */
+.log-title {
+  grid-column: 2;
+  grid-row: 1;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  font-variation-settings:
+    'wdth' 102,
+    'wght' 700;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+  color: var(--text-bright);
+  transition: color 0.2s ease;
+}
+
+.log-row a:hover .log-title {
+  color: var(--accent);
+}
+
+/* ===== 日期（数据列）===== */
+.log-date {
+  grid-column: 3;
+  grid-row: 1;
+  justify-self: end;
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 摘要 ===== */
+.log-desc {
+  grid-column: 2;
+  grid-row: 2;
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* ===== 分类（冷钢青）===== */
+.log-category {
+  grid-column: 3;
+  grid-row: 2;
+  justify-self: end;
+  align-self: start;
+}
+
+/* ===== 标签 ===== */
+.log-tags {
+  grid-column: 2 / span 2;
+  grid-row: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+/* ===== 列表入场 ===== */
+.log-row {
+  animation: logRise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.log-row:nth-child(1) {
+  animation-delay: 0.05s;
+}
+.log-row:nth-child(2) {
+  animation-delay: 0.11s;
+}
+.log-row:nth-child(3) {
+  animation-delay: 0.17s;
+}
+.log-row:nth-child(4) {
+  animation-delay: 0.23s;
+}
+.log-row:nth-child(5) {
+  animation-delay: 0.29s;
+}
+.log-row:nth-child(n + 6) {
+  animation-delay: 0.33s;
+}
+
+@keyframes logRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,66 @@
+# AGENTS.md
+
+Atom —— 一个用 Astro 构建的现代轻量级博客（冷轧钢 + 黄铜指示灯的「PRECISION LOG」视觉体系），为 GitHub Pages / Cloudflare Pages 部署优化。
+
+## Setup commands
+
+- Node 版本：**>= 22.23.4**（Astro 7.4 的硬性要求，CI 用 `node-version: 24`）。`setup-node` 里写 `node-version: 22` 会命中 runner 镜像缓存的 22.23.3，导致 `astro check` 直接报错退出——别改成 `22`
+- Install deps: `npm install`
+- Start dev:    `npm run dev`            # http://localhost:4321
+- Build:        `npm run build`          # 含 minify + RSS + sitemap 后处理，产出 `dist/`
+- Test:         `npm test`               # Vitest（`npm run test:coverage` 带覆盖率）
+- Lint:         `npm run lint`           # ESLint flat config
+- Typecheck:    `npm run check`          # `astro check`（CI 里先跑这个再跑 lint）
+- Format:       `npm run format`         # Prettier
+
+## Project layout
+
+- `src/` — Astro 应用：`pages/` 路由、`components/`、`layouts/`、`content/` 文章集合、`themes/`、`styles/`、`utils/`、`consts.ts` 站点配置
+- `src/content/blog/` — Markdown 文章（frontmatter 见 `src/content.config.ts`）
+- `src/themes/<id>/{light,dark}.css` — 主题，**只放 CSS token**，不放规则
+- `src/styles/_modules/` — 21 个共享 CSS 模块（布局/字体/刻度尺），**不含颜色**
+- `src/generated/` — 构建时生成的主题汇总入口（`themes.ts` 已被跟踪，但内容会被 build 重写，别手改）
+- `public/` — 静态资源（`logos/`、`favicon.svg`、`manifest.json`）
+- `astro-plugins/` — remark/rehype 与构建期插件（`rehype-table-scroll` 等）
+- `scripts/` — 构建辅助与 CLI（`atom-cli.mjs`、`create-theme.mjs`、`vectorize-icon.mjs`）
+- `tests/` — Vitest 单元测试，`*.test.ts`
+- `docs/THEMING.md` — **主题作者契约**，改 token 必须同步改这里
+- `.github/workflows/` — `test.yml`（lint → test → build 三段依赖）、`deploy.yml`
+
+## Code style
+
+- TypeScript 严格模式（`astro/tsconfigs/strict`）
+- Prettier：单引号、分号、`trailingComma: all`、printWidth 100（Markdown 120）、2 空格、LF
+- ESLint flat config：`eslint.config.js`；`scripts/` 与 `astro-plugins/` 被 ignore（各自有独立风格）
+- 提交前跑 `npm run check && npm run lint && npm test`
+
+## Project rules (违反会被 review 打回)
+
+- **组件层不得写死任何颜色**——只用语义 token（`--accent`、`--bg-primary`、`--rule-tick` …）。主题目录只放 token；组件 CSS 写死颜色会让第三方主题渲染出错的配色
+- **文章目录永远不挤压正文宽度**——正文列固定 `--content-width`(740px) 居中，TOC 只能待在两侧空白区（≥1280px 左侧刻度栏 / <1280px 顶部折叠条）。曾因在 1100–1279px 把 TOC 塞进文章块当左列，正文被压到 508px 且右移 116px
+- 新增/修改 token 时，`scripts/create-theme.mjs` 脚手架和 `docs/THEMING.md` 必须同步
+- JetBrains Mono **只用于真实数据**（日期、计数、序号、刻度、代码）；中文界面一律无衬线
+- 分类 = 冷钢青，标签 = 中性描边；全站只保留两条语义色通道
+- **版本号只有一个数据源**——只改 `package.json` 的 `version`。`src/consts.ts` 的 `SITE_VERSION` 从那里 import，页脚显示它；`tests/version.test.ts` 会校验它与 `CHANGELOG.md` 最新版本号一致。发版流程见 DEVELOP.md「版本号与发布流程」
+- `@astrojs/markdown-remark` 在 Astro 7 里是 **peer dependency**，必须显式留在 `devDependencies`
+- Markdown 管线走 `astro.config.mjs` 的 `markdown.processor: unified({ ... })`（旧的 `markdown.remarkPlugins` 顶层写法已废弃）
+- 链接要走 `src/utils/path.ts` 的 `withBase`，不要手写 base 前缀
+
+## Testing instructions
+
+- 单元测试：Vitest，跑 `npm test`；新增行为在 `tests/` 下加 `*.test.ts`
+- `npm run format:check` **有既存基线噪音**（Markdown 里刻意对齐的表格与行尾注释不合 Prettier）——只格式化自己动过的文件，别全量 `--write`
+- 改了 markdown 处理器后，`.astro/data-store.json` 缓存**不会**自动失效：必须 `rm .astro/data-store.json` 再重启 dev server
+- 窄屏验证用 iframe 量 `scrollWidth`（macOS headless Chrome 的 `--window-size` 在 <500px 时不可靠）
+
+## PR & commit conventions
+
+- **推 `main` 即部署**——`deploy.yml` 在 `push` 到 `main` 时触发部署；`test.yml` 同时跑在 push 与 PR 上。本仓库历史以直推 `main` 为主
+- 需要 review 时从 `main` 切分支、开 PR（`gh pr create`）再合入 `main`
+- Commit message：conventional commits（`feat:` / `fix:` / `docs:` / `refactor:`）
+- 发版时打 annotated tag（`git tag -a v1.1.0 -m "..."`）并 `git push --tags`
+
+## Security
+
+- 不要提交密钥。注意 **`.env` 目前不在 `.gitignore` 里**——本地建 `.env` 前先自己加进 ignore，CI 侧密钥一律走 GitHub Actions secrets
+- `scripts/vectorize-icon.mjs` 依赖 `sharp`，而 `sharp` **未列入 `package.json`**（只是 Astro 的传递依赖）——需要时临时 `npm i -D sharp`，用完卸掉

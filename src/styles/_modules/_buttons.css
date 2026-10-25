@@ -1,65 +1,51 @@
-/* Atom Blog — Buttons */
+/* Atom Blog — Buttons
+ *
+ * 两种实心度：primary 是黄铜实心块，secondary 是发丝描边。
+ * 不使用渐变填充 —— 实色更像仪表上的实体按键。
+ */
 
 .btn {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.65rem 1.5rem;
+  padding: 0.6rem 1.25rem;
   border-radius: var(--radius);
+  font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 0.9rem;
-  transition: all 0.3s ease;
+  font-size: 0.88rem;
+  line-height: 1.4;
   cursor: pointer;
   border: 1px solid transparent;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-html:not([data-mode="dark"]) .btn-primary {
+.btn-primary {
   background: var(--accent);
-  color: #fff;
+  color: var(--on-accent);
   border-color: var(--accent);
-  box-shadow: 0 1px 3px rgba(99, 102, 241, 0.3);
-}
-html:not([data-mode="dark"]) .btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  color: #fff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
-}
-html[data-mode="dark"] .btn-primary {
-  background: var(--accent);
-  color: #000;
-  border-color: var(--accent);
-  box-shadow:
-    0 0 15px var(--accent-glow),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-html[data-mode="dark"] .btn-primary:hover {
-  background: var(--accent-hover);
-  border-color: var(--accent-hover);
-  color: #000;
-  transform: translateY(-2px);
-  box-shadow:
-    0 0 25px var(--accent-glow-strong),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
-html:not([data-mode="dark"]) .btn-secondary {
+.btn-primary:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  color: var(--on-accent);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-glow);
+}
+
+.btn-secondary {
   background: transparent;
   color: var(--text-primary);
   border-color: var(--border-color);
 }
-html:not([data-mode="dark"]) .btn-secondary:hover {
+
+.btn-secondary:hover {
   border-color: var(--accent);
   color: var(--accent);
-}
-html[data-mode="dark"] .btn-secondary {
-  background: transparent;
-  color: var(--text-primary);
-  border-color: var(--border-color);
-}
-html[data-mode="dark"] .btn-secondary:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  box-shadow: 0 0 15px var(--accent-glow);
+  background: var(--accent-glow);
 }

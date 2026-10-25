@@ -4,8 +4,8 @@
   "description": "A modern, lightweight blog built with Astro",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0f2f5",
-  "theme_color": "#6366f1",
+  "background_color": "#ecedef",
+  "theme_color": "#8a5407",
   "icons": [
     {
       "src": "/favicon.svg",

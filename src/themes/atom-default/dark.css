@@ -1,55 +1,78 @@
 /* Atom Default Theme — Dark Mode
- * 双主题（light + dark），夜间赛博朋克青主题
+ * 双主题（light + dark），夜间「枪铁 / Gunmetal」配色
+ *
+ * 设计概念：枪灰色的钢面 + 一盏点亮的黄铜指示灯。
+ *  - 表面：深枪铁蓝灰（不是纯黑，避免"赛博朋克黑"）
+ *  - 强调色：琥珀黄铜（夜间像仪表指示灯一样发亮）
+ *  - 次强调色：冷钢青（仅用于「分类」这一语义通道）
  *
  * 选择器约定: html[data-theme="atom-default"][data-mode="dark"]
  */
 
 html[data-theme='atom-default'][data-mode='dark'] {
-  /* Backgrounds */
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-card: #16161f;
-  --bg-card-hover: #1a1a25;
-  --bg-inline-code: rgba(0, 229, 255, 0.06);
+  /* ===== Surfaces ===== */
+  --bg-primary: #12161a;
+  --bg-secondary: #181d22;
+  --bg-card: #1b2126;
+  --bg-card-hover: #222a30;
+  --bg-inline-code: rgba(242, 179, 61, 0.1);
 
-  /* Text colors */
-  --text-primary: #e2e8f0;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --text-bright: #f8fafc;
+  /* ===== Text ===== */
+  --text-primary: #d8dee3;
+  --text-secondary: #9ba6ae;
+  --text-muted: #848f97;
+  --text-bright: #f2f6f8;
 
-  /* Borders */
-  --border-color: rgba(99, 102, 241, 0.15);
-  --border-light: rgba(99, 102, 241, 0.08);
-  --border-glow: rgba(99, 102, 241, 0.4);
+  /* ===== Borders ===== */
+  --border-color: #2a3238;
+  --border-light: #212830;
+  --border-glow: #6a4a12;
 
-  /* Accent colors (Cyberpunk style) */
-  --accent: #00e5ff;
-  --accent-hover: #00bcd4;
-  --accent-secondary: #a78bfa;
-  --accent-gradient: linear-gradient(135deg, #00e5ff, #a78bfa);
-  --accent-glow: rgba(0, 229, 255, 0.15);
-  --accent-glow-strong: rgba(0, 229, 255, 0.3);
-  --purple-glow: rgba(167, 139, 250, 0.15);
+  /* ===== Accent — 点亮的黄铜指示灯 ===== */
+  --accent: #f2b33d;
+  --accent-hover: #ffc95c;
+  --accent-secondary: #5fb6d4;
+  --accent-gradient: linear-gradient(135deg, #f2b33d, #d9893a);
+  --accent-glow: rgba(242, 179, 61, 0.12);
+  --accent-glow-strong: rgba(242, 179, 61, 0.24);
+  --glow-secondary: rgba(95, 182, 212, 0.12);
+  /* 向后兼容：旧主题把副色辉光叫 --purple-glow */
+  --purple-glow: rgba(95, 182, 212, 0.12);
 
-  /* Tags & Categories */
-  --tag-bg: rgba(0, 229, 255, 0.08);
-  --tag-text: #00e5ff;
-  --tag-border: rgba(0, 229, 255, 0.2);
-  --tag-active-bg: rgba(0, 229, 255, 0.15);
-  --cat-bg: rgba(167, 139, 250, 0.08);
-  --cat-text: #a78bfa;
-  --cat-border: rgba(167, 139, 250, 0.2);
-  --cat-active-bg: rgba(167, 139, 250, 0.15);
+  /* ===== Tags — 中性 ===== */
+  --tag-bg: transparent;
+  --tag-text: #97a2aa;
+  --tag-border: #2f383f;
+  --tag-active-bg: rgba(242, 179, 61, 0.1);
 
-  /* Semantic colors */
-  --success: #10b981;
-  --warning: #f59e0b;
+  /* ===== Categories — 冷钢青 ===== */
+  --cat-bg: rgba(95, 182, 212, 0.1);
+  --cat-text: #74c2dc;
+  --cat-border: rgba(95, 182, 212, 0.28);
+  --cat-active-bg: rgba(95, 182, 212, 0.18);
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
-  --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-  --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.5);
-  --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.6);
-  --shadow-glow: 0 0 20px var(--accent-glow), 0 0 40px rgba(0, 229, 255, 0.1);
+  /* ===== Semantic ===== */
+  --success: #3ddc97;
+  --warning: #f2b33d;
+
+  /* ===== Shadows ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 14px 38px rgba(0, 0, 0, 0.6);
+  --shadow-glow: 0 0 0 1px rgba(242, 179, 61, 0.26), 0 6px 22px rgba(242, 179, 61, 0.16);
+
+  /* ===== Semantic surface tokens ===== */
+  --on-accent: #12161a;
+  --header-bg: rgba(18, 22, 26, 0.86);
+  --panel-bg: #1a2025;
+  --code-bg: #161b20;
+  --grid-line: rgba(216, 222, 227, 0.028);
+  --ambient-glow: rgba(242, 179, 61, 0.045); /* 页面左上角的暖光 */
+  --highlight: rgba(242, 179, 61, 0.22);
+
+  /* ===== 刻度尺 ===== */
+  --rule-tick: rgba(216, 222, 227, 0.2);
+  --rule-tick-strong: rgba(242, 179, 61, 0.6);
+  --focus-ring: #f2b33d;
 }

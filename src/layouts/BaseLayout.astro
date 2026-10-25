@@ -45,8 +45,8 @@ const defaultThemeId = themeIds[0] || 'atom-default';
     <meta name="description" content={desc} />
     <meta name="generator" content={Astro.generator} />
     <meta name="author" content={AUTHOR} />
-    <meta name="theme-color" content="#6366f1" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1e1b4b" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#ecedef" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#12161a" media="(prefers-color-scheme: dark)" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
@@ -84,8 +84,12 @@ const defaultThemeId = themeIds[0] || 'atom-default';
     <!-- Font preconnect -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!--
+      Archivo：可变字体（含 wdth 宽度轴），标题用宽字重变化制造标识感
+      JetBrains Mono：等宽字体，只承担「数据」与代码
+    -->
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;700&display=swap"
       rel="stylesheet"
       crossorigin="anonymous"
     />
@@ -111,8 +115,12 @@ const defaultThemeId = themeIds[0] || 'atom-default';
     <noscript>
       <style>
         /* JS disabled 时：默认浅色 + 调整布局避免主题按钮占位 */
-        html { color-scheme: light; }
-        .theme-toggle { display: none; }
+        html {
+          color-scheme: light;
+        }
+        .theme-toggle {
+          display: none;
+        }
       </style>
       <div style="background:#fef3c7;color:#92400e;padding:0.75rem 1rem;text-align:center;font-size:0.9rem;border-bottom:1px solid #f59e0b;">
         本站某些功能（主题切换 / 搜索 / 代码复制）需要 JavaScript。基础阅读不受影响。

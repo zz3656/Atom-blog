@@ -1,39 +1,27 @@
-/* Atom Blog — Header & Navigation */
+/* Atom Blog — Header & Navigation
+ *
+ * 结构：左（标识）· 中（导航）· 右（搜索 + 主题开关）
+ * 风格：一条实心仪表横梁，而不是发光的玻璃条。
+ */
 
-/* Sticky header with glass effect */
 .site-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(240, 242, 245, 0.85);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border-light);
+  background: var(--header-bg);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border-bottom: 1px solid var(--border-color);
   height: var(--header-height);
-  transition: background 0.3s ease;
+  transition:
+    background 0.3s ease,
+    border-color 0.3s ease;
 }
 
-html[data-mode="dark"] .site-header {
-  background: rgba(10, 10, 15, 0.85);
-}
-
-/* Glowing bottom border */
-.site-header::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
-  opacity: 0.5;
-}
-
-/* Navigation container: title (left) + links (center) + actions (right) */
 .nav-container {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 1.75rem;
   height: 100%;
   display: flex;
   align-items: center;
@@ -42,66 +30,75 @@ html[data-mode="dark"] .site-header {
 }
 
 @media (min-width: 769px) {
-  .nav-container {
-    justify-content: space-between;
-    gap: 0;
-  }
   .nav-links {
     flex: 1;
     justify-content: center;
   }
 }
 
-/* Site title with logo */
+/* ===== 站点标识 ===== */
 .site-title {
   display: flex;
   align-items: center;
-  gap: 0.6rem;
-  font-size: 1.25rem;
-  font-weight: 700;
+  gap: 0.55rem;
   color: var(--text-bright);
-  letter-spacing: -0.5px;
-  transition: all 0.3s ease;
   flex-shrink: 0;
 }
 
 .site-logo {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   object-fit: contain;
   flex-shrink: 0;
 }
 
-html:not([data-mode="dark"]) .site-title:hover {
-  color: var(--accent);
-}
-html[data-mode="dark"] .site-title:hover {
-  color: var(--accent);
-  text-shadow: 0 0 20px var(--accent-glow);
+.site-name-text {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings:
+    'wdth' 108,
+    'wght' 800;
+  font-size: 1.08rem;
+  letter-spacing: -0.02em;
+  line-height: 1;
 }
 
-/* Navigation links */
+/* 标识右侧的小字：站点定位，一行说清这是什么 */
+.site-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  padding-left: 0.55rem;
+  margin-left: 0.1rem;
+  border-left: 1px solid var(--border-color);
+  line-height: 1;
+  align-self: center;
+}
+
+@media (max-width: 1080px) {
+  .site-tagline {
+    display: none;
+  }
+}
+
+/* ===== 导航链接 ===== */
 .nav-links {
   display: flex;
   align-items: center;
-  gap: 0.25rem;
-}
-
-.nav-actions {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  flex-shrink: 0;
+  gap: 0.15rem;
 }
 
 .nav-link {
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  font-weight: 500;
-  padding: 0.35rem 0.75rem;
-  border-radius: var(--radius-sm);
-  transition: all 0.2s ease;
   position: relative;
+  color: var(--text-secondary);
+  font-size: 0.88rem;
+  font-weight: 500;
+  padding: 0.45rem 0.7rem;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .nav-link:hover {
@@ -109,61 +106,91 @@ html[data-mode="dark"] .site-title:hover {
   background: var(--accent-glow);
 }
 
+/* 激活态：脚下打一根刻度短线 */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 2px;
+  width: 14px;
+  height: 2px;
+  transform: translateX(-50%) scaleX(0);
+  background: var(--accent);
+  transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nav-link:hover::after,
+.nav-link.active::after {
+  transform: translateX(-50%) scaleX(1);
+}
+
 .nav-link.active {
   color: var(--accent);
   font-weight: 600;
 }
 
-html:not([data-mode="dark"]) .nav-link.active {
-  background: var(--accent-glow-strong);
+/* ===== 右侧动作区 ===== */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-shrink: 0;
 }
 
-html:not([data-mode="dark"]) .nav-link::after {
-  content: none;
-}
-
-html[data-mode="dark"] .nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%) scaleX(0);
-  width: 60%;
-  height: 1px;
-  background: var(--accent);
-  transition: transform 0.3s ease;
-}
-
-html[data-mode="dark"] .nav-link.active::after {
-  transform: translateX(-50%) scaleX(1);
-}
-
-html[data-mode="dark"] .nav-link:hover::after {
-  transform: translateX(-50%) scaleX(1);
-}
-
-/* Theme toggle button */
+/* ===== 主题开关（双档拨动式）===== */
 .theme-toggle {
-  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  background: var(--bg-secondary);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
-  padding: 0.35rem 0.55rem;
   cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.25s ease;
-  margin-left: 0.5rem;
+  transition:
+    border-color 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.theme-toggle:hover {
+  border-color: var(--border-glow);
+}
+
+.theme-toggle .theme-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 3px;
+  color: var(--text-muted);
+  transition:
+    color 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.theme-toggle .theme-icon svg {
+  width: 14px;
+  height: 14px;
+  display: block;
+}
+
+/* 亮色模式下点亮太阳，暗色模式下点亮月亮 */
+html[data-mode='light'] .theme-toggle .theme-icon-sun {
+  color: var(--accent);
+  background: var(--bg-card);
+}
+
+html[data-mode='dark'] .theme-toggle .theme-icon-moon {
+  color: var(--accent);
+  background: var(--bg-card);
+}
+
+.theme-toggle:hover .theme-icon {
   color: var(--text-secondary);
 }
 
-html:not([data-mode="dark"]) .theme-toggle:hover {
-  border-color: var(--accent);
+html[data-mode='light'] .theme-toggle:hover .theme-icon-sun,
+html[data-mode='dark'] .theme-toggle:hover .theme-icon-moon {
   color: var(--accent);
-  transform: rotate(15deg);
-}
-
-html[data-mode="dark"] .theme-toggle:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  box-shadow: 0 0 10px var(--accent-glow);
-  transform: rotate(15deg);
 }

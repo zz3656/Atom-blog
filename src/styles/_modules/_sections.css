@@ -1,46 +1,73 @@
-/* Atom Blog — Section Headers */
+/* Atom Blog — Section Headers
+ *
+ * 每个区块由「eyebrow（小写标签） + 标题 + 计数」和一根刻度尺组成。
+ * 刻度尺是本站的签名元素：它既是分隔线，也是"标尺"。
+ */
 
 .section-header {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 1.5rem;
+  gap: 1.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.section-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-eyebrow::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
+  flex-shrink: 0;
 }
 
 .section-title {
-  font-size: 1.4rem;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
   font-weight: 700;
+  font-variation-settings:
+    'wdth' 104,
+    'wght' 700;
+  letter-spacing: -0.025em;
   color: var(--text-bright);
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  position: relative;
-}
-
-.section-title::before {
-  content: '';
-  display: inline-block;
-  width: 3px;
-  height: 1.1em;
-  background: var(--accent-gradient);
-  border-radius: 2px;
-}
-
-html:not([data-mode="dark"]) .section-title::before {
-  box-shadow: none;
-}
-html[data-mode="dark"] .section-title::before {
-  box-shadow: 0 0 8px var(--accent-glow);
+  line-height: 1.15;
 }
 
 .section-count {
-  font-size: 0.85rem;
-  color: var(--text-muted);
   font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  white-space: nowrap;
+  padding-bottom: 0.2rem;
 }
 
+/* 标题下方的刻度尺 */
+.section-rule {
+  margin-bottom: 1.75rem;
+}
+
+/* ===== 页面内的强调数值 ===== */
 .accent {
   color: var(--accent);
   font-weight: 700;
   font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
 }

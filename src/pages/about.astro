@@ -1,27 +1,30 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { SITE_TITLE } from '../consts';
 ---
 
-<BaseLayout title="关于 | Atom Blog">
+<BaseLayout title={`关于 | ${SITE_TITLE}`}>
   <section class="about">
     <div class="unified-page-header">
+      <p class="unified-page-eyebrow">About</p>
       <h1>关于 Atom 博客</h1>
+      <div class="rule"></div>
     </div>
     <div class="about-content">
-      <p>
+      <p class="about-bio">
         <strong>Atom 博客</strong> 是一个用{' '}
         <a href="https://astro.build" target="_blank" rel="noopener">
           Astro
         </a>{' '}
-        构建的现代轻量级静态博客主题。 灵感来自电影《铁甲钢拳》(Real Steel) 中的机器人 Atom —
+        构建的现代轻量级静态博客。灵感来自电影《铁甲钢拳》(Real Steel) 中的机器人 Atom —
         小巧、精准、充满力量。
       </p>
 
-      <h2>✨ 为什么选择 Atom</h2>
+      <h2>为什么选择 Atom</h2>
       <div class="about-projects">
         <div class="project-card">
-          <h3>⚡ 极致性能</h3>
-          <p>零 JavaScript 输出，纯 HTML + CSS，Lighthouse 性能评分接近满分。</p>
+          <h3>极致性能</h3>
+          <p>无框架运行时、无水合，仅约 8.7KB 原生 JS 负责搜索与主题切换，Lighthouse 性能评分接近满分。</p>
           <div class="project-links">
             <a href="https://astro.build" target="_blank" class="tag">
               Astro 7.x
@@ -32,23 +35,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           </div>
         </div>
         <div class="project-card">
-          <h3>🎨 优雅设计</h3>
-          <p>双主题模式 — 日间简洁明亮 + 夜间赛博朋克风格，基于 CSS 变量实现一键切换。</p>
+          <h3>精准的排版</h3>
+          <p>等宽字体承载数据、几何字承载标题，刻度尺串联全站，让长文也像仪表一样易读。</p>
           <div class="project-links">
-            <a href="https://postcss.org" target="_blank" class="tag">
-              CSS 变量
-            </a>
             <a
-              href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/Backdrop-filter"
+              href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_cascade/Cascade"
               target="_blank"
               class="tag"
             >
-              毛玻璃
+              CSS 变量
+            </a>
+            <a
+              href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_fonts"
+              target="_blank"
+              class="tag"
+            >
+              字体
             </a>
           </div>
         </div>
         <div class="project-card">
-          <h3>📱 移动优先</h3>
+          <h3>移动优先</h3>
           <p>汉堡菜单导航、安全区域适配、多断点渐进缩放，各类设备完美体验。</p>
           <div class="project-links">
             <a href="https://www.w3.org/TR/mediaqueries-4/" target="_blank" class="tag">
@@ -65,7 +72,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
         </div>
       </div>
 
-      <h2>🏗️ 架构</h2>
+      <h2>架构</h2>
       <ul>
         <li>
           <strong>内容管理</strong> — Astro Content Collections + Markdown，零数据库依赖
@@ -77,11 +84,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           <strong>SEO 优化</strong> — Open Graph / Twitter Card / JSON-LD / Sitemap / RSS 全内置
         </li>
         <li>
+          <strong>主题系统</strong> — CSS Token 驱动，日夜双模式，第三方主题零配置接入
+        </li>
+        <li>
           <strong>开发体验</strong> — TypeScript 类型安全，CLI 工具快速创建文章
         </li>
       </ul>
 
-      <h2>🤝 社区</h2>
+      <h2>社区</h2>
       <p>Atom 博客是一个开源项目，欢迎 Fork、提 Issue 或提交 PR。</p>
       <div class="about-links">
         <a
@@ -90,7 +100,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           rel="noopener"
           class="btn btn-secondary"
         >
-          🐙 GitHub
+          GitHub
         </a>
         <a
           href="https://github.com/zz3656/Atom/issues"
@@ -98,7 +108,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
           rel="noopener"
           class="btn btn-secondary"
         >
-          💡 提交 Issue
+          提交 Issue
         </a>
       </div>
     </div>

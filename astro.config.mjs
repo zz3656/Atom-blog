@@ -1,6 +1,8 @@
 import { defineConfig } from 'astro/config';
+import { unified } from '@astrojs/markdown-remark';
 import sitemap from '@astrojs/sitemap';
 import remarkImgLazy from './astro-plugins/remark-img-lazy.mjs';
+import rehypeTableScroll from './astro-plugins/rehype-table-scroll.mjs';
 import themeLoader from './astro-plugins/theme-loader.mjs';
 
 // 部署目标自动检测:
@@ -10,7 +12,7 @@ import themeLoader from './astro-plugins/theme-loader.mjs';
 const isGitHubPages = process.env.DEPLOY_TARGET === 'github' || process.env.PAGES_ENV === 'true';
 
 // GitHub Pages 自动从仓库名推导 base 路径
-// 例如: zz3656/Atom-blog → base='/Atom-blog'
+// 例如: zz3656/Atom → base='/Atom'
 const REPO_NAME = process.env.REPO_NAME || 'Atom';
 
 // Cloudflare Pages 使用根路径
@@ -50,6 +52,12 @@ export default defineConfig({
   },
 
   markdown: {
+    // Astro 5+ 的写法：统一走 unified() 处理器
+    // （旧的 markdown.remarkPlugins 顶层写法已废弃）
+    processor: unified({
+      remarkPlugins: [remarkImgLazy],
+      rehypePlugins: [rehypeTableScroll],
+    }),
     shikiConfig: {
       // Shiki 输出两套颜色，CSS 变量 --shiki-dark 控制切换（见 src/styles/_modules/_post.css）
       themes: {
@@ -58,7 +66,5 @@ export default defineConfig({
       },
       wrap: true,
     },
-    // 为 Markdown 中的图片自动添加 loading="lazy" 和 decoding="async"
-    remarkPlugins: [remarkImgLazy],
   },
 });

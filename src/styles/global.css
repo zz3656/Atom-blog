@@ -12,7 +12,7 @@
  *  8. _hero        → 首屏 Hero 区域
  *  9. _buttons     → 按钮
  * 10. _sections    → 页面标题/计数
- * 11. _postcards   → 文章卡片
+ * 11. _log         → 日志列表（文章列表）
  * 12. _tags        → 标签 & 分类
  * 13. _pages       → 分类/标签列表页
  * 14. _post        → 文章正文内容
@@ -55,8 +55,8 @@
 /* 10. Section Headers */
 @import './_modules/_sections.css';
 
-/* 11. Post Cards */
-@import './_modules/_postcards.css';
+/* 11. Log List (文章日志列表) */
+@import './_modules/_log.css';
 
 /* 12. Tags */
 @import './_modules/_tags.css';

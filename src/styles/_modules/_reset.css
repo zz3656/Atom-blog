@@ -21,7 +21,7 @@ button {
 }
 
 html {
-  /* 告诉浏览器页面同时支持亮色与暗色 — 滚动条、表单控件、<input type=date> 等会随之适配 */
+  /* 同时支持亮色与暗色 — 滚动条、表单控件等会随之适配 */
   color-scheme: light dark;
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
@@ -37,7 +37,7 @@ body {
   font-family: var(--font-sans);
   background: var(--bg-primary);
   color: var(--text-primary);
-  line-height: 1.7;
+  line-height: 1.75;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -45,22 +45,32 @@ body {
   transition:
     background 0.3s ease,
     color 0.3s ease;
-  will-change: background, color;
 }
 
+/* ===== 链接 ===== */
 a {
   color: var(--accent);
   text-decoration: none;
-  transition: all 0.25s ease;
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
 }
 
-html:not([data-mode="dark"]) a:hover {
-  text-shadow: none;
-}
-
-html[data-mode="dark"] a:hover {
+a:hover {
   color: var(--accent-hover);
-  text-shadow: 0 0 8px var(--accent-glow-strong);
+}
+
+/* ===== 焦点可见性（键盘导航）===== */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: var(--highlight);
+  color: var(--text-bright);
 }
 
 img {
@@ -70,7 +80,15 @@ img {
   -webkit-tap-highlight-color: transparent;
 }
 
-::selection {
-  background: var(--accent);
-  color: #fff;
+/* ===== 表单控件继承字体 ===== */
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+/* ===== 数字/序号的排版基线 ===== */
+time,
+.mono {
+  font-variant-numeric: tabular-nums;
 }

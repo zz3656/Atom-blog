@@ -3,7 +3,7 @@
   "name": "Atom Default",
   "author": "zz3656",
   "version": "1.0.0",
-  "description": "默认主题：日间明亮紫 + 夜间赛博朋克青",
+  "description": "默认主题：日间镀锌钢 + 夜间枪铁灰，强调色为黄铜指示灯",
   "modes": ["light", "dark"],
   "preview": "/logos/logo.svg"
 }

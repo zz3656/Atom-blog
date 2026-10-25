@@ -1,11 +1,18 @@
 <div align="center">
 
   <svg width="72" height="72" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:1rem">
-    <circle cx="16" cy="16" r="14" fill="#6366f1"/>
-    <ellipse cx="16" cy="16" rx="11" ry="5" fill="none" stroke="#e0e7ff" stroke-width="1.5" transform="rotate(30 16 16)"/>
-    <ellipse cx="16" cy="16" rx="11" ry="5" fill="none" stroke="#e0e7ff" stroke-width="1.5" transform="rotate(-30 16 16)"/>
-    <ellipse cx="16" cy="16" rx="11" ry="5" fill="none" stroke="#e0e7ff" stroke-width="1.5" transform="rotate(90 16 16)"/>
-    <circle cx="16" cy="16" r="2.5" fill="#fff"/>
+<defs><radialGradient id="logoDisc" cx="34%" cy="26%" r="84%">
+        <stop offset="0%" stop-color="#454f59"/>
+        <stop offset="55%" stop-color="#252c33"/>
+        <stop offset="100%" stop-color="#14181c"/>
+      </radialGradient><linearGradient id="logoBrass" x1="10%" x2="90%" y1="4%" y2="98%">
+        <stop offset="0%" stop-color="#f7d488"/>
+        <stop offset="50%" stop-color="#e2a93a"/>
+        <stop offset="100%" stop-color="#a66b11"/>
+      </linearGradient></defs>
+      <path fill="url(#logoDisc)" fill-rule="evenodd" d="M14.36.75h3.28l2.53.5 2.27.76 3.27 2.01 2.27 2.27 1.51 2.27 1.76 5.55-.25 5.31-.76 2.52-2.26 3.77-4.04 3.53-2 1-3.77 1.01h-4.31l-1.19-.5h-1.09l-1.52-.51-3.52-2.01-2.77-2.77-1.01-1.52-1.26-2.77-.75-3.28.25-5.31 1.01-3.02 2.01-3.27 2.27-2.27 2.27-1.51 3.27-1.26 2.5-.5zM15.64 14l-1.37 1.04-.27.82.26 1.08.85.81 1.83-.01L18 16.42l-.52-1.88-.81-.54z"/>
+      <path fill="url(#logoBrass)" fill-rule="evenodd" d="m15.61 5.5 1.08.01 1.29 1.03 1.08 2.7 2.05-.49h1.81l1.04.52.54.84-.26 2.83-1.99 2.92 1.99 3.2.25 2.63-1.03 1.29-.79.27-3.63-.48-.81 2.44-1.56 1.29-1.36-.01-1.54-1.28-.83-2.45-3.36.49-1.04-.27-1.04-1.34.51-3.08 1.74-2.42-2-3.47-.25-2.31.51-1.05 1.35-.56 3.58.49 1.33-2.95 1.31-.79zM9.64 9.75l-1.12.79-.02.88 1.01 2.27 1.1 1.31 1.63-1.31.51-3.11-1.83-.83zM21.39 17l-1.63 1.56-.26 3.08 2.08.61 1.38-.27.53-.54.01-1.08-.77-1.82L21.42 17zm.5-7.25-2.39.86.26 2.83 1.6 1.56 1.62-2.04.52-1.32-.02-1.1-.54-.53-1.02-.26zM10.64 17l-1.13 1.31-1.01 2.27.27 1.13 1.06.54h.84l1.83-.83-.26-2.86L10.67 17zm5.25 4.25L14 22.36l.51 1.83 1.1 1.31.83-.01.54-.53L18 22.89l-.29-.87-1.79-.77zm.25-14.75-1.37 1.04L14 9.36l.29.62 1.54.77L18 9.89l-.76-2.33-1.07-1.06zm2.25 13-1.14.86.04.37 1.07.52.39-1.36-.33-.39zM13.64 11l-.28 1.75 1.39-1.08-.04-.4-1.04-.27zm4.5 0-.89.61.86.64.39-.11v-1.06l-.33-.08zm-4.5 8.75L13.58 21l1.17-.36-1.08-.89z"/>
+      <path fill="url(#logoBrass)" fill-rule="evenodd" d="m15.86 13.25 1.85.52.79 1.31-.26 2.36-1.57 1.06-2.11-.26-1.06-1.32.27-2.38 1.02-1.02 1.04-.27zm.28-1-1.85 1.02-1.02 1.02-.27.82.26 2.83 2.35 1.81 1.08-.26 1.77-1.26.54-1.09-.26-3.08-2.57-1.81z"/>
   </svg>
 
 # Atom
@@ -14,11 +21,11 @@
 
 > 灵感来自电影《铁甲钢拳》(Real Steel) 中的机器人 Atom — 小巧、精准、充满力量
 
-[![Astro](https://img.shields.io/badge/Astro-7.x-ff5d01?logo=astro&logoColor=white)](https://astro.build)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Astro](https://img.shields.io/badge/Astro-7.4-ff5d01?logo=astro&logoColor=white)](https://astro.build)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.x-3178C6?logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-[🌐 在线预览](https://zz3656.github.io/Atom) · [📝 写文章](#-写文章) · [🤖 CLI 工具](#-cli-本地构建工具) · [🚀 部署](#-部署到-github-pages) · [⚙️ 自定义](#%EF%B8%8F-自定义) · [🇬🇧 English](README_EN.md) · [📘 开发者指南](DEVELOP.md) · [🔄 Hexo 转换工具](scripts/README.md)
+[🌐 在线预览](https://zz3656.github.io/Atom) · [📝 写文章](#-写文章) · [🤖 CLI 工具](#-cli-与-npm-scripts) · [🚀 部署](#-部署到-github-pages) · [⚙️ 自定义](#-自定义) · [🇬🇧 English](README_EN.md) · [📘 开发者指南](DEVELOP.md) · [🔄 Hexo 转换工具](scripts/README.md)
 
 </div>
 
@@ -28,16 +35,18 @@
 
 | 特性                   | 说明                                                                           |
 | ---------------------- | ------------------------------------------------------------------------------ |
-| ⚡ **Astro 驱动**      | 静态 HTML + ~10KB minified 交互脚本（defer 加载，首屏渲染零阻塞），加载极快             |
-| 🎨 **主题系统**         | 默认主题（紫罗兰 + 赛博青），一键切换深/浅色；CSS Token 体系让开发者可拓展自定义主题          |
+| ⚡ **Astro 驱动**      | 静态 HTML + ~8.7KB minified 交互脚本（defer 加载，首屏渲染零阻塞），加载极快             |
+| 🎨 **主题系统**         | 默认主题（冷轧钢 + 黄铜指示灯），一键切换深/浅色；CSS Token 体系让开发者可拓展自定义主题          |
 | 📱 **响应式设计**      | 手机汉堡菜单、平板、桌面完美适配，iOS 安全区域支持                             |
 | 📝 **Markdown 写作**   | 原生支持，Shiki 代码语法高亮                                                   |
 | 🤖 **CLI 工具**        | `npm run new` / `npm run list` / `npm run theme:create <id>` — 本地创建文章、生成主题       |
 | 📁 **分类 + 标签**     | 分类（单数）组织文章大类，标签（可多）标注细分主题                             |
 | 🚀 **双平台部署**      | GitHub Actions 自动构建，支持 GitHub Pages / Cloudflare Pages                  |
 | 🔍 **SEO 友好**        | 语义化 HTML、Open Graph / Twitter Card / JSON-LD 结构化数据、Sitemap、RSS 订阅 |
-| 📦 **超小体积**        | 首页 HTML ~11KB gzipped（CSS 内联，无额外请求）；单篇文章 ~14KB gzipped             |
+| 📦 **超小体积**        | 首页 HTML ~14KB gzipped（CSS 内联，无额外请求）；单篇文章 ~18KB gzipped             |
 | 💯 **Lighthouse 满分** | 在简洁页面上可达到 100/100（性能/无障碍/SEO）；内置配置：语义化 HTML、canonical、OG、Twitter Card、JSON-LD、sitemap、RSS、a11y skip-link |
+| 🎚️ **Token 化设计系统** | 组件层零硬编码颜色，12 组语义表面 token 驱动全部配色，第三方主题零配置接入 |
+| 📐 **刻度尺视觉语言** | 横竖刻度线贯穿全站，日志列表配标尺脊线，让"按时间排列的日志"成为可读的视觉结构 |
 
 ---
 
@@ -45,8 +54,8 @@
 
 ### 首页
 
-- Hero 区域：Atom 原子图标（紫色渐变轨道球体）+ 渐变大标题 + 背景光晕
-- 卡片网格布局：展示标题、描述、日期、分类、标签
+- Hero 区域：Atom 原子图标（冷轧钢圆盘 + 黄铜三轨道）+ 渐变大标题 + 背景光晕
+- 日志行列表：竖向刻度脊线上依次排列序号、标题、日期、分类、标签
 - 右上角主题切换按钮：一键深/浅色；首次访问跟随系统设置，之后记忆用户选择
 
 ### 导航栏
@@ -59,14 +68,15 @@
 ### 移动端体验
 
 - **汉堡菜单**：768px 断点自动折叠导航为抽屉式菜单，带 X 形切换动画
-- **横向卡片转纵向**：文章列表在移动端自动切换为纵向卡片
+- **日志行转纵向**：文章列表在 600px 以下改为「标题 → 日期 → 摘要 → 分类」纵向堆叠
+- **零横向溢出**：320px 起全站无横向滚动条；宽表格由 rehype 插件包裹为可横向滑动容器
 - **安全区域适配**：支持 iPhone 刘海屏、底部横条等安全区域
-- **触控优化**：禁用 iOS 触摸高亮、文本缩放、滚动回弹
-- **字体自适应**：多断点（768px / 480px）渐进式字体缩放
+- **触控优化**：禁用 iOS 触摸高亮、文本缩放、滚动回弹；主要可点击元素热区 ≥ 24px（WCAG 2.5.8）
+- **字体自适应**：多断点（1024px / 768px / 600px / 480px / 400px）渐进式字体缩放
 
 ### 文章页
 
-- **居中渐变标题** → 描述 → 日期 / 更新日 → 分类 + 标签
+- **刊头式排版**：分类 / 日期 / 阅读时长（等宽）→ 标题 → 刻度尺 → 描述 → 标签，正文首字下沉
 - 阅读进度条
 - 上一篇 / 下一篇导航（卡片式）
 
@@ -76,11 +86,11 @@
 - 📁 **分类详情**：列表展示该分类下所有文章
 - 🏷️ **标签列表**：紧凑标签云风格，标签名 + 文章数
 - 🏷️ **标签详情**：列表展示该标签下所有文章
-- 所有页面标题统一为**渐变标题 + 底部发光装饰线**
+- 所有页面标题统一为 **eyebrow 标签 + 大标题 + 刻度尺分隔线**
 
 ### 关于页
 
-- 统一渐变标题
+- 统一的 eyebrow + 标题 + 刻度尺
 - 内容居中，项目卡片网格
 
 ---
@@ -89,41 +99,66 @@
 
 ```
 Atom/
+├── .github/                    # GitHub 配置（CI 与部署均已启用）
+│   ├── dependabot.yml          # 依赖更新机器人
+│   └── workflows/
+│       ├── test.yml            # CI：lint → test → build
+│       └── deploy.yml          # GitHub Pages / Cloudflare Pages 部署
 ├── scripts/
 │   ├── atom-cli.mjs           # 🤖 本地 CLI（创建/列出文章）
 │   ├── create-theme.mjs       # 🎨 主题脚手架（npm run theme:create <id>）
 │   ├── generate-rss.mjs       # RSS Feed + 搜索索引生成
 │   ├── fix-sitemap.mjs        # sitemap lastmod 修正
-│   └── minify-app-js.mjs      # app.js 压缩 + 子路径兼容
+│   ├── minify-app-js.mjs      # app.js 压缩 + 子路径兼容
+│   ├── vectorize-icon.mjs     # 位图 → 矢量（图标流水线）
+│   └── convert-hexo.mjs       # Hexo 迁移工具（可选用）
 ├── astro-plugins/
-│   └── theme-loader.mjs       # 构建时扫描 src/themes/
+│   ├── theme-loader.mjs       # 构建时扫描 src/themes/
+│   ├── remark-img-lazy.mjs    # Markdown 图片懒加载
+│   └── rehype-table-scroll.mjs # 宽表格包可横向滚动容器
 ├── public/
 │   ├── favicon.svg            # 浏览器标签页图标
 │   ├── manifest.json          # PWA 支持
 │   ├── robots.txt             # 搜索引擎爬虫规则
-│   ├── logos/                 # 导航栏 Logo 目录
+│   ├── opensearch.xml         # 浏览器搜索插件
+│   ├── logos/logo.svg         # 导航栏 Logo
+│   ├── js/app.js              # 压缩后的交互脚本（构建时生成）
+│   ├── _assets/               # 搜索索引（构建时生成）
 │   └── medias/reward/         # 打赏二维码（可选）
 ├── src/
 │   ├── themes/                # 🎨 主题目录（默认 atom-default，开发者可扩展）
 │   ├── components/            # Astro 组件
 │   │   ├── Header.astro       # 导航栏
 │   │   ├── Footer.astro       # 页脚
-│   │   ├── PostCard.astro     # 文章卡片
-│   │   └── ...                # 其他组件
+│   │   ├── PostCard.astro     # 日志行（文章列表项）
+│   │   ├── TableOfContents.astro # 文章目录（≥1280px 左侧刻度栏 / <1280px 顶部折叠条）
+│   │   ├── HeroIcon.astro     # 首页 Hero 图标
+│   │   └── FormattedDate.astro # 日期格式化组件
 │   ├── utils/                 # 工具函数（path/date/blog/themes/collection/markdown-strip）
 │   ├── styles/                # 样式模块
 │   │   ├── global.css         # 主入口
-│   │   └── _modules/          # 各组件 CSS 模块
+│   │   └── _modules/          # 21 个 CSS 模块
+│   ├── scripts/app.js         # 交互脚本源码（构建时压缩）
+│   ├── generated/             # 构建期生成的主题入口（勿手改）
 │   ├── content/               # 📝 Markdown 文章
 │   │   └── blog/              # 文章目录（每篇一个 .md）
 │   ├── layouts/               # 布局模板（BaseLayout / BlogPost）
 │   ├── pages/                 # 路由页面
-│   ├── consts.ts              # 站点配置（SITE_TITLE / REPO_URL 等）
+│   ├── consts.ts              # 站点配置（SITE_TITLE / REPO_URL / HERO_* 等）
+│   ├── content.config.ts      # 内容集合 Schema（类型安全）
 │   └── env.d.ts
+├── tests/                     # 单元测试（Vitest）
 ├── docs/THEMING.md            # 主题开发指南
-├── astro.config.mjs
+├── astro.config.mjs           # Astro 配置（base 自动检测 + 统一 Markdown 管线）
+├── vitest.config.ts           # 测试配置
+├── eslint.config.js           # ESLint 配置
 ├── package.json
-└── README.md
+├── tsconfig.json
+├── AGENTS.md                  # AI Agent 项目定义
+├── CHANGELOG.md               # 更新日志
+├── DEVELOP.md                 # 开发者指南
+├── README.md                  # 本文件（中文）
+└── README_EN.md               # 本文件（英文）
 ```
 
 ---
@@ -196,7 +231,7 @@ npm run list
 
 ### 前置要求
 
-- Node.js >= 22.12
+- Node.js >= 22.23.4（Astro 7.4 的硬性要求；推荐 24 LTS）
 - npm >= 10.8
 
 ### 1. 克隆项目
@@ -262,12 +297,13 @@ draft: false # 可选：草稿标记（true 时不发布）
 
 ### 样式自定义
 
-CSS 已按功能拆分为 20 个模块（`src/styles/_modules/`），编辑对应的 `.css` 文件即可：
+CSS 已按功能拆分为 21 个模块（`src/styles/_modules/`），编辑对应的 `.css` 文件即可：
 
-- `_variables.css` — 颜色变量（亮色/暗色主题）
+- `_variables.css` — 共享 token（字体栈 / 圆角 / 刻度尺几何）
 - `_header.css` — 导航栏样式
-- `_postcards.css` — 文章卡片样式
-- `_responsive.css` — 响应式断点（768px / 480px）
+- `_log.css` — 文章列表（日志行 + 竖向刻度脊线）
+- `_post.css` — 文章正文排版
+- `_responsive.css` — 响应式断点（1024px / 768px / 600px / 480px / 400px）
 
 所有样式通过 `src/styles/global.css` 入口文件统一导入。
 
@@ -312,7 +348,7 @@ Actions 会自动：`安装依赖 → 构建 → 部署`
 
 ## ⚙️ 自定义
 
-### 1. 站点基本信息 / Logo / Favicon
+### 1. 站点基本信息 / Logo / Favicon / 首页 Hero
 
 **所有站点客制化只需编辑 `src/consts.ts` 一个文件**：
 
@@ -325,6 +361,15 @@ export const AUTHOR = '张三'; // 作者名（meta author 标签）
 export const SITE_LOGO = '/logos/logo.svg'; // 导航栏 Logo 路径（对应 public/logos/logo.svg）
 export const SITE_FAVICON = '/favicon.svg'; // 浏览器 Favicon 路径
 
+// 首页 Hero 区域完全可客制化（图标 + 标题 + 描述 + 按钮）
+export const SITE_HERO_ICON = ''; // 留空则使用内置 Atom 原子 SVG
+export const HERO_TITLE = 'MyBlog'; // Hero 标题文本（可含 HTML 标签，如 <em>）
+export const HERO_DESCRIPTION = '一个简洁、快速、优雅的现代博客。';
+export const HERO_ACTIONS = [
+  { label: '开始阅读 →', href: '/blog', variant: 'primary' },
+  { label: '关于此站', href: '/about', variant: 'secondary' },
+];
+
 export const SOCIAL_LINKS = {
   github: 'https://github.com/yourusername',
   twitter: '',
@@ -332,11 +377,13 @@ export const SOCIAL_LINKS = {
 };
 ```
 
-> 💡 **替换 Logo 和 Favicon 各独立**：
+> 💡 **替换 Logo、Favicon、Hero 图标各独立**：
 >
 > 1. **Logo**（导航栏）：放入 `public/logos/logo.svg`（支持 .svg / .png / .webp），修改 `SITE_LOGO`
 > 2. **Favicon**（浏览器标签页）：放入 `public/favicon.svg`，修改 `SITE_FAVICON`
-> 3. 不需要再修改任何组件代码！
+> 3. **Hero 图标**（首页大标题前）：留空 `''` 走内置 SVG；如需替换，放入 `public/heroes/hero.svg`（支持 .svg / .png / .webp），修改 `SITE_HERO_ICON`
+> 4. **Hero 文案 / 按钮**：直接编辑 `HERO_TITLE` / `HERO_DESCRIPTION` / `HERO_ACTIONS`；按钮可任意增删，`variant: 'primary' | 'secondary'` 控制样式，`hide: true` 跳过渲染
+> 5. 不需要再修改任何组件代码！
 
 ### 2. 替换示例文章
 
@@ -482,7 +529,7 @@ public/medias/reward/
 
 ### 6. 主题 / 换肤
 
-Atom 自带一套精心调校的默认主题：**紫罗兰 + 赛博青**（日间紫罗兰，夜间赛博朋克青）。
+Atom 自带一套精心调校的默认主题：**冷轧钢 + 黄铜指示灯**（日间镀锌灰 + 深棕黄铜，夜间枪铁灰 + 琥珀黄铜）。
 
 右上角一键切换深色 / 浅色模式，**首次访问跟随系统设置**，之后记忆用户选择。
 
@@ -519,7 +566,7 @@ src/pages/links.astro        → /links
 
 | 方案               | 构建输出  | JS 依赖  | 构建时间 | SEO / RSS / Sitemap              | 学习成本     |
 | ------------------ | --------- | -------- | -------- | -------------------------------- | ------------ |
-| **Atom（本项目）** | **~11 KB gz** | **0**    | **~1.5s**  | **RSS/Sitemap/JSON-LD 自动生成** | 极低         |
+| **Atom（本项目）** | **~14 KB gz** | **8.7KB 原生** | **~1.5s**  | **RSS/Sitemap/JSON-LD 自动生成** | 极低         |
 | Hexo + Matery      | ~15 MB    | 数十个库 | ~5s      | 需插件                           | 中           |
 | Hugo               | ~2 MB     | 0        | ~0.5s    | 需插件                           | 中           |
 | Jekyll             | ~3 MB     | 少量     | ~3s      | 内置                             | 中           |
@@ -528,12 +575,17 @@ src/pages/links.astro        → /links
 
 ### 本项目的优势
 
-- **零依赖** — 全站无 JavaScript，纯 HTML + CSS，Lighthouse 满分
-- **一键日/夜切换** — 默认主题（日间紫罗兰 + 夜间赛博青），首次访问跟随系统设置，之后记忆用户选择；开发者可通过 `npm run theme:create` 拓展主题
+- **零第三方依赖** — 无前端框架；唯一的 JavaScript 是 ~8.7KB 原生脚本（搜索 / 主题切换 / 目录），Lighthouse 满分
+- **一键日/夜切换** — 默认主题（日间镀锌钢 + 夜间枪铁），首次访问跟随系统设置，之后记忆用户选择；开发者可通过 `npm run theme:create` 拓展主题
 - **自动 SEO** — 每篇文章自动注入 Open Graph、Twitter Card、JSON-LD 结构化数据
 - **极简构建** — 构建完成后自动执行 RSS/Sitemap 生成，零配置
 - **1 秒构建** — 相比 Hexo 的 5s+，依然足够快
 - **TypeScript 类型安全** — 文章内容通过 Astro Content Collections Schema 校验
+- **Token 化设计系统** — 12 组语义表面 token 驱动全部配色，组件层零硬编码颜色
+- **刻度尺视觉语言** — 横竖刻度线贯穿全站，日志列表落在竖向刻度脊线上
+- **内置客户端搜索** — 静态索引于构建期生成，交互 JS 总量约 8.7KB
+- **零横向溢出** — 320px 起全站无横向滚动条；宽表格在自身容器内滚动
+- **居中导航栏** — Logo 左、导航链接居中、操作区右
 
 ### 局限性
 

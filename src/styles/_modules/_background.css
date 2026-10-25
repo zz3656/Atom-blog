@@ -1,34 +1,32 @@
-/* Atom Blog — Background Patterns */
-/* 页面背景纹理，不同主题使用不同图案 */
+/* Atom Blog — Background */
+/*
+ * 底纹：极淡的制图纸网格 + 首屏角落的一小片黄铜辉光。
+ * 网格线用 --grid-line token，深浅模式共用同一套结构，只是色值不同。
+ */
 
-/* Light theme: grid + radial gradients */
-html:not([data-mode="dark"]) body::before {
+body::before {
   content: '';
   position: fixed;
   inset: 0;
   z-index: -1;
-  background:
-    linear-gradient(rgba(99, 102, 241, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(99, 102, 241, 0.06) 1px, transparent 1px),
-    radial-gradient(ellipse at 30% 20%, rgba(99, 102, 241, 0.04) 0%, transparent 60%),
-    radial-gradient(ellipse at 70% 80%, rgba(139, 92, 246, 0.04) 0%, transparent 60%);
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
   background-size:
-    60px 60px,
-    60px 60px,
-    100% 100%,
-    100% 100%;
+    32px 32px,
+    32px 32px;
   pointer-events: none;
 }
 
-/* Dark theme: simple grid */
-html[data-mode="dark"] body::before {
+/* 首屏左上角的暖光，暗示"指示灯"的存在 */
+body::after {
   content: '';
   position: fixed;
-  inset: 0;
+  top: -220px;
+  left: -160px;
+  width: 640px;
+  height: 540px;
   z-index: -1;
-  background:
-    linear-gradient(rgba(0, 229, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 229, 255, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+  background: radial-gradient(ellipse at center, var(--ambient-glow) 0%, transparent 68%);
   pointer-events: none;
 }
