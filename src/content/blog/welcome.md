@@ -124,18 +124,18 @@ export const HERO_ACTIONS = [
 
 ## 四、主题配色（推荐改）
 
-**文件**：`src/themes/atom-default/light.css` 和 `dark.css`
+**文件**：`src/themes/atom-geek/light.css` 和 `dark.css`
 
-默认主题是**冷轧钢 + 黄铜指示灯**配色：日间镀锌灰底、夜间枪铁灰底，强调色是一盏黄铜色。改颜色只需要动这两个文件里的变量：
+本站主题是**磷光终端**配色：暗色模式近黑底（`#05070a`）+ 磷光绿强调（`#00e88f`），亮色模式是反色终端的「磷光纸」（`#f2f6f3` 底 + `#00794c` 深绿墨），分类走青色通道。改颜色只需要动这两个文件里的变量：
 
 ```css
-html[data-theme='atom-default'][data-mode='light'] {
-  --bg-primary: #ecedef;      /* 页面底色 */
-  --bg-card: #ffffff;         /* 卡片底色 */
-  --text-primary: #171a1d;    /* 正文 */
-  --accent: #8a5407;          /* 强调色（链接、按钮、刻度） */
-  --accent-secondary: #1c6b85; /* 次强调色（分类） */
-  --rule-tick-strong: rgba(138, 84, 7, 0.55); /* 刻度尺长线 */
+html[data-theme='atom-geek'][data-mode='light'] {
+  --bg-primary: #f2f6f3;      /* 页面底色 */
+  --bg-card: #f8fbf9;         /* 卡片底色 */
+  --text-primary: #16302a;    /* 正文 */
+  --accent: #00794c;          /* 强调色（链接、按钮、刻度） */
+  --accent-secondary: #0a5c72; /* 次强调色（分类） */
+  --rule-tick-strong: rgba(0, 121, 76, 0.5); /* 刻度尺长线 */
 }
 ```
 
@@ -178,7 +178,7 @@ GitHub Actions 会自动跑 `npm run build` 并部署。几分钟后访问你的
 | ⭐ 必改 | 示例文章 | `src/content/blog/*.md` |
 | ⭐ 推荐 | Logo + Favicon + Hero 图标 | `public/logos/logo.svg`, `public/favicon.svg`, `public/heroes/hero.svg`（可选）|
 | ⭐ 推荐 | 首页 Hero 文案与按钮 | `HERO_TITLE` / `HERO_DESCRIPTION` / `HERO_ACTIONS` 在 `src/consts.ts` |
-| ⭐ 推荐 | 主题配色 | `src/themes/atom-default/light.css` + `dark.css` |
+| ⭐ 推荐 | 主题配色 | `src/themes/atom-geek/light.css` + `dark.css` |
 | 推荐 | 关于页面 | `src/pages/about.astro` |
 | 可选 | 新主题 | `src/themes/` + 主题脚手架 `npm run theme:create <id>` |
 | 可选 | 社交链接 | `SOCIAL_LINKS` 在 `src/consts.ts` |

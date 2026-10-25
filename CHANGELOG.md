@@ -15,6 +15,13 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+### ♻️ Changed
+
+- **单主题化**：`atom-default` 移出本站，站点只剩 `atom-geek` 一个设计。归档位置 `~/Documents/GitHub/atom-themes/atom-default/`（三个文件 sha 与 git 历史 `1d6073b` 逐一校验一致）；文件同时保留在本仓库 git 历史中，可随时取回
+- **默认主题与扫描顺序解耦**：默认主题由 `src/consts.ts` 的 `DEFAULT_THEME_ID` 决定，与 `scanThemes()` 的扫描顺序无关；`scanThemes()` 与 `astro-plugins/theme-loader.mjs` 统一改为 id 字典序，两处保持同序
+- 站点不再内联第二套主题的 CSS，首页 HTML 从 70,064B 降至 67,732B（`inlineStylesheets:'always'` 下每页都背这部分）
+- 老访客 localStorage 里存过 `themeId=atom-default` 的：该 id 已不在清单 → 校验失败自动回退 `atom-geek`；**日/夜模式选择始终保留**
+
 ### 📝 Docs
 
 - 文档事实核对：修正「零 JavaScript」等与实现不符的表述，统一为「无框架运行时 / 仅 ~8.7KB 原生 JS」

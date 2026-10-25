@@ -57,16 +57,16 @@ Atom 的视觉完全由 CSS 变量驱动，组件层**不写死任何颜色**。
 
 现在的做法是两层 Token：
 
-**第一层：语义色**（主题作者定义，见 `src/themes/atom-default/light.css`）
+**第一层：语义色**（主题作者定义，见 `src/themes/atom-geek/light.css`）
 
 ```css
-html[data-theme='atom-default'][data-mode='light'] {
-  --bg-primary: #ecedef;
-  --text-primary: #171a1d;
-  --accent: #8a5407;
-  --accent-secondary: #1c6b85;
-  --border-color: #d4d8dc;
-  --shadow-md: 0 4px 14px rgba(23, 26, 29, 0.08);
+html[data-theme='atom-geek'][data-mode='light'] {
+  --bg-primary: #f2f6f3;
+  --text-primary: #16302a;
+  --accent: #00794c;
+  --accent-secondary: #0a5c72;
+  --border-color: rgba(0, 121, 76, 0.2);
+  --shadow-md: 0 6px 18px rgba(10, 40, 30, 0.1);
   /* ... */
 }
 ```
