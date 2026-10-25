@@ -143,11 +143,17 @@
   // ============================================================
   var searchInput = document.getElementById('search-input');
   var searchResults = document.getElementById('search-results');
+  var searchWrapper = searchInput ? searchInput.closest('.search-wrapper') : null;
 
   if (searchInput && searchResults) {
     var searchIndex = [];
     var indexLoaded = false;
     var indexLoading = false;
+
+    // 索引尚未就绪时把查询挂起；索引到位后立刻补跑。
+    // 旧实现是 setInterval 轮询 + 3 秒超时：索引加载慢于 3 秒（弱网 / 大索引）
+    // 轮询就被清掉了，用户的第一次搜索被静默丢弃——搜不出东西还看不出原因。
+    var pendingQuery = null;
 
     function ensureIndexLoaded() {
       if (indexLoaded || indexLoading) return;
@@ -160,9 +166,15 @@
         .then(function (data) {
           searchIndex = data;
           indexLoaded = true;
+          if (pendingQuery) {
+            var q = pendingQuery;
+            pendingQuery = null;
+            doSearch(q);
+          }
         })
         .catch(function (e) {
           console.warn('Search index not loaded:', e.message);
+          pendingQuery = null;
         })
         .finally(function () {
           indexLoading = false;
@@ -170,6 +182,15 @@
     }
     searchInput.addEventListener('focus', ensureIndexLoaded, { once: true });
     searchInput.addEventListener('input', ensureIndexLoaded, { once: true });
+
+    function renderLoading() {
+      while (searchResults.firstChild) searchResults.removeChild(searchResults.firstChild);
+      var loading = document.createElement('div');
+      loading.className = 'search-no-result';
+      loading.textContent = '正在加载索引…';
+      searchResults.appendChild(loading);
+      searchResults.classList.add('active');
+    }
 
     function renderResults(results, query) {
       while (searchResults.firstChild) searchResults.removeChild(searchResults.firstChild);
@@ -220,22 +241,18 @@
     function search(query) {
       query = query.trim().toLowerCase();
       if (!query) {
+        pendingQuery = null;
         searchResults.classList.remove('active');
         return;
       }
       if (!indexLoaded) {
+        // 索引还在路上：把查询挂起，并显示加载态，别让面板空着像坏了
+        pendingQuery = query;
         ensureIndexLoaded();
-        var pollId = setInterval(function () {
-          if (indexLoaded) {
-            clearInterval(pollId);
-            doSearch(query);
-          }
-        }, 50);
-        setTimeout(function () {
-          clearInterval(pollId);
-        }, 3000);
+        renderLoading();
         return;
       }
+      pendingQuery = null;
       doSearch(query);
     }
 
@@ -251,20 +268,22 @@
       if (!e.target.closest('.search-wrapper')) searchResults.classList.remove('active');
     });
 
-    // 键盘监听挂在 .search-wrapper 上，而不是 searchInput 上。
-    // 原因：↓ 会把焦点从输入框移到结果项（<a>），焦点一旦离开 input，
+    // 键盘监听挂在 document 上，作用域用「结果面板是否展开」来限定。
+    // 为什么不用 searchInput：↓ 会把焦点移到结果项（<a>），焦点一离开 input，
     // 挂在 input 上的 keydown 就再也收不到按键 —— ↑ / Enter / Esc 会全部失灵，
-    // 页脚那行快捷键提示就成了空话。wrapper 同时包住输入框与结果面板。
-    var searchWrapper = searchInput.closest('.search-wrapper') || searchInput;
-    searchWrapper.addEventListener('keydown', function (e) {
+    // 页脚那行快捷键提示就成了空话。
+    // 为什么不用 .search-wrapper：结果列表重渲染会销毁被聚焦的项，焦点掉回 body，
+    // 此时按键同样收不到（body 不是 wrapper 的祖先）。挂 document 最稳。
+    document.addEventListener('keydown', function (e) {
       var panelOpen = searchResults.classList.contains('active');
       var inInput = document.activeElement === searchInput;
+      var inWrapper = !!(searchWrapper && searchWrapper.contains(document.activeElement));
 
       if (e.key === 'Escape') {
         if (!panelOpen && !inInput) return;
         searchResults.classList.remove('active');
         if (inInput) searchInput.blur();
-        else searchInput.focus(); // 焦点回到输入框，便于继续编辑
+        else if (inWrapper) searchInput.focus(); // 焦点回到输入框，便于继续编辑
         return;
       }
       if (!panelOpen) return;
