@@ -311,6 +311,11 @@
     gap: 0.55rem;
   }
 
+  /* 窄屏整块左对齐，避免链接行被推到右边 */
+  .footer-right-col {
+    align-items: flex-start;
+  }
+
   /* --- 正文行号槽收窄 --- */
   .post-content {
     --term-gutter: 2.6rem;

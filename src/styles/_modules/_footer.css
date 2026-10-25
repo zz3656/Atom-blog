@@ -1,6 +1,7 @@
 /* Atom Blog — Footer（TUI 系统状态栏）
  *
- * 形态与 tmux / vim 的状态栏一致：左中右三段 + 一行快捷键提示。
+ * 形态与 tmux / vim 的状态栏一致：左右两段 + 一行快捷键提示。
+ * 右侧块内部再分两行：链接行在上，构建信息（build / astro / static）在其正下方。
  */
 
 .site-footer {
@@ -24,13 +25,22 @@
   gap: 0.7rem;
 }
 
-/* ===== 三段式状态栏 ===== */
+/* ===== 状态栏 ===== */
 .footer-status {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 0.7rem 1rem;
   flex-wrap: wrap;
+  min-width: 0;
+}
+
+/* 右侧块：链接行 + 其正下方的构建信息（两行右对齐） */
+.footer-right-col {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.3rem;
   min-width: 0;
 }
 

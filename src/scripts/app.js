@@ -251,13 +251,23 @@
       if (!e.target.closest('.search-wrapper')) searchResults.classList.remove('active');
     });
 
-    searchInput.addEventListener('keydown', function (e) {
+    // 键盘监听挂在 .search-wrapper 上，而不是 searchInput 上。
+    // 原因：↓ 会把焦点从输入框移到结果项（<a>），焦点一旦离开 input，
+    // 挂在 input 上的 keydown 就再也收不到按键 —— ↑ / Enter / Esc 会全部失灵，
+    // 页脚那行快捷键提示就成了空话。wrapper 同时包住输入框与结果面板。
+    var searchWrapper = searchInput.closest('.search-wrapper') || searchInput;
+    searchWrapper.addEventListener('keydown', function (e) {
+      var panelOpen = searchResults.classList.contains('active');
+      var inInput = document.activeElement === searchInput;
+
       if (e.key === 'Escape') {
+        if (!panelOpen && !inInput) return;
         searchResults.classList.remove('active');
-        searchInput.blur();
+        if (inInput) searchInput.blur();
+        else searchInput.focus(); // 焦点回到输入框，便于继续编辑
         return;
       }
-      if (!searchResults.classList.contains('active')) return;
+      if (!panelOpen) return;
       var items = searchResults.querySelectorAll('.search-result-item');
       if (items.length === 0) return;
       var idx = Array.prototype.indexOf.call(items, document.activeElement);
@@ -267,9 +277,10 @@
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         items[idx > 0 ? idx - 1 : items.length - 1].focus();
-      } else if (e.key === 'Enter' && idx >= 0) {
+      } else if (e.key === 'Enter') {
         e.preventDefault();
-        items[idx].click();
+        // 没选中任何一条时，打开第一条（页脚提示的 [Enter] 打开）
+        items[idx >= 0 ? idx : 0].click();
       }
     });
   }
