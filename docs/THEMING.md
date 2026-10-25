@@ -21,11 +21,20 @@
 
 | 主题 | 状态 | 说明 |
 |---|---|---|
-| `atom-geek` | **本站在用** | `src/themes/atom-geek/`，双模式磷光绿/磷光纸；因特吧的整套视觉 |
-| `atom-default` | 已移出本站 | 冷轧钢 + 黄铜指示灯，保留在 git 历史中（`git show 1d6073b:src/themes/atom-default/light.css`），并已复制到本地 `~/Documents/GitHub/atom-themes/atom-default/` |
-| `sepia` / `solarized` | 在本地 themes 目录 | 本地 `~/Documents/GitHub/atom-themes/` 下已有这两套 |
+| `atom-geek` | **本站在用**，并已独立发布 | `src/themes/atom-geek/`，双模式磷光绿/磷光纸；因特吧的整套视觉。同时以**独立第三方主题仓**发布：<https://github.com/zz3656/atom-geek> |
+| `atom-default` | 已移出本站 | 冷轧钢 + 黄铜指示灯，保留在 git 历史中（`git show 1d6073b:src/themes/atom-default/light.css`）；上游框架仓 [zz3656/Atom](https://github.com/zz3656/Atom) 的 `src/themes/atom-default/` 原版**仍然保留**，本仓不另发 |
+| `sepia` / `solarized` | 已发布为第三方主题 | 独立仓库 <https://github.com/zz3656/atom-themes>，目录即主题包（`sepia/` / `solarized/`） |
 
-> ⚠️ `~/Documents/GitHub/atom-themes/` **目前还不是 git 仓库**，GitHub 上 `zz3656/atom-themes` 也尚未创建（远端返回 Repository not found）。要把它做成真正的第三方主题仓库，需要先建仓——这一步涉及账号权限，**不要由 AI 自行创建远端仓库**。
+### 第三方主题仓
+
+主题可以脱离本站单独分发，Atom 的主题契约对第三方主题一视同仁：
+
+| 仓库 | 内容 | 装上后得到什么 |
+|---|---|---|
+| [zz3656/atom-geek](https://github.com/zz3656/atom-geek) | `atom-geek/` 主题包 + `overlay/` 组件层覆盖包 | 主题包 = 只有配色；overlay = 完整 TUI 版式 |
+| [zz3656/atom-themes](https://github.com/zz3656/atom-themes) | `sepia/` / `solarized/` 主题包 | 只有配色 |
+
+> ⚠️ 两条安装路径不等价。Atom 的主题契约规定**主题目录只能放 CSS token**，所以复制 `atom-geek/` 目录只会得到一套配色，**不会**得到 TUI 版式——版式差异必须靠覆盖组件层（`src/components/` `src/layouts/` `src/pages/` `src/styles/` `src/scripts/`）实现。详见 [zz3656/atom-geek 的 README](https://github.com/zz3656/atom-geek#readme)。
 
 ---
 
@@ -432,6 +441,11 @@ grep -c "data-theme=\"ocean\"" dist/index.html
 - README 说明设计灵感
 - 必需 token 是否全部实现
 - 浏览器测试矩阵
+
+**已发布的第三方主题仓**（可作为参考样例）：
+
+- [zz3656/atom-themes](https://github.com/zz3656/atom-themes) —— 纯主题包仓库，每个子目录即一个主题
+- [zz3656/atom-geek](https://github.com/zz3656/atom-geek) —— 主题包 + 组件层 overlay 的**双仓结构**样例：把「可分发的 token」与「必须替换组件层的版式」拆成两条安装路径，README 里明确说明二者不等价
 
 ---
 

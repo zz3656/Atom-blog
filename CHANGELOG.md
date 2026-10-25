@@ -15,6 +15,11 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+### 📚 Documentation
+
+- **第三方主题仓链接**：`docs/THEMING.md` 的「主题的去向」改写为远端真实状态（此前还写着 `zz3656/atom-themes` 未建仓的过时提示），新增「第三方主题仓」小节与「发布到社区」的参考样例；`README.md` 的主题特性行与「主题 / 换肤」章节加入指向 [zz3656/atom-geek](https://github.com/zz3656/atom-geek) / [zz3656/atom-themes](https://github.com/zz3656/atom-themes) 的链接
+- 明确记录「两条安装路径不等价」：Atom 主题契约规定主题目录只能放 CSS token，复制 `atom-geek/` 只得到配色，TUI 版式必须靠覆盖组件层实现
+
 ## [1.5.0] — 2026-10-25
 
 ### ✨ Changed

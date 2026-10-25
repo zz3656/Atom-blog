@@ -36,7 +36,7 @@
 | 特性                   | 说明                                                                           |
 | ---------------------- | ------------------------------------------------------------------------------ |
 | ⚡ **Astro 驱动**      | 静态 HTML + ~8.7KB minified 交互脚本（defer 加载，首屏渲染零阻塞），加载极快             |
-| 🎨 **主题系统**         | 单主题站点：唯一主题 `atom-geek`（暗色磷光绿 + 亮色磷光纸），一键切换深/浅色；CSS Token 体系让开发者可拓展自定义主题          |
+| 🎨 **主题系统**         | 单主题站点：唯一主题 `atom-geek`（暗色磷光绿 + 亮色磷光纸），一键切换深/浅色；CSS Token 体系让开发者可拓展自定义主题；本主题另以[独立第三方主题仓](https://github.com/zz3656/atom-geek)发布          |
 | 📱 **响应式设计**      | 手机汉堡菜单、平板、桌面完美适配，iOS 安全区域支持                             |
 | 📝 **Markdown 写作**   | 原生支持，Shiki 代码语法高亮                                                   |
 | 🤖 **CLI 工具**        | `npm run new` / `npm run list` / `npm run theme:create <id>` — 本地创建文章、生成主题       |
@@ -550,6 +550,8 @@ npm run theme:create ocean --no-dark
 如需在 UI 暴露主题选择菜单，开发者可自行扩展 `src/components/Header.astro`——基础设施（themes 数组 + data-theme 属性切换）已就绪。
 
 完整开发指南（必需 token 列表、选择器约定、最佳实践）见 **[docs/THEMING.md](./docs/THEMING.md)**。
+
+> 📦 **这套主题已作为独立第三方主题发布** → [zz3656/atom-geek](https://github.com/zz3656/atom-geek)（含 TUI 组件层 overlay、演示图与完整文档）。另有纯主题包仓库 [zz3656/atom-themes](https://github.com/zz3656/atom-themes)（sepia / solarized）。
 
 ### 7. 添加新页面
 
