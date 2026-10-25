@@ -15,6 +15,28 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+## [1.4.0] — 2026-10-25
+
+### ✨ Changed
+
+- **标签页 → 词频面板**：索引摘要（`tags: 58 unique · cats: 8 dirs · posts: 25 files`）+ 频次分布条 + 按频次分档（≥5 / 3–4 / 1–2 篇），档内标签为带篇数与热度条的 chip
+- **分类页 → 目录树面板**：`├──` / `└──` 树线串起目录卡片，卡内含分类名、文章数、最新文章标题与日期、该分类标签（含 `+N` 溢出标记）
+- 两个索引页改为带边框的独立面板形态，与文章列表页的平铺 `ls -la` 行明确区分
+- 索引面板样式（`_index.css`）改为**页面级引入**（仅 /tags/ 与 /categories/ 各自 import），不再全局引入 —— CSS 全内联进每个 HTML，全局引入等于让所有页面为用不到的样式买单；改动后每页少背约 5.6KB CSS（首页 76,959B → 71,364B）
+
+### 🐛 Fixed
+
+- **移动端横向溢出**：`html/body` 的 `overflow-x: hidden` → `clip`。`hidden` 会让 html 变成滚动容器、页头 sticky 失效；`clip` 才能真正阻断 iOS Safari 上的横向平移
+- **点阵字标**（22 行 × 73 列）改为按视口等比缩放（`font-size: min(clamp(...), (100vw - 3.5rem) / 43.8)`），去掉 `overflow-x: auto` —— 它是站内唯一真正能左右滑动的区域（320px 下 scrollWidth 294 > clientWidth 285）
+- **触摸设备输入框字号提至 16px**（`@media (pointer: coarse)`）：iOS Safari 会对 <16px 的输入框在聚焦时自动放大整个页面，放大后用户就能左右平移看到超出范围的内容
+- 搜索框改为可伸缩（`flex: 1 1 auto; min-width: 0`），聚焦时不再突然变宽顶破顶栏
+- 另修四处实测溢出：`footer-status`（窄屏溢出 10px）、`dir-date`（日期列比内容窄 2px）、`nav.toc`（侧栏内部横向滚动区）、`about-topics`（320px 下两列只剩 61px，标签 chip 溢出卡片）
+- 标签 chip 名称被挤成 `#...` 的问题（chip 改按内容定宽，热度条改固定轨道 + `calc()` 填充，避免百分比在按内容定宽的 flex 里循环依赖）
+
+### 验收
+
+320 / 360 / 375 / 390 / 412 / 430px 六个宽度 × 首页 / 文章列表 / 标签页 / 分类页，共 48 组：页面最大越界 0px、`.term-window` scrollWidth 等于 clientWidth、`scrollLeft` 回写恒为 0（含聚焦搜索框后复测），不合格 0 组。
+
 ## [1.3.0] — 2026-10-25
 
 ### ✨ Added

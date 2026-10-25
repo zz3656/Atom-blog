@@ -7,6 +7,8 @@
 //   ③ 按频次分档的面板 —— 每个档位一块，档内是带计数与热度条的 chip
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CommandHeader from '../../components/CommandHeader.astro';
+// 索引面板样式只在标签页引入 —— 全局引入会让每个页面都为用不到的 8KB 样式买单
+import '../../styles/_modules/_index.css';
 import IndexSummary from '../../components/IndexSummary.astro';
 import { SITE_TITLE } from '../../consts';
 import { getPublishedPosts } from '../../utils/collection';

@@ -7,6 +7,8 @@
 //      卡片内容：分类名（等宽大号）· 文章数 · 最新文章标题与日期 · 该分类的标签
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CommandHeader from '../../components/CommandHeader.astro';
+// 索引面板样式只在分类页引入 —— 全局引入会让每个页面都为用不到的 8KB 样式买单
+import '../../styles/_modules/_index.css';
 import IndexSummary from '../../components/IndexSummary.astro';
 import { SITE_TITLE } from '../../consts';
 import { normalizeCategory } from '../../utils/blog';

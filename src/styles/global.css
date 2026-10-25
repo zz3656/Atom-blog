@@ -14,19 +14,22 @@
  * 10. _sections    → 区块标题
  * 11. _ls          → 文章列表（ls -la 输出行）
  * 12. _terminal    → TUI 原语（命令页头 / 目录行 / grep 命中 / 404）
- * 13. _index       → 索引面板（词频面板 / 目录树面板）
- * 14. _tags        → 标签 & 分类
- * 15. _pages       → 页面壳（About 页头 / 空态 / 返回）
- * 16. _post        → 文章正文（cat 输出 + 行号槽）
- * 17. _post-extras → 打赏/上一篇下一篇/相关推荐
- * 18. _toc         → 文章目录（命令树）
- * 19. _pagination  → 分页
- * 20. _progress    → 阅读进度条
- * 21. _about       → 关于页（冻结文件）
- * 22. _footer      → 系统状态栏
- * 23. _layout      → 全局布局 & 动画
- * 24. _responsive  → 响应式断点
- * 25. _theme-geek  → 主题作用域增补（atom-geek，可整份删除）
+ * 13. _tags        → 标签 & 分类
+ * 14. _pages       → 页面壳（About 页头 / 空态 / 返回）
+ * 15. _post        → 文章正文（cat 输出 + 行号槽）
+ * 16. _post-extras → 打赏/上一篇下一篇/相关推荐
+ * 17. _toc         → 文章目录（命令树）
+ * 18. _pagination  → 分页
+ * 19. _progress    → 阅读进度条
+ * 20. _about       → 关于页（冻结文件）
+ * 21. _footer      → 系统状态栏
+ * 22. _layout      → 全局布局 & 动画
+ * 23. _responsive  → 响应式断点
+ * 24. _theme-geek  → 主题作用域增补（atom-geek，可整份删除）
+ *
+ * ⚠️ 索引面板样式（_index.css：词频面板 / 目录树面板）**不在全局引入**——
+ * 只有 /tags/ 与 /categories/ 两个页面用得到，由这两个页面各自 import。
+ * 原因：CSS 全内联进每个 HTML，全局引入等于让所有页面为用不到的样式买单。
  */
 
 /* 1. Shared variables (layout, typography, radius — 跨主题共享) */
@@ -65,10 +68,7 @@
 /* 12. Terminal Primitives */
 @import './_modules/_terminal.css';
 
-/* 13. Index Panels (词频面板 / 目录树面板) */
-@import './_modules/_index.css';
-
-/* 14. Tags */
+/* 13. Tags */
 @import './_modules/_tags.css';
 
 /* 15. Page Shells */
