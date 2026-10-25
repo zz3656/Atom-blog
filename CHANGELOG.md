@@ -15,6 +15,24 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+## [1.3.0] — 2026-10-25
+
+### ✨ Added
+
+- **TUI 终端形态全站客制化** —— 组件层与视觉层全部重写，不是换皮
+  - 站点外壳：整页包进 `.term-window` 终端窗口（1px 硬边框、标题栏、状态栏、零圆角）
+  - Header 两行化：① 标题栏（红绿灯 · `zz3656@node:~` · 实时 `25 POSTS · 08 CATS · 58 TAGS` · build 版本 · 日夜开关）② 命令行（`~/ ~/posts ~/cats ~/tags ~/about`，当前项前缀 `>`，hover 前缀也换 `>` 并带闪烁光标）
+  - Hero 终端启动：纯文本点阵「因特吧」字标（22 行 × 73 列）→ 逐行自检输出（kernel / articles / index / status）→ `~/yinteba $` 提示符与闪烁光标；原 Telemetry 右列并入自检输出
+  - 文章列表：`ls -la ~/posts` 行式（`[01] -rw-r--r-- 日期 大小 标题.md [分类]`，hover 整行反色 + 浮出 `>`）
+  - 文章页：`cat posts/x.md` 回显刊头 + 真实文件元信息（size / lines / date / cat / read）+ 行号槽 + 命令树目录（`├─` `└─`）+ 终端标题栏代码块（真实文件名 + 语言标签 + 复制按钮）
+  - 归档 / 分类 / 标签：`ls ~/cats` 目录列表；标签页 `grep -rn "tag" ~/posts`，命中行号真实、大小写不敏感
+  - 搜索：`grep` 终端输入 + 带路径的命令输出下拉
+  - 404：`yinteba: command not found` + 建议命令
+  - About：`cat README.md` + 终端面板 + `df -h` 数据条（正文内容一字未删）
+  - 新增组件 `TerminalBoot` / `TerminalAscii` / `CommandHeader` / `GrepHit`，新增样式模块 `_terminal.css`
+  - 实测：对比度暗色 5.26–13.91:1、亮色 4.60–12.92:1，全部 ≥ WCAG AA；390px 无横向溢出；`app.js` 压缩后 9,800B（gzip 3,790B）；无新增依赖
+  - 已知折中：行号槽是块级序号而非渲染行号（零 JS 方案）；点阵字标为构建期栅格化固化结果，换字需重跑栅格化流程（流程见 `TerminalAscii.astro` 头注释）
+
 ### ♻️ Changed
 
 - **单主题化**：`atom-default` 移出本站，站点只剩 `atom-geek` 一个设计。归档位置 `~/Documents/GitHub/atom-themes/atom-default/`（三个文件 sha 与 git 历史 `1d6073b` 逐一校验一致）；文件同时保留在本仓库 git 历史中，可随时取回
