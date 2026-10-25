@@ -25,7 +25,8 @@ const searchBase = baseAssetsPath('/');
 
 // Site URL for OG/Twitter images and RSS
 const siteUrl = String(Astro.site || '').replace(/\/$/, '');
-const ogImage = image ? `${siteUrl}${image}` : `${siteUrl}/favicon.svg`;
+// 社交分享卡片（1200×630）——用站点自己的 TUI 视觉渲染，不再拿 favicon 当 og:image
+const ogImage = image ? `${siteUrl}${image}` : `${siteUrl}/og.png`;
 
 // 主题清单（构建时由 theme-loader 自动生成，仅包含有效主题 ID）
 // 用于内联脚本的运行时校验，防止老用户 localStorage 中的过期主题 ID 被吞

@@ -1,18 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Atom Geek">
-  <!-- 终端屏幕：近黑底 + 磷光绿边框 -->
-  <rect x="6" y="6" width="116" height="116" fill="#05070a" />
-  <rect x="6" y="6" width="116" height="116" fill="none" stroke="#00e88f" stroke-width="4" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="因特吧">
+  <!-- 终端屏幕（深色底板，让图标在浅色浏览器标签栏上也有轮廓） -->
+  <rect width="128" height="128" fill="#05070a" />
 
   <!-- 命令提示符 > -->
   <path
-    d="M43 44 L63 64 L43 84"
+    d="M36 36 L64 64 L36 92"
     fill="none"
     stroke="#00e88f"
-    stroke-width="10"
+    stroke-width="16"
     stroke-linecap="square"
     stroke-linejoin="miter"
   />
 
   <!-- 光标块 -->
-  <rect x="73" y="54" width="12" height="20" fill="#00e88f" />
+  <rect x="76" y="50" width="16" height="28" fill="#00e88f" />
 </svg>

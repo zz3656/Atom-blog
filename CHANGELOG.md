@@ -15,6 +15,14 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+## [1.5.0] — 2026-10-25
+
+### ✨ Changed
+
+- **品牌标识重做**：导航栏 logo、favicon、Hero 图标统一改为终端提示符 `>_` 的磷光绿标记（替换旧版紫罗兰渐变原子）；笔画加大以保证 16px 下仍可辨认
+- **PWA 图标**：新增 192 / 512 / maskable-512（由同一矢量渲染，512 图标仅 3KB）；`manifest.json` 名称改为「因特吧」，主题色 `#8a5407` → `#00e88f`，背景色 → `#05070a`
+- **社交分享卡片**：`og:image` / `twitter:image` 不再拿 favicon 顶替，改为 1200×630 的 TUI 卡片 `/og.png` —— 终端标题栏、站名、提示符与光标，背景氛围由本地 Draw Things（Qwen-Image 2512 / SDXL Turbo）生成，文字与界面元素全部代码排版保证清晰
+
 ## [1.4.0] — 2026-10-25
 
 ### ✨ Changed

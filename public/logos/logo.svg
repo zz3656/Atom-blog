@@ -1,25 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="因特吧">
-  <!-- 终端窗口 -->
-  <rect x="4" y="8" width="56" height="48" fill="#05070a" stroke="#00e88f" stroke-width="2.5" />
-
-  <!-- 标题栏分隔线 -->
-  <line x1="4" y1="18" x2="60" y2="18" stroke="#00e88f" stroke-width="2" opacity="0.5" />
-
-  <!-- 标题栏三色状态点（与站点终端标题栏一致） -->
-  <circle cx="12" cy="13" r="2" fill="#ff5f57" />
-  <circle cx="19" cy="13" r="2" fill="#febc2e" />
-  <circle cx="26" cy="13" r="2" fill="#28c840" />
+  <!-- 终端屏幕底板 -->
+  <rect width="64" height="64" fill="#05070a" />
 
   <!-- 命令提示符 > -->
   <path
-    d="M18 34 L26 40 L18 46"
+    d="M18 18 L32 32 L18 46"
     fill="none"
     stroke="#00e88f"
-    stroke-width="3.5"
+    stroke-width="8"
     stroke-linecap="square"
     stroke-linejoin="miter"
   />
 
   <!-- 光标块 -->
-  <rect x="31" y="34" width="5" height="12" fill="#00e88f" />
+  <rect x="38" y="25" width="8" height="14" fill="#00e88f" />
 </svg>
