@@ -21,7 +21,9 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-/* ===== Eyebrow ===== */
+/* ===== Eyebrow =====
+ * 文案大小写按 consts.ts 的原文显示（'~/yinteba' / 'terminal session · since 2026'），
+ * 这里不做 uppercase 变换。 */
 .hero-eyebrow {
   display: flex;
   align-items: center;
@@ -29,8 +31,7 @@
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+  letter-spacing: 0.14em;
   color: var(--accent);
 }
 
@@ -54,18 +55,19 @@
   line-height: 1;
 }
 
-/* 5×41 块字符点阵，逐列显现 = 打字机 */
+/* 「因特吧」点阵字标（22 行 × 73 列，'#' 与空格）
+ * line-height 0.66：让每个点接近正方形（字宽 0.6em），字标整体比例与原字形一致 */
 .term-wordmark {
   font-family: var(--font-mono);
-  font-size: clamp(0.5rem, 2.05vw, 1.05rem);
-  line-height: 1.08;
+  font-size: clamp(0.42rem, 1.55vw, 0.82rem);
+  line-height: 0.66;
   color: var(--accent);
   margin: 0;
   white-space: pre;
   overflow-x: auto;
   overflow-y: hidden;
   text-shadow: 0 0 22px var(--accent-glow);
-  animation: termType 1.5s steps(41, end) both;
+  animation: termType 1.6s steps(73, end) both;
 }
 
 @keyframes termType {
@@ -102,8 +104,9 @@
   display: flex;
   align-items: baseline;
   gap: 0.65rem;
-  opacity: 0;
-  animation: termBoot 0.3s ease forwards;
+  /* 基础态可见：降级路径（prefers-reduced-motion）关掉动画后内容仍然在 */
+  opacity: 1;
+  animation: termBoot 0.3s ease both;
 }
 
 .term-boot-line:nth-child(1) {

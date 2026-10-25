@@ -1,9 +1,8 @@
 /* Atom Blog — 主题作用域增补（L2）: atom-geek
  *
  * 站点级文件，非主题包。主题包只允许定义 token（45 个契约 token，勿动）。
- * 本文件承载「选择器级」的主题味道 —— 直角化、等宽角色、CRT 质感、焦点辉光，
- * 以及 About 页（src/pages/about.astro 与 _modules/_about.css 是冻结文件，不改标记）
- * 的终端化覆盖。
+ * 本文件承载「选择器级」的主题味道 —— 等宽角色、CRT 质感、焦点辉光。
+ * 圆角已由站点骨架层（_variables.css 的 --radius* = 0）统一拉直。
  *
  * 铁律：每条规则以 html[data-theme='atom-geek'] 开头；不用 !important；
  * 不改 --radius* / --font-* / --max-width / --content-width / --rule-* / --log-gutter；
@@ -12,70 +11,15 @@
  */
 
 /* == ① 直角化（FN-13）==
- * 终端没有圆角。本文件不改 --radius* token（那是跨主题共享的布局 token），
- * 只在作用域内把用到的组件拉直。
- */
-
-/* 正文 / 代码 / 图片 / 表格：_post.css */
-html[data-theme='atom-geek'] img,
-html[data-theme='atom-geek'] .post-content img,
-html[data-theme='atom-geek'] .post-content pre,
-html[data-theme='atom-geek'] .post-content code,
-html[data-theme='atom-geek'] .post-content .table-scroll,
-html[data-theme='atom-geek'] .post-content blockquote,
-html[data-theme='atom-geek'] .hero-image,
-html[data-theme='atom-geek'] .code-copy-btn,
-html[data-theme='atom-geek'] .image-zoom-overlay .image-zoom-img {
-  border-radius: 0;
-}
-
-/* 目录 / 搜索 / 按钮 / 导航：_toc.css _search.css _buttons.css _layout.css */
-html[data-theme='atom-geek'] .toc,
-html[data-theme='atom-geek'] .search-input,
-html[data-theme='atom-geek'] .search-results,
-html[data-theme='atom-geek'] .btn,
-html[data-theme='atom-geek'] .theme-toggle,
-html[data-theme='atom-geek'] .nav-toggle,
-html[data-theme='atom-geek'] .skip-link,
-html[data-theme='atom-geek'] .back-to-top {
-  border-radius: 0;
-}
-
-/* 列表 / 分页 / 标签 / 页脚：_pages.css _pagination.css _tags.css _footer.css */
-html[data-theme='atom-geek'] .tag,
-html[data-theme='atom-geek'] .post-category-tag,
-html[data-theme='atom-geek'] .view-all a,
-html[data-theme='atom-geek'] .page-btn,
-html[data-theme='atom-geek'] .page-link {
-  border-radius: 0;
-}
-
-/* 文章周边：_post-extras.css */
-html[data-theme='atom-geek'] .post-reward,
-html[data-theme='atom-geek'] .reward-item img,
-html[data-theme='atom-geek'] .post-nav a,
-html[data-theme='atom-geek'] .post-nav-link,
-html[data-theme='atom-geek'] .related-posts,
-html[data-theme='atom-geek'] .related-link {
-  border-radius: 0;
-}
-
-/* 关于页：_about.css 为冻结文件，不改它，只覆盖其圆角 */
-html[data-theme='atom-geek'] .about-stats,
-html[data-theme='atom-geek'] .project-card,
-html[data-theme='atom-geek'] .topic-card,
-html[data-theme='atom-geek'] .skill-tag {
-  border-radius: 0;
-}
-
-/* 保留圆角：.footer-built::before(50%)、.image-zoom-close(50%)、
- * :focus-visible(2px)、.theme-toggle .theme-icon(无圆角) */
+ * 终端没有圆角：--radius* 已经在站点骨架层（_variables.css）统一为 0，
+ * 主题层不需要再逐个组件覆盖。
+ * 保留圆角的都是刻意为之：窗口按钮（50%）、图片灯箱关闭键（50%）、
+ * 滚动条滑块（4px）、汉堡菜单线（1px）。 */
 
 /* == ② 等宽角色（FN-14）==
- * 站点骨架层已经给数据位上了等宽；这里只补冻结的 About 页遗留的几处。 */
+ * 站点骨架层已经给数据位上了等宽；这里只补 About 数据条。 */
 html[data-theme='atom-geek'] .about-stat dd,
-html[data-theme='atom-geek'] .about-stat dt,
-html[data-theme='atom-geek'] .skill-tag {
+html[data-theme='atom-geek'] .about-stat dt {
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
 }

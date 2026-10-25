@@ -1,5 +1,10 @@
 ---
+// Atom Blog — 关于页（TUI: cat README.md）
+//
+// 正文内容保持 69959a2 提交时的原样（基于站内真实数据），
+// 这里只把结构与视觉改成终端形态：命令回显页头 + 终端面板 + 数据条。
 import BaseLayout from '../layouts/BaseLayout.astro';
+import CommandHeader from '../components/CommandHeader.astro';
 import { SITE_TITLE, REPO_URL, SOCIAL_LINKS } from '../consts';
 import { getPublishedPosts } from '../utils/collection';
 import { countWords, normalizeCategory } from '../utils/blog';
@@ -22,11 +27,11 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
   description="关于因特吧：网络、Linux、AI 与折腾的个人技术日志"
 >
   <section class="about">
-    <div class="unified-page-header">
-      <p class="unified-page-eyebrow">About</p>
-      <h1>关于因特吧</h1>
-      <div class="rule"></div>
-    </div>
+    <CommandHeader
+      cmd="cat README.md"
+      title="关于因特吧"
+      count={`${totalPosts} posts · ${categorySet.size} cats · ${tagSet.size} tags`}
+    />
 
     <div class="about-content">
       <p class="about-bio">
@@ -40,26 +45,26 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
 
       <dl class="about-stats">
         <div class="about-stat">
-          <dt>文章</dt>
+          <dt>articles</dt>
           <dd>{String(totalPosts).padStart(2, '0')}</dd>
         </div>
         <div class="about-stat">
-          <dt>分类</dt>
+          <dt>categories</dt>
           <dd>{String(categorySet.size).padStart(2, '0')}</dd>
         </div>
         <div class="about-stat">
-          <dt>标签</dt>
+          <dt>tags</dt>
           <dd>{String(tagSet.size).padStart(2, '0')}</dd>
         </div>
         <div class="about-stat">
-          <dt>累计字数</dt>
+          <dt>words</dt>
           <dd>
             {wordCount}
             <span class="unit">{wordUnit}</span>
           </dd>
         </div>
         <div class="about-stat">
-          <dt>最近更新</dt>
+          <dt>updated</dt>
           <dd>{latestDate ? formatDateISO(latestDate) : '—'}</dd>
         </div>
       </dl>
@@ -67,7 +72,7 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
       <h2>这里写些什么</h2>
       <div class="about-topics">
         <div class="topic-card">
-          <div class="topic-icon">🌐</div>
+          <div class="topic-icon" aria-hidden="true">🌐</div>
           <div class="topic-info">
             <strong>网络与路由</strong>
             <span>
@@ -75,20 +80,20 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
             </span>
             <div class="project-links">
               <a href={getTagUrl('RouterOS')} class="tag">
-                RouterOS
+                #RouterOS
               </a>
               <a href={getTagUrl('软路由')} class="tag">
-                软路由
+                #软路由
               </a>
               <a href={getTagUrl('网络')} class="tag">
-                网络
+                #网络
               </a>
             </div>
           </div>
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">🖧</div>
+          <div class="topic-icon" aria-hidden="true">🖧</div>
           <div class="topic-info">
             <strong>Linux 与系统运维</strong>
             <span>
@@ -96,20 +101,20 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
             </span>
             <div class="project-links">
               <a href={getTagUrl('Linux')} class="tag">
-                Linux
+                #Linux
               </a>
               <a href={getTagUrl('ubuntu')} class="tag">
-                ubuntu
+                #ubuntu
               </a>
               <a href={getTagUrl('shell')} class="tag">
-                shell
+                #shell
               </a>
             </div>
           </div>
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">🤖</div>
+          <div class="topic-icon" aria-hidden="true">🤖</div>
           <div class="topic-info">
             <strong>AI 与本地推理</strong>
             <span>
@@ -118,20 +123,20 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
             </span>
             <div class="project-links">
               <a href={getTagUrl('AI')} class="tag">
-                AI
+                #AI
               </a>
               <a href={getTagUrl('大模型')} class="tag">
-                大模型
+                #大模型
               </a>
               <a href={getTagUrl('AI Agent')} class="tag">
-                AI Agent
+                #AI Agent
               </a>
             </div>
           </div>
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">🛠️</div>
+          <div class="topic-icon" aria-hidden="true">🛠️</div>
           <div class="topic-info">
             <strong>工具与效率</strong>
             <span>
@@ -139,32 +144,32 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
             </span>
             <div class="project-links">
               <a href={getTagUrl('Markdown')} class="tag">
-                Markdown
+                #Markdown
               </a>
               <a href={getTagUrl('typora')} class="tag">
-                typora
+                #typora
               </a>
               <a href={getTagUrl('picgo')} class="tag">
-                picgo
+                #picgo
               </a>
             </div>
           </div>
         </div>
 
         <div class="topic-card">
-          <div class="topic-icon">📖</div>
+          <div class="topic-icon" aria-hidden="true">📖</div>
           <div class="topic-info">
             <strong>随笔与回忆录</strong>
             <span>网管生涯的碎碎念，和「我这一生」系列。老故事，慢慢写，写完再补。</span>
             <div class="project-links">
               <a href={getTagUrl('回忆录')} class="tag">
-                回忆录
+                #回忆录
               </a>
               <a href={getTagUrl('网管')} class="tag">
-                网管
+                #网管
               </a>
               <a href={getTagUrl('屌丝网管')} class="tag">
-                屌丝网管
+                #屌丝网管
               </a>
             </div>
           </div>
@@ -172,7 +177,7 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
       </div>
 
       <h2>写东西的几条规矩</h2>
-      <ul>
+      <ul class="about-rules">
         <li>
           <strong>实操优先</strong> —— 命令、配置、版本号尽量写全，适用环境一并交代清楚
         </li>
@@ -188,19 +193,19 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
       </ul>
 
       <h2>本站是怎么跑的</h2>
-      <ul>
+      <ul class="about-rules">
         <li>
           <strong>底座</strong> —— Astro 7 静态站点，输出纯 HTML，没有框架运行时
         </li>
         <li>
-          <strong>皮肤</strong> —— CSS Token 驱动的「PRECISION LOG」设计语言：冷轧钢底色 +
-          黄铜指示灯，日夜双模式
+          <strong>皮肤</strong> —— CSS Token 驱动的终端形态设计：磷光绿 + 近黑底，日夜双模式，
+          全站零框架运行时、零新依赖
         </li>
         <li>
           <strong>功能</strong> —— 全站搜索、RSS 订阅、标签与分类归档、Sitemap、SEO meta 一应俱全
         </li>
         <li>
-          <strong>体积</strong> —— 页面 JavaScript 约 8.9KB（gzip 后 3.4KB），只负责搜索与主题切换
+          <strong>体积</strong> —— 页面 JavaScript 约 9KB（gzip 后约 3.5KB），只负责搜索与主题切换
         </li>
         <li>
           <strong>部署</strong> —— GitHub Actions 自动构建，产物直接发布到 GitHub Pages
@@ -227,19 +232,19 @@ const wordUnit = totalWords >= 10000 ? '万字' : '字';
 
       <div class="about-links">
         <a href={blogListUrl()} class="btn btn-primary">
-          浏览全部文章 →
+          $ ls ~/posts
         </a>
         <a href={categoriesUrl()} class="btn btn-secondary">
-          分类
+          $ ls ~/cats
         </a>
         <a href={tagsUrl()} class="btn btn-secondary">
-          标签
+          $ grep tag ~/posts
         </a>
         <a href={rssUrl()} class="btn btn-secondary">
-          RSS 订阅
+          $ cat rss.xml
         </a>
         <a href={SOCIAL_LINKS.github} target="_blank" rel="noopener" class="btn btn-secondary">
-          GitHub
+          $ git clone github
         </a>
       </div>
     </div>

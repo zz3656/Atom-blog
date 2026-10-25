@@ -31,8 +31,8 @@ export const SITE_VERSION = pkg.version;
 export const HERO_TITLE = '因特吧';
 export const HERO_DESCRIPTION =
   '因特网里的一间小吧 —— 聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。全部以终端会话的形式记录。';
-export const HERO_EYEBROW = 'SYSTEM READY';
-export const HERO_EYEBROW_SUB = 'astro static · zero-runtime';
+export const HERO_EYEBROW = '~/yinteba';
+export const HERO_EYEBROW_SUB = 'terminal session · since 2026';
 export const HERO_ACTIONS: Array<{
   label: string;
   href: string;

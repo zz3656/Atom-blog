@@ -9,10 +9,12 @@
  */
 
 :root {
-  /* ===== Border radius ===== */
-  --radius: 6px;
-  --radius-lg: 10px;
-  --radius-sm: 4px;
+  /* ===== Border radius =====
+   * TUI：终端没有圆角，全站统一 0（连同 sm / lg）。
+   * 这是站点骨架层的布局 token，主题包不参与、也不允许覆盖。 */
+  --radius: 0;
+  --radius-lg: 0;
+  --radius-sm: 0;
 
   /* ===== Typography =====
    * 三种"声音"：

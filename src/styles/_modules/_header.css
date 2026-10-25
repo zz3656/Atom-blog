@@ -154,10 +154,11 @@
 }
 
 .nav-link {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.1rem;
-  padding: 0.28rem 0.5rem;
+  padding: 0.28rem 1.05rem 0.28rem 0.5rem;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   color: var(--text-secondary);
@@ -168,9 +169,36 @@
     border-color 0.18s ease;
 }
 
+/* hover 时的闪烁光标块 —— 常驻在右侧留白里，不占位、不挤压 */
+.nav-link::after {
+  content: '';
+  position: absolute;
+  right: 0.28rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.42em;
+  height: 0.95em;
+  background: var(--accent);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* 前缀标记：未选中是 ~/，当前页是 >（标记层直接给出） */
 .nav-caret {
+  position: relative;
   color: var(--text-muted);
   transition: color 0.18s ease;
+}
+
+/* hover 时把 ~/ 换成 >（绝对定位覆盖，宽度不变，不产生位移） */
+.nav-caret::after {
+  content: '>';
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  color: var(--accent);
+  opacity: 0;
 }
 
 .nav-link:hover {
@@ -179,7 +207,28 @@
 }
 
 .nav-link:hover .nav-caret {
-  color: var(--accent);
+  color: transparent;
+}
+
+.nav-link:not(.is-active):hover .nav-caret::after {
+  opacity: 1;
+  animation: navBlink 1.1s step-end infinite;
+}
+
+.nav-link:not(.is-active):hover::after {
+  opacity: 1;
+  animation: navBlink 1.1s step-end infinite;
+}
+
+@keyframes navBlink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 /* 当前页：前缀换成 > 并高亮 */
@@ -192,6 +241,56 @@
 .nav-link.is-active .nav-caret {
   color: var(--accent);
   font-weight: 700;
+}
+
+/* 降级：关掉动画后前缀依然要切换成 > */
+@media (prefers-reduced-motion: reduce) {
+  .nav-link:not(.is-active):hover .nav-caret::after {
+    opacity: 1;
+    animation: none;
+  }
+
+  .nav-link:not(.is-active):hover::after {
+    opacity: 1;
+    animation: none;
+  }
+}
+
+/* ===== 顶部磷光扫描光带 =====
+ * 终端窗口顶边的一道横扫光带，纯 CSS 渐变动画；
+ * prefers-reduced-motion 下整条移除（不动内容，只关装饰）。 */
+.site-header::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--accent) 42%,
+    var(--accent-secondary) 58%,
+    transparent 100%
+  );
+  opacity: 0.6;
+  pointer-events: none;
+  animation: termSweep 9s linear infinite;
+}
+
+@keyframes termSweep {
+  0% {
+    transform: translateX(-70%);
+  }
+  100% {
+    transform: translateX(70%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-header::after {
+    display: none;
+  }
 }
 
 /* ===== 右侧动作区 ===== */

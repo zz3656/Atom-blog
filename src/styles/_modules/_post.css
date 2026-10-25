@@ -259,6 +259,7 @@
 
 /* ===== 代码块：带标题栏的终端窗口 ===== */
 .post-content pre {
+  position: relative;
   margin: 1.5rem 0;
   border-radius: var(--radius);
   overflow: hidden;
@@ -266,22 +267,37 @@
   border: 1px solid var(--border-color);
 }
 
-/* 标题栏 —— 语言名取自 Shiki 输出的 data-language */
+/* 标题栏 —— 文件名（app.js 依据真实 slug / 块序号写入 data-file） */
 .post-content pre::before {
-  content: attr(data-language);
+  content: attr(data-file);
   display: block;
-  padding: 0.32rem 5.6rem 0.32rem 0.85rem;
+  padding: 0.32rem 8.8rem 0.32rem 0.85rem;
   font-family: var(--font-mono);
   font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--text-muted);
+  letter-spacing: 0.06em;
+  color: var(--text-secondary);
   background: var(--bg-secondary);
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+/* 标题栏右侧：语言名（Shiki 输出的 data-language） */
+.post-content pre::after {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.34rem;
+  right: 5.4rem;
+  font-family: var(--font-mono);
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--cat-text);
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 .post-content pre code {

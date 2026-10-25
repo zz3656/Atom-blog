@@ -44,6 +44,13 @@
   color: var(--text-secondary);
 }
 
+/* TERMINAL SESSION —— 站点的终端身份标识，不随宽度折行 */
+.footer-tagline {
+  color: var(--text-muted);
+  letter-spacing: 0.12em;
+  white-space: nowrap;
+}
+
 .footer-author {
   color: var(--accent);
 }
