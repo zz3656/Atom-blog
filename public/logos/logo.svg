@@ -1,22 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <defs>
-    <!-- 紫罗兰渐变背景 -->
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1"/>
-      <stop offset="100%" style="stop-color:#8b5cf6"/>
-    </linearGradient>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="因特吧">
+  <!-- 终端窗口 -->
+  <rect x="4" y="8" width="56" height="48" fill="#05070a" stroke="#00e88f" stroke-width="2.5" />
 
-  <!-- 紫罗兰圆球 -->
-  <circle cx="32" cy="32" r="28" fill="url(#bg)"/>
+  <!-- 标题栏分隔线 -->
+  <line x1="4" y1="18" x2="60" y2="18" stroke="#00e88f" stroke-width="2" opacity="0.5" />
 
-  <!-- 赤道（水平） -->
-  <ellipse cx="32" cy="32" rx="28" ry="7" fill="none" stroke="white" stroke-width="2" opacity="0.65"/>
+  <!-- 标题栏三色状态点（与站点终端标题栏一致） -->
+  <circle cx="12" cy="13" r="2" fill="#ff5f57" />
+  <circle cx="19" cy="13" r="2" fill="#febc2e" />
+  <circle cx="26" cy="13" r="2" fill="#28c840" />
 
-  <!-- 经线（纵向） -->
-  <ellipse cx="32" cy="32" rx="7" ry="28" fill="none" stroke="white" stroke-width="2" opacity="0.55"/>
+  <!-- 命令提示符 > -->
+  <path
+    d="M18 34 L26 40 L18 46"
+    fill="none"
+    stroke="#00e88f"
+    stroke-width="3.5"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
+  />
 
-  <!-- "我的位置" 标记（金色圆点） -->
-  <circle cx="32" cy="20" r="4" fill="#fbbf24"/>
-  <circle cx="32" cy="20" r="2" fill="white"/>
+  <!-- 光标块 -->
+  <rect x="31" y="34" width="5" height="12" fill="#00e88f" />
 </svg>

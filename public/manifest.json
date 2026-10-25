@@ -1,17 +1,35 @@
 {
-  "name": "Atom Blog",
-  "short_name": "Atom",
-  "description": "A modern, lightweight blog built with Astro",
+  "name": "因特吧",
+  "short_name": "因特吧",
+  "description": "因特网里的一间小吧 —— 聊网络、Linux、AI、折腾。TUI 终端形态的 Atom 博客。",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ecedef",
-  "theme_color": "#8a5407",
+  "background_color": "#05070a",
+  "theme_color": "#00e88f",
   "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
     {
       "src": "/favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ]
 }

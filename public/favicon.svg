@@ -1,26 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
-  <defs>
-    <!-- 紫罗兰渐变 -->
-    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#6366f1"/>
-      <stop offset="100%" style="stop-color:#8b5cf6"/>
-    </linearGradient>
-    <!-- 阴影滤镜 -->
-    <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
-      <feDropShadow dx="0" dy="3" stdDeviation="4" flood-color="#312e81" flood-opacity="0.4"/>
-    </filter>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Atom Geek">
+  <!-- 终端屏幕：近黑底 + 磷光绿边框 -->
+  <rect x="6" y="6" width="116" height="116" fill="#05070a" />
+  <rect x="6" y="6" width="116" height="116" fill="none" stroke="#00e88f" stroke-width="4" />
 
-  <!-- 紫罗兰圆球 -->
-  <circle cx="64" cy="64" r="56" fill="url(#bg)" filter="url(#shadow)"/>
+  <!-- 命令提示符 > -->
+  <path
+    d="M43 44 L63 64 L43 84"
+    fill="none"
+    stroke="#00e88f"
+    stroke-width="10"
+    stroke-linecap="square"
+    stroke-linejoin="miter"
+  />
 
-  <!-- 赤道（水平） -->
-  <ellipse cx="64" cy="64" rx="56" ry="14" fill="none" stroke="white" stroke-width="3.5" opacity="0.7"/>
-
-  <!-- 经线（纵向） -->
-  <ellipse cx="64" cy="64" rx="14" ry="56" fill="none" stroke="white" stroke-width="3.5" opacity="0.55"/>
-
-  <!-- "我的位置" 标记（金色圆点 + 白色中心） -->
-  <circle cx="64" cy="40" r="8" fill="#fbbf24"/>
-  <circle cx="64" cy="40" r="3.5" fill="white"/>
+  <!-- 光标块 -->
+  <rect x="73" y="54" width="12" height="20" fill="#00e88f" />
 </svg>
