@@ -47,7 +47,7 @@ function setupPage(html: string, opts: { theme?: string; mode?: string } = {}) {
   // jsdom 中 document.documentElement.innerHTML 重写不可靠
   // 正确做法: 清 body + 手动设 html 属性 + 抽 <body>...</body> 内容到 body.innerHTML
   document.body.innerHTML = '';
-  document.documentElement.setAttribute('data-theme', opts.theme || 'atom-default');
+  document.documentElement.setAttribute('data-theme', opts.theme || 'atom-geek');
   document.documentElement.setAttribute('data-mode', opts.mode || 'light');
   var bodyContent = html
     .replace(/^[\s\S]*?<body[^>]*>/, '')
@@ -68,7 +68,7 @@ afterEach(() => {
   vi.restoreAllMocks();
   // 清空 body 防止跨测试污染
   document.body.innerHTML = '';
-  document.documentElement.setAttribute('data-theme', 'atom-default');
+  document.documentElement.setAttribute('data-theme', 'atom-geek');
   document.documentElement.setAttribute('data-mode', 'light');
 });
 
@@ -86,7 +86,7 @@ describe('theme toggle', () => {
         </button>
       </body>
     `,
-      { theme: 'atom-default', mode: 'light' },
+      { theme: 'atom-geek', mode: 'light' },
     );
   });
 
@@ -122,7 +122,7 @@ describe('theme toggle', () => {
         </button>
       </body>
     `,
-      { theme: 'atom-default', mode: 'dark' },
+      { theme: 'atom-geek', mode: 'dark' },
     );
     const btn = document.getElementById('theme-toggle') as HTMLButtonElement;
     expect(document.documentElement.getAttribute('data-mode')).toBe('dark');

@@ -2,20 +2,59 @@
 
 > 想为 Atom 博客开发一个新主题？本文档解释主题结构、必需 token、选择器约定和发布流程。
 
-## 项目状态说明（v2 以后）
+## 项目状态说明（2026-10-25 起）
 
-Atom v2 起重新定位为**轻量化博客**：
+「因特吧」是**单主题站点**——站点只有一套设计，不做多主题并存：
 
-- **默认只附带一个主题**：`atom-default`（位于 `src/themes/atom-default/`，自带 light + dark）
-- **不内置多主题选择器 UI**：右上角只有简单的日/夜切换按钮
-- **多主题基础设施保留**：你（第三方开发者）仍可开发新主题并发布
+- **唯一主题**：`atom-geek`（位于 `src/themes/atom-geek/`，自带 light + dark；暗色磷光绿 `#00e88f` + 亮色磷光纸 `#00794c`）
+- **不内置主题选择器 UI**：右上角只有日/夜切换按钮（`localStorage.themeMode`）
+- **站点默认主题由 `src/consts.ts` 的 `DEFAULT_THEME_ID` 决定**——既不是 manifest 字段，也不是扫描顺序
+- **原 `atom-default`（冷轧钢 + 黄铜）已移出本站**，去向见 [「主题的去向」](#主题的去向)
 
-`npm run theme:create <id>` 脚手架会自动创建 `src/themes/<id>/` 目录，构建时会**自动被扫描加入**（无需修改任何其他文件）。
+多主题基础设施仍在：`npm run theme:create <id>` 脚手架会自动创建 `src/themes/<id>/` 目录，构建时会**自动被扫描加入**（无需修改任何其他文件）；扫描顺序按 id 字典序（通用规则，无任何 per-id 特例），与 `src/utils/themes.ts` 的 `scanThemes()` 保持一致。
 
 如果你想让用户能在 UI 切换多个主题，需自己扩展 `src/components/Header.astro`——本文档专注于"主题本身"如何开发，不涉及 UI 集成。
 
+---
+
+## 主题的去向
+
+| 主题 | 状态 | 说明 |
+|---|---|---|
+| `atom-geek` | **本站在用** | `src/themes/atom-geek/`，双模式磷光绿/磷光纸；因特吧的整套视觉 |
+| `atom-default` | 已移出本站 | 冷轧钢 + 黄铜指示灯，保留在 git 历史中（`git show 1d6073b:src/themes/atom-default/light.css`），并已复制到本地 `~/Documents/GitHub/atom-themes/atom-default/` |
+| `sepia` / `solarized` | 在本地 themes 目录 | 本地 `~/Documents/GitHub/atom-themes/` 下已有这两套 |
+
+> ⚠️ `~/Documents/GitHub/atom-themes/` **目前还不是 git 仓库**，GitHub 上 `zz3656/atom-themes` 也尚未创建（远端返回 Repository not found）。要把它做成真正的第三方主题仓库，需要先建仓——这一步涉及账号权限，**不要由 AI 自行创建远端仓库**。
+
+---
+
+## 站点级作用域增补（L2）
+
+有些视觉差异**无法用 token 表达**（直角化、等宽字体承担数据、CRT 扫描线、终端标题栏），而主题包被禁止写组件样式。为此本站采用两层结构：
+
+| 层 | 位置 | 允许写什么 | 作用域 |
+|---|---|---|---|
+| **L1 主题包** | `src/themes/<id>/*.css` | **只有 CSS 变量** | `html[data-theme='<id>'][data-mode='...']` |
+| **L2 站点级增补** | `src/styles/_theme-geek.css` | 选择器级规则 | **每条规则**以 `html[data-theme='atom-geek']` 开头 |
+
+L2 的铁律（写错了会污染其它主题或破坏布局）：
+
+- ❌ 不用 `!important`
+- ❌ 不覆盖布局 token：`--radius*` / `--font-*` / `--max-width` / `--content-width` / `--header-height` / `--rule-*` / `--log-gutter`
+- ❌ 出现任何无作用域规则
+- ✅ 需要圆角变化就在作用域内写 `border-radius: 0`，不改 token 本身
+- ✅ 需要等宽字体就显式声明 `font-family: var(--font-mono)`，不改 `--font-*`
+
+删掉 `src/styles/_theme-geek.css` 一个文件 = 完整回退到纯 token 形态，这是 L1/L2 分离的核心收益。
+
+---
+
 ## 目录
 
+- [项目状态说明](#项目状态说明2026-10-25-起)
+- [主题的去向](#主题的去向)
+- [站点级作用域增补（L2）](#站点级作用域增补l2)
 - [主题结构](#主题结构)
 - [必需 CSS Token](#必需-css-token)
 - [可选 CSS Token](#可选-css-token)
@@ -35,7 +74,7 @@ Atom v2 起重新定位为**轻量化博客**：
 每个主题是一个独立的目录，位于 `src/themes/<theme-id>/`：
 
 ```
-src/themes/atom-default/
+src/themes/atom-geek/
 ├── manifest.json     # 主题元数据
 ├── light.css         # 浅色模式 token
 └── dark.css          # 暗色模式 token (可选)
@@ -326,7 +365,9 @@ html[data-theme='ocean'][data-mode='light'] {
 
 **无需修改任何文件** — `astro-plugins/theme-loader.mjs` 会在 `dev` / `build` 时自动扫描 `src/themes/<id>/` 并生成 `src/generated/themes.css`，然后 `src/styles/global.css` 自动 `@import` 进去。
 
-只需 `npm run dev`（或 `npm run build`）即可生效，新主题立即出现在右上角菜单。
+只需 `npm run dev`（或 `npm run build`）即可生效——主题会被注册进 `src/generated/themes.ts`，并通过 `html[data-theme='<id>']` 作用域生效。
+
+> ⚠️ 本站**没有主题选择器 UI**（右上角只有日/夜切换）。要让访客手动切换新主题，需自行扩展 `src/components/Header.astro` 并写入 `localStorage.themeId`——见文末 FAQ。
 
 如果你不想手写脚手架：
 
@@ -337,7 +378,9 @@ npm run theme:create ocean --no-dark   # 单模式模板
 
 ### 5. 测试
 
-启动 `npm run dev` → 打开站点 → 点击右上角主题按钮 → 应看到 "Ocean" 选项
+启动 `npm run dev` → 打开站点 → 在控制台执行 `document.documentElement.setAttribute('data-theme', 'ocean')` 验证新主题生效。
+
+> 本站没有主题选择器菜单；若要正式提供切换入口，需扩展 `src/components/Header.astro`（见 FAQ「主题菜单能否自定义」）。
 
 ---
 
@@ -447,12 +490,22 @@ A: 现代 CSS Variables 在 IE11 不支持。Atom 默认放弃 IE11。
 
 ## 参考现有主题
 
-仓库默认只附带一个主题：
+仓库现在只附带一个主题：
 
-- `src/themes/atom-default/` — 双模式、冷轧钢 + 黄铜指示灯
+- `src/themes/atom-geek/` — 双模式、暗色磷光绿 + 亮色磷光纸（因特吧的整套视觉）
 
 它同时也是**最完整的 token 参考实现**——复制这个目录改名，就是一个合规的新主题起点。
-其余主题（Solarized、Sepia 等）放在独立仓库 `atom-themes/`，需要时单独安装。
+
+原 `atom-default`（冷轧钢 + 黄铜）已移出本站，去向见 [「主题的去向」](#主题的去向)；`sepia` / `solarized` 等第三方主题在本地 `~/Documents/GitHub/atom-themes/` 目录（尚未建仓）。
+
+### 主题排序规则
+
+扫描结果按 **id 字典序**排列（`localeCompare`），**不对任何具体主题 id 做特例**。两处实现必须保持同一顺序：
+
+- `src/utils/themes.ts` → `scanThemes()`（测试用）
+- `astro-plugins/theme-loader.mjs` → `scan()`（构建用）
+
+站点的**默认主题**与排序无关，由 `src/consts.ts` 的 `DEFAULT_THEME_ID` 决定。
 
 ### 版本要求
 

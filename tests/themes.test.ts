@@ -10,7 +10,7 @@ describe('isValidThemeId', () => {
   it('accepts hyphens and underscores', () => {
     expect(isValidThemeId('sepia-paper')).toBe(true);
     expect(isValidThemeId('sepia_paper')).toBe(true);
-    expect(isValidThemeId('atom-default')).toBe(true);
+    expect(isValidThemeId('atom-geek')).toBe(true);
   });
 
   it('rejects empty string', () => {
@@ -59,20 +59,26 @@ describe('isValidMode', () => {
 });
 
 describe('scanThemes', () => {
-  it('returns at least the atom-default built-in theme', () => {
+  it('returns at least the atom-geek built-in theme', () => {
     const themes = scanThemes();
     expect(themes.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('contains atom-default', () => {
+  it('contains atom-geek', () => {
     const themes = scanThemes();
     const ids = themes.map((t) => t.id);
-    expect(ids).toContain('atom-default');
+    expect(ids).toContain('atom-geek');
   });
 
-  it('puts atom-default first', () => {
+  it('lists the sole shipped theme atom-geek', () => {
     const themes = scanThemes();
-    expect(themes[0].id).toBe('atom-default');
+    expect(themes.map((t) => t.id)).toEqual(['atom-geek']);
+  });
+
+  it('sorts themes by id lexicographically (generic rule, no per-id special case)', () => {
+    const themes = scanThemes();
+    const ids = themes.map((t) => t.id);
+    expect(ids).toEqual([...ids].sort((a, b) => a.localeCompare(b)));
   });
 
   it('every scanned theme has required fields', () => {
@@ -91,9 +97,9 @@ describe('scanThemes', () => {
     }
   });
 
-  it('atom-default supports both light and dark', () => {
+  it('atom-geek supports both light and dark', () => {
     const themes = scanThemes();
-    const def = themes.find((t) => t.id === 'atom-default');
+    const def = themes.find((t) => t.id === 'atom-geek');
     expect(def?.modes).toEqual(expect.arrayContaining(['light', 'dark']));
   });
 });

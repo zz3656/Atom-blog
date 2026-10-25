@@ -36,7 +36,7 @@
 | Feature                 | Description                                                                                                      |
 | ----------------------- | ---------------------------------------------------------------------------------------------------------------- |
 | ⚡ **Astro-Powered**    | Static HTML + ~8.7KB minified interaction script (defer-loaded, no first-paint blocking), blazing fast             |
-| 🎨 **Theme System**     | Default theme (cold steel + brass indicator) with one-click light/dark toggle; CSS Token system for custom themes    |
+| 🎨 **Theme System**     | Single-theme site: `atom-geek` (dark phosphor green + light phosphor paper) with one-click light/dark toggle; CSS Token system for custom themes    |
 | 📱 **Responsive**       | Perfect on mobile / tablet / desktop, iOS safe-area support                                                      |
 | 📝 **Markdown Writing** | Native support with Shiki code syntax highlighting                                                                |
 | 🤖 **CLI Tools**        | `npm run new` / `npm run list` / `npm run theme:create <id>` — create articles, generate themes                  |
@@ -94,8 +94,8 @@ Atom/
 │   ├── vectorize-icon.mjs       # Raster → vector (brand icon pipeline)
 │   └── convert-hexo.mjs         # Hexo migration tool (optional)
 ├── src/
-│   ├── themes/                  # Theme directory (default: atom-default)
-│   │   └── atom-default/        # Built-in theme: light.css + dark.css + manifest.json
+│   ├── themes/                  # Theme directory (sole theme: atom-geek)
+│   │   └── atom-geek/           # Built-in theme: light.css + dark.css + manifest.json
 │   ├── components/              # Astro components
 │   │   ├── Header.astro         # Navbar + light/dark toggle
 │   │   ├── Footer.astro         # Footer + social links + version badge
@@ -290,10 +290,10 @@ export default defineConfig({
 
 ### Theme Colors
 
-The default theme is **cold-rolled steel + a brass indicator lamp** — a galvanized-gray surface by day, gunmetal by night, with brass as the single accent. Edit the variables in `src/themes/atom-default/light.css` and `dark.css`:
+The site ships one carefully tuned theme: **Phosphor Terminal** (near-black `#05070a` + phosphor green `#00e88f` in dark mode; phosphor paper `#f2f6f3` + deep green `#00794c` in light mode; cyan for the category channel). Edit the variables in `src/themes/atom-geek/light.css` and `dark.css`:
 
 ```css
-html[data-theme='atom-default'][data-mode='light'] {
+html[data-theme='atom-geek'][data-mode='light'] {
   --bg-primary: #ecedef;       /* Page background */
   --bg-card: #ffffff;          /* Card surface */
   --text-primary: #171a1d;     /* Body text */

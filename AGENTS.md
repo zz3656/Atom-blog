@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Atom —— 一个用 Astro 构建的现代轻量级博客（冷轧钢 + 黄铜指示灯的「PRECISION LOG」视觉体系），为 GitHub Pages / Cloudflare Pages 部署优化。
+Atom —— 一个用 Astro 构建的现代轻量级博客（「因特吧」，磷光终端 / TUI 视觉体系，方向 A = TUI），为 GitHub Pages / Cloudflare Pages 部署优化。
 
 ## Setup commands
 
@@ -17,8 +17,9 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（冷轧钢 + 黄铜�
 
 - `src/` — Astro 应用：`pages/` 路由、`components/`、`layouts/`、`content/` 文章集合、`themes/`、`styles/`、`utils/`、`consts.ts` 站点配置
 - `src/content/blog/` — Markdown 文章（frontmatter 见 `src/content.config.ts`）
-- `src/themes/<id>/{light,dark}.css` — 主题，**只放 CSS token**，不放规则
+- `src/themes/<id>/{light,dark}.css` — 主题，**只放 CSS token**，不放规则。本站是**单主题站点**：唯一主题 `atom-geek`（`src/themes/atom-geek/`）
 - `src/styles/_modules/` — 21 个共享 CSS 模块（布局/字体/刻度尺），**不含颜色**
+- `src/styles/_theme-geek.css` — 站点级作用域增补（L2）：直角化 / 等宽角色 / 终端标题栏 / CRT。**每条规则必须以 `html[data-theme='atom-geek']` 开头**，禁 `!important`、禁覆盖布局 token
 - `src/generated/` — 构建时生成的主题汇总入口（`themes.ts` 已被跟踪，但内容会被 build 重写，别手改）
 - `public/` — 静态资源（`logos/`、`favicon.svg`、`manifest.json`）
 - `astro-plugins/` — remark/rehype 与构建期插件（`rehype-table-scroll` 等）
@@ -36,11 +37,12 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（冷轧钢 + 黄铜�
 
 ## Project rules (违反会被 review 打回)
 
-- **组件层不得写死任何颜色**——只用语义 token（`--accent`、`--bg-primary`、`--rule-tick` …）。主题目录只放 token；组件 CSS 写死颜色会让第三方主题渲染出错的配色
+- **组件层不得写死任何颜色**——只用语义 token（`--accent`、`--bg-primary`、`--rule-tick` …）。主题目录只放 token；组件 CSS 写死颜色会让换主题时渲染出错的配色
+- **站点默认主题由 `src/consts.ts` 的 `DEFAULT_THEME_ID` 决定**——不是 manifest 字段，也不是扫描顺序；主题扫描顺序按 id 字典序（通用规则，无 per-id 特例）
 - **文章目录永远不挤压正文宽度**——正文列固定 `--content-width`(740px) 居中，TOC 只能待在两侧空白区（≥1280px 左侧刻度栏 / <1280px 顶部折叠条）。曾因在 1100–1279px 把 TOC 塞进文章块当左列，正文被压到 508px 且右移 116px
 - 新增/修改 token 时，`scripts/create-theme.mjs` 脚手架和 `docs/THEMING.md` 必须同步
 - JetBrains Mono **只用于真实数据**（日期、计数、序号、刻度、代码）；中文界面一律无衬线
-- 分类 = 冷钢青，标签 = 中性描边；全站只保留两条语义色通道
+- 分类 = 青色通道（`--cat-*`），标签 = 绿色描边（`--tag-*`）；全站只保留两条语义色通道
 - **版本号只有一个数据源**——只改 `package.json` 的 `version`。`src/consts.ts` 的 `SITE_VERSION` 从那里 import，页脚显示它；`tests/version.test.ts` 会校验它与 `CHANGELOG.md` 最新版本号一致。发版流程见 DEVELOP.md「版本号与发布流程」
 - `@astrojs/markdown-remark` 在 Astro 7 里是 **peer dependency**，必须显式留在 `devDependencies`
 - Markdown 管线走 `astro.config.mjs` 的 `markdown.processor: unified({ ... })`（旧的 `markdown.remarkPlugins` 顶层写法已废弃）

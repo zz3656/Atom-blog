@@ -31,10 +31,10 @@ const ogImage = image ? `${siteUrl}${image}` : `${siteUrl}/favicon.svg`;
 // 用于内联脚本的运行时校验，防止老用户 localStorage 中的过期主题 ID 被吞
 const themeIds = themes.map((t) => t.id);
 // 默认主题：优先站点配置 DEFAULT_THEME_ID；
-// 该主题包缺失 / 未注册时回退到清单首个（atom-default），保证站点始终可用。
+// 该主题包缺失 / 未注册时回退到清单首个可用主题，保证站点始终可用。
 const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
   ? DEFAULT_THEME_ID
-  : themeIds[0] || 'atom-default';
+  : themeIds[0] || DEFAULT_THEME_ID;
 ---
 
 <!doctype html>

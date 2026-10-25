@@ -74,7 +74,10 @@ export const POSTS_PER_PAGE = 12;
  *
  * 「哪个主题是站点默认」属于站点配置，不是主题包属性 ——
  * 所以它住在 consts.ts，而不是 manifest.json 里。
- * 主题包被移除 / 未注册时，BaseLayout.astro 会自动回退到清单首个可用主题
- * （通常是 atom-default），因此删掉 src/themes/<id>/ 不会让站点构建失败。
+ * 主题包被移除 / 未注册时，BaseLayout.astro 会自动回退到清单首个可用主题，
+ * 因此删掉 src/themes/<id>/ 不会让站点构建失败。
+ *
+ * 本站是单主题站点：唯一主题是 atom-geek（因特吧 TUI 视觉）。
+ * 原 atom-default（冷轧钢 + 黄铜）已移出本站，去向见 docs/THEMING.md。
  */
 export const DEFAULT_THEME_ID = 'atom-geek';

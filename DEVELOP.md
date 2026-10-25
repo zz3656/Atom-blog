@@ -159,8 +159,8 @@ Atom/
 │       ├── wechat.png
 │       └── alipay.png
 ├── src/
-│   ├── themes/                # 主题目录（默认 atom-default）
-│   │   └── atom-default/      # 自带主题：light + dark
+│   ├── themes/                # 主题目录（唯一主题 atom-geek）
+│   │   └── atom-geek/         # 自带主题：light + dark
 │   ├── components/            # Astro 组件
 │   │   ├── Header.astro       # 导航栏 + 日/夜间切换
 │   │   ├── Footer.astro       # 页脚 + 社交链接
@@ -254,8 +254,8 @@ Atom/
 │       ├── wechat.png
 │       └── alipay.png
 ├── src/
-│   ├── themes/                # Themes directory (default: atom-default)
-│   │   └── atom-default/      # Built-in theme: light + dark
+│   ├── themes/                # Themes directory (sole theme: atom-geek)
+│   │   └── atom-geek/         # Built-in theme: light + dark
 │   ├── components/            # Astro components
 │   │   ├── Header.astro       # Navbar + light/dark toggle
 │   │   ├── Footer.astro       # Footer + social links
@@ -608,26 +608,26 @@ node scripts/vectorize-icon.mjs /tmp/atom.png /tmp/logo.svg \
 
 #### 修改主题配色（推荐）
 
-编辑主题文件 `src/themes/atom-default/light.css` 和 `dark.css`，调整 CSS 变量：
+编辑主题文件 `src/themes/atom-geek/light.css` 和 `dark.css`，调整 CSS 变量：
 
 ```css
-/* src/themes/atom-default/light.css */
-html[data-theme='atom-default'][data-mode='light'] {
-  --bg-primary: #ecedef;
-  --bg-secondary: #e2e4e7;
-  --text-primary: #171a1d;
-  --accent: #8a5407;
-  --accent-hover: #6d4005;
+/* src/themes/atom-geek/light.css */
+html[data-theme='atom-geek'][data-mode='light'] {
+  --bg-primary: #f2f6f3;
+  --bg-secondary: #e6ece8;
+  --text-primary: #16302a;
+  --accent: #00794c;
+  --accent-hover: #00613f;
 }
 ```
 
 ```css
-/* src/themes/atom-default/dark.css */
-html[data-theme='atom-default'][data-mode='dark'] {
-  --bg-primary: #12161a;
-  --text-primary: #d8dee3;
-  --accent: #f2b33d;
-  --accent-hover: #ffc95c;
+/* src/themes/atom-geek/dark.css */
+html[data-theme='atom-geek'][data-mode='dark'] {
+  --bg-primary: #05070a;
+  --text-primary: #c7d4d1;
+  --accent: #00e88f;
+  --accent-hover: #4bffb6;
 }
 ```
 
@@ -710,26 +710,26 @@ export const SOCIAL_LINKS = {
 
 #### Change Theme Colors (recommended)
 
-Edit theme files `src/themes/atom-default/light.css` and `dark.css`, adjust CSS variables:
+Edit theme files `src/themes/atom-geek/light.css` and `dark.css`, adjust CSS variables:
 
 ```css
-/* src/themes/atom-default/light.css */
-html[data-theme='atom-default'][data-mode='light'] {
-  --bg-primary: #ecedef;
-  --bg-secondary: #e2e4e7;
-  --text-primary: #171a1d;
-  --accent: #8a5407;
-  --accent-hover: #6d4005;
+/* src/themes/atom-geek/light.css */
+html[data-theme='atom-geek'][data-mode='light'] {
+  --bg-primary: #f2f6f3;
+  --bg-secondary: #e6ece8;
+  --text-primary: #16302a;
+  --accent: #00794c;
+  --accent-hover: #00613f;
 }
 ```
 
 ```css
-/* src/themes/atom-default/dark.css */
-html[data-theme='atom-default'][data-mode='dark'] {
-  --bg-primary: #12161a;
-  --text-primary: #d8dee3;
-  --accent: #f2b33d;
-  --accent-hover: #ffc95c;
+/* src/themes/atom-geek/dark.css */
+html[data-theme='atom-geek'][data-mode='dark'] {
+  --bg-primary: #05070a;
+  --text-primary: #c7d4d1;
+  --accent: #00e88f;
+  --accent-hover: #4bffb6;
 }
 ```
 
