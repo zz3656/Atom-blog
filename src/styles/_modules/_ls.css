@@ -51,6 +51,9 @@
 
 /* ===== 序号 ===== */
 .ls-index {
+  grid-column: 1;
+  grid-row: 1;
+  min-width: 0;
   font-family: var(--font-mono);
   font-size: 0.78rem;
   font-weight: 600;
@@ -60,6 +63,7 @@
 
 /* ===== 权限位 ===== */
 .ls-mode {
+  min-width: 0;
   font-family: var(--font-mono);
   font-size: 0.74rem;
   color: var(--text-muted);
@@ -68,6 +72,7 @@
 
 /* ===== 日期 ===== */
 .ls-date {
+  min-width: 0;
   font-family: var(--font-mono);
   font-size: 0.76rem;
   color: var(--text-secondary);
@@ -77,6 +82,7 @@
 
 /* ===== 大小 ===== */
 .ls-size {
+  min-width: 0;
   font-family: var(--font-mono);
   font-size: 0.76rem;
   color: var(--text-secondary);
@@ -109,6 +115,8 @@
 .ls-cat {
   justify-self: end;
   align-self: center;
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* ===== 续行：摘要 + 标签 ===== */

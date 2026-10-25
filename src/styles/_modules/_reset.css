@@ -31,6 +31,11 @@ html {
   text-size-adjust: 100%;
   /* Prevent overscroll bounce on iOS */
   -webkit-overflow-scrolling: touch;
+  /* ===== 横向溢出兜底 =====
+   * 用 clip 而不是 hidden：hidden 会让 html 变成滚动容器，
+   * 页头的 position: sticky 会失效。clip 不创建滚动容器。
+   * 任何子元素意外超宽时，整页也不会出现左右滑动。 */
+  overflow-x: clip;
 }
 
 body {
@@ -41,7 +46,7 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow-x: hidden;
+  overflow-x: clip;
   transition:
     background 0.3s ease,
     color 0.3s ease;
@@ -85,6 +90,25 @@ input,
 textarea,
 select {
   font-family: inherit;
+}
+
+/* ===== 触摸设备：输入框字号 ≥ 16px =====
+ * iOS Safari 会对小于 16px 的输入框在聚焦时自动放大整页，
+ * 放大之后用户就能左右平移看到超出页面范围的内容 —— 正是移动端横滑的成因之一。
+ * 桌面端（pointer: fine）保持原有视觉尺寸不变。 */
+@media (pointer: coarse) {
+  input[type='text'],
+  input[type='search'],
+  input[type='email'],
+  input[type='url'],
+  input[type='tel'],
+  input[type='number'],
+  input[type='password'],
+  textarea,
+  select {
+    font-size: 16px;
+    line-height: 1.5;
+  }
 }
 
 /* ===== 数字/序号的排版基线 ===== */

@@ -1,0 +1,33 @@
+---
+// Atom Blog — 索引摘要行（TUI）
+//
+// 分类页 / 标签页共用：一行说清这个索引的规模，
+// 三个数字全部来自真实内容集合，不写死。
+interface Props {
+  tags: number;
+  cats: number;
+  posts: number;
+}
+
+const { tags, cats, posts } = Astro.props;
+---
+
+<p class="idx-summary">
+  <span class="idx-summary-item">
+    <span class="idx-summary-key">tags</span>
+    <span class="idx-summary-val">{tags}</span>
+    <span class="idx-summary-unit">unique</span>
+  </span>
+  <span class="idx-summary-sep" aria-hidden="true">·</span>
+  <span class="idx-summary-item">
+    <span class="idx-summary-key">cats</span>
+    <span class="idx-summary-val">{cats}</span>
+    <span class="idx-summary-unit">dirs</span>
+  </span>
+  <span class="idx-summary-sep" aria-hidden="true">·</span>
+  <span class="idx-summary-item">
+    <span class="idx-summary-key">posts</span>
+    <span class="idx-summary-val">{posts}</span>
+    <span class="idx-summary-unit">files</span>
+  </span>
+</p>

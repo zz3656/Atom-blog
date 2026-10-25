@@ -29,8 +29,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
+  gap: 0.7rem 1rem;
   flex-wrap: wrap;
+  min-width: 0;
 }
 
 .footer-left,
@@ -38,6 +39,10 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
+  /* 允许在窄屏折行，避免状态栏内容溢出自己的盒子 */
+  flex-wrap: wrap;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .footer-copy {

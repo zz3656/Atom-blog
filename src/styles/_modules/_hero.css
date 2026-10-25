@@ -56,16 +56,21 @@
 }
 
 /* 「因特吧」点阵字标（22 行 × 73 列，'#' 与空格）
- * line-height 0.66：让每个点接近正方形（字宽 0.6em），字标整体比例与原字形一致 */
+ * line-height 0.66：让每个点接近正方形（字宽 0.6em），字标整体比例与原字形一致
+ *
+ * 宽度公式：73 列 × 0.6em ≈ 43.8em。
+ * font-size 取 min(常规档位, (可用视口 - 留白) / 43.8)，
+ * 保证任何视口下字标都放得进容器；再叠加 max-width + overflow: hidden 兜底，
+ * 字标自身永远不会产生横向滚动。 */
 .term-wordmark {
   font-family: var(--font-mono);
-  font-size: clamp(0.42rem, 1.55vw, 0.82rem);
+  font-size: min(clamp(0.42rem, 1.55vw, 0.82rem), calc((100vw - 3.5rem) / 43.8));
   line-height: 0.66;
   color: var(--accent);
   margin: 0;
   white-space: pre;
-  overflow-x: auto;
-  overflow-y: hidden;
+  max-width: 100%;
+  overflow: hidden;
   text-shadow: 0 0 22px var(--accent-glow);
   animation: termType 1.6s steps(73, end) both;
 }
