@@ -1,0 +1,80 @@
+/* Atom Geek Theme — Dark Mode
+ * 双主题（light + dark），暗色「磷光终端」配色
+ *
+ * 设计概念：一台老式终端机 —— 近黑的蓝绿底面 + 一盏常亮的磷光绿指示灯。
+ *  - 表面：近黑蓝绿（#05070a），不是纯黑，避免生硬
+ *  - 强调色：磷光绿 #00e88f（链接 / 按钮 / 刻度，对比度 12.43:1）
+ *  - 次强调色：青色 #22d3ee（仅用于「分类」这一语义通道）
+ *  - 投影让位给辉光：--shadow-glow 承担"发光"语义
+ *
+ * 选择器约定: html[data-theme="atom-geek"][data-mode="dark"]
+ * 契约: docs/THEMING.md —— 本文件只定义 token，不含任何组件选择器。
+ */
+
+html[data-theme='atom-geek'][data-mode='dark'] {
+  /* ===== Surfaces ===== */
+  --bg-primary: #05070a;
+  --bg-secondary: #0a0f13;
+  --bg-card: #0c1317;
+  --bg-card-hover: #111b20;
+  --bg-inline-code: rgba(0, 232, 143, 0.09);
+
+  /* ===== Text ===== */
+  --text-primary: #c7d4d1;
+  --text-secondary: #8b9a97;
+  --text-muted: #748682;
+  --text-bright: #e9fff6;
+
+  /* ===== Borders ===== */
+  --border-color: rgba(0, 232, 143, 0.2);
+  --border-light: rgba(0, 232, 143, 0.09);
+  --border-glow: rgba(0, 232, 143, 0.55);
+
+  /* ===== Accent — 点亮的磷光指示灯 ===== */
+  --accent: #00e88f;
+  --accent-hover: #4bffb6;
+  --accent-secondary: #22d3ee;
+  --accent-gradient: linear-gradient(135deg, #00e88f, #22d3ee);
+  --accent-glow: rgba(0, 232, 143, 0.14);
+  --accent-glow-strong: rgba(0, 232, 143, 0.26);
+  --glow-secondary: rgba(34, 211, 238, 0.12);
+  /* 向后兼容：旧主题把副色辉光叫 --purple-glow */
+  --purple-glow: rgba(34, 211, 238, 0.12);
+
+  /* ===== Tags — 中性描边 ===== */
+  --tag-bg: transparent;
+  --tag-text: #5ee9b0;
+  --tag-border: rgba(0, 232, 143, 0.28);
+  --tag-active-bg: rgba(0, 232, 143, 0.14);
+
+  /* ===== Categories — 青色通道 ===== */
+  --cat-bg: rgba(34, 211, 238, 0.1);
+  --cat-text: #67e8f9;
+  --cat-border: rgba(34, 211, 238, 0.3);
+  --cat-active-bg: rgba(34, 211, 238, 0.18);
+
+  /* ===== Semantic ===== */
+  --success: #3ddc97;
+  --warning: #ffb454;
+
+  /* ===== Shadows — 辉光代替投影 ===== */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
+  --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 14px 38px rgba(0, 0, 0, 0.7);
+  --shadow-glow: 0 0 0 1px rgba(0, 232, 143, 0.3), 0 0 22px rgba(0, 232, 143, 0.18);
+
+  /* ===== Semantic surface tokens ===== */
+  --on-accent: #04140d;
+  --header-bg: rgba(5, 7, 10, 0.82);
+  --panel-bg: #081014;
+  --code-bg: #05090b;
+  --grid-line: rgba(0, 232, 143, 0.045);
+  --ambient-glow: rgba(0, 232, 143, 0.06);
+  --highlight: rgba(0, 232, 143, 0.2);
+
+  /* ===== 刻度尺 ===== */
+  --rule-tick: rgba(0, 232, 143, 0.18);
+  --rule-tick-strong: rgba(0, 232, 143, 0.62);
+  --focus-ring: #00e88f;
+}

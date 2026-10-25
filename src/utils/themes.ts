@@ -67,7 +67,14 @@ export function scanThemes(): ThemeManifest[] {
       console.warn(`[themes] Failed to parse ${manifestPath}:`, (err as Error).message);
     }
   }
-  // 排序：第一个主题保持首位（通常是 atom-default）
+  // 排序：atom-default 固定首位，其余按 id 字典序。
+  // 显式化而非依赖 readdirSync 的实现细节 —— 新增主题目录时，
+  // 顺序不因文件系统行为变化而漂移（与 astro-plugins/theme-loader.mjs 保持一致）。
+  themes.sort((a, b) => {
+    if (a.id === 'atom-default') return -1;
+    if (b.id === 'atom-default') return 1;
+    return a.id.localeCompare(b.id);
+  });
   return themes;
 }
 

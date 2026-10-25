@@ -1,0 +1,9 @@
+{
+  "id": "atom-geek",
+  "name": "Atom Geek",
+  "author": "zz3656",
+  "version": "1.0.0",
+  "description": "极客主题：暗色磷光绿 + 亮色磷光纸，等宽字体承担数据",
+  "modes": ["light", "dark"],
+  "preview": ""
+}

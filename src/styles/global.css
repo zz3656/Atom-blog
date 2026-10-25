@@ -23,6 +23,7 @@
  * 19. _footer      → 页脚
  * 20. _layout      → 全局布局 & 动画
  * 21. _responsive  → 响应式断点
+ * 22. _theme-geek  → 主题作用域增补（atom-geek，可整份删除回退）
  */
 
 /* 1. Shared variables (layout, typography, radius — 跨主题共享) */
@@ -90,3 +91,6 @@
 
 /* 21. Responsive */
 @import './_modules/_responsive.css';
+
+/* 22. Theme-scoped augmentations（站点级；作用域锁定单个主题，可整份删除） */
+@import './_theme-geek.css';

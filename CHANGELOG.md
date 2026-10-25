@@ -31,6 +31,27 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.2.0] — 2026-10-25
+
+### ✨ Added
+
+- **极客主题 `atom-geek`** —— 成为站点默认主题，磷光绿 + 青双色通道
+  - 主题包 `src/themes/atom-geek/{manifest.json,light.css,dark.css}`：45 个契约 token 全覆盖，0 组件选择器、0 `!important`、不覆盖任何布局 token
+  - 暗色主形态 `#00e88f` on `#05070a`（12.43:1）；亮色主色按 WCAG AA 由 `#00a86b` 降为 `#00794c`（5.01:1）
+  - 站点级增补 `src/styles/_theme-geek.css`（作用域锁 `html[data-theme='atom-geek']`）：直角化、等宽字体承担数据、终端标题栏、CRT 扫描线、命令行导航、Hero 与 404 终端化
+  - 删除该文件即完整回退到纯 token 形态；不改动 `atom-default`，主题包可随时并存
+- **默认主题可配置** —— `src/consts.ts` 新增 `DEFAULT_THEME_ID`；`BaseLayout.astro` 优先取站点配置，主题包缺失时自动回退清单首个（删主题不会导致构建失败），老访客本地的日/夜选择不受影响
+- 主题设计文档：`docs/REQUIREMENTS-ATOM-GEEK.md`（需求说明与验收标准）、`docs/ARCHITECTURE-ATOM-GEEK.md`（技术方案与 token 契约）
+
+### 🐛 Fixed
+
+- `src/utils/themes.ts` 的主题排序不再依赖 `readdirSync` 的实现细节，改为显式排序，新增主题目录时顺序不再漂移（与 `astro-plugins/theme-loader.mjs` 保持一致）
+
+### ⚠️ Known gaps
+
+- `theme-color` meta 仍为 `atom-default` 色值（`BaseLayout.astro` 中硬编码），浏览器地址栏配色暂不跟随主题
+- 5 个契约 token（`--accent-secondary` / `--accent-gradient` / `--accent-glow-strong` / `--glow-secondary` / `--purple-glow`）当前无组件消费，属契约完整性保留
+
 ## [1.1.0] — 2026-10-25
 
 ### ✨ Changed

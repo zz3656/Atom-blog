@@ -2,7 +2,7 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR, SITE_FAVICON } from '../consts';
+import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR, SITE_FAVICON, DEFAULT_THEME_ID } from '../consts';
 import { rssUrl, baseAssetsPath } from '../utils/path';
 import { themes } from '../generated/themes';
 
@@ -30,12 +30,15 @@ const ogImage = image ? `${siteUrl}${image}` : `${siteUrl}/favicon.svg`;
 // 主题清单（构建时由 theme-loader 自动生成，仅包含有效主题 ID）
 // 用于内联脚本的运行时校验，防止老用户 localStorage 中的过期主题 ID 被吞
 const themeIds = themes.map((t) => t.id);
-// 默认主题：清单中第一个
-const defaultThemeId = themeIds[0] || 'atom-default';
+// 默认主题：优先站点配置 DEFAULT_THEME_ID；
+// 该主题包缺失 / 未注册时回退到清单首个（atom-default），保证站点始终可用。
+const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
+  ? DEFAULT_THEME_ID
+  : themeIds[0] || 'atom-default';
 ---
 
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme={defaultThemeId} data-mode="light">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />

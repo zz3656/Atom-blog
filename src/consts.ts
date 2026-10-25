@@ -68,3 +68,13 @@ export const SOCIAL_LINKS = {
 
 // 分页配置（首页与文章列表共用）
 export const POSTS_PER_PAGE = 12;
+
+/**
+ * 站点默认主题 ID（构建期常量）。
+ *
+ * 「哪个主题是站点默认」属于站点配置，不是主题包属性 ——
+ * 所以它住在 consts.ts，而不是 manifest.json 里。
+ * 主题包被移除 / 未注册时，BaseLayout.astro 会自动回退到清单首个可用主题
+ * （通常是 atom-default），因此删掉 src/themes/<id>/ 不会让站点构建失败。
+ */
+export const DEFAULT_THEME_ID = 'atom-geek';
