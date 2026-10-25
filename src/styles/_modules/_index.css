@@ -1,0 +1,419 @@
+/* Atom Blog — 索引面板（分类页 / 标签页）
+ *
+ * 这两个页面刻意不走文章列表页那种「一行条」的平铺形态，
+ * 改用面板（带边框与辉光）来表达「这是索引，不是内容流」：
+ *   .idx-summary   索引摘要行（规模）
+ *   .freq-*        词频面板（标签页）：分布条 + 分档 + 带热度条的 chip
+ *   .tree-*        目录树面板（分类页）：├── / └── 串起来的目录卡片
+ * 移动端优先：360px 下全部单列，不产生横向滚动。
+ */
+
+/* ===== 索引摘要 ===== */
+.idx-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+  margin: 0 0 1.6rem;
+  padding: 0.6rem 0.85rem;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  border-left: 2px solid var(--accent);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+.idx-summary-item {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.idx-summary-key {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.idx-summary-key::after {
+  content: ':';
+}
+
+.idx-summary-val {
+  color: var(--text-bright);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.idx-summary-unit {
+  color: var(--text-muted);
+}
+
+.idx-summary-sep {
+  color: var(--border-glow);
+}
+
+/* ===== 词频面板（标签页）===== */
+.freq-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.75rem;
+  padding: 0.85rem 0.95rem;
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+}
+
+.freq-chart-row {
+  display: grid;
+  grid-template-columns: 3.2rem minmax(0, 1fr) 2.4rem;
+  align-items: center;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+}
+
+.freq-chart-label {
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.freq-chart-track {
+  display: block;
+  height: 10px;
+  min-width: 0;
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+}
+
+.freq-chart-bar {
+  display: block;
+  width: var(--w, 0%);
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-secondary));
+}
+
+.freq-chart-val {
+  color: var(--text-bright);
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ===== 频次分档 ===== */
+.freq-tier {
+  margin-bottom: 1.85rem;
+}
+
+.freq-tier-title {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0 0 0.7rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border-light);
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.freq-tier-mark {
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+.freq-tier-name {
+  color: var(--text-bright);
+  font-family: var(--font-sans);
+  font-weight: 700;
+}
+
+.freq-tier-range {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--cat-text);
+  letter-spacing: 0.04em;
+}
+
+.freq-tier-meta {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ===== 标签 chip（带热度条）===== */
+.freq-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.freq-chip {
+  list-style: none;
+  /* 不参与收缩：让 chip 按内容宽度排布，标签名不会被挤成「#...」 */
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.freq-chip-link {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: 100%;
+  padding: 0.4rem 0.6rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  transition:
+    border-color 0.18s ease,
+    background-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.freq-chip-link:hover {
+  border-color: var(--accent);
+  background: var(--bg-card-hover);
+  transform: translateY(-1px);
+}
+
+.freq-chip-name {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--tag-text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+.freq-chip-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  font-variant-numeric: tabular-nums;
+  flex-shrink: 0;
+}
+
+/* 热度条 —— 轨道宽度固定，填充比例由 --heat（0~1 的真实篇数比例）决定
+ * 用固定轨道而不是百分比宽度：百分比在「按内容定宽」的 flex 容器里
+ * 会形成循环依赖，填充比例会解析不出来。 */
+.freq-chip-bar {
+  display: block;
+  width: 3.4rem;
+  height: 4px;
+  flex: 0 0 auto;
+  background: var(--border-light);
+}
+
+.freq-chip-bar-fill {
+  display: block;
+  height: 100%;
+  width: calc(var(--heat, 0) * 100%);
+  min-width: 2px;
+  background: var(--accent);
+}
+
+/* ===== 目录树面板（分类页）===== */
+.tree-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.tree-node {
+  display: grid;
+  /* 分支列用 max-content：'├──' 里的制表符在等宽字体里是全角，
+   * 固定 rem 宽度会窄几像素导致字符溢出格子。 */
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: stretch;
+  list-style: none;
+  margin-bottom: 0.6rem;
+}
+
+.tree-branch {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+  padding-top: 0.75rem;
+  white-space: nowrap;
+}
+
+.tree-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-width: 0;
+  padding: 0.85rem 1rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 2px solid var(--accent);
+  color: var(--text-primary);
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.tree-card:hover {
+  border-color: var(--border-glow);
+  border-left-color: var(--accent);
+  background: var(--bg-card-hover);
+  box-shadow: var(--shadow-glow);
+}
+
+.tree-card-head {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.tree-card-name {
+  font-family: var(--font-mono);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-bright);
+  letter-spacing: 0.02em;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.tree-card-count {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--cat-text);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  margin-left: auto;
+}
+
+.tree-card-latest {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  min-width: 0;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+}
+
+.tree-card-key {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.tree-card-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.tree-card-date {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tree-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.tree-card-tags .tag {
+  font-size: 0.7rem;
+  padding: 0.12rem 0.4rem;
+}
+
+/* ===== 窄屏收敛 ===== */
+@media (max-width: 768px) {
+  .idx-summary {
+    font-size: 0.7rem;
+    padding: 0.55rem 0.7rem;
+    margin-bottom: 1.3rem;
+  }
+
+  .freq-chart {
+    padding: 0.7rem 0.75rem;
+    margin-bottom: 1.4rem;
+  }
+
+  .freq-chart-row {
+    grid-template-columns: 2.8rem minmax(0, 1fr) 2rem;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+  }
+
+  .freq-tier {
+    margin-bottom: 1.5rem;
+  }
+
+  .freq-tier-title {
+    font-size: 0.92rem;
+  }
+
+  .freq-tier-meta {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .freq-chips {
+    gap: 0.4rem;
+  }
+
+  .freq-chip-link {
+    padding: 0.35rem 0.5rem;
+  }
+
+  .tree-node {
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+
+  .tree-branch {
+    font-size: 0.7rem;
+  }
+
+  .tree-card {
+    padding: 0.7rem 0.75rem;
+  }
+
+  .tree-card-name {
+    font-size: 0.95rem;
+  }
+
+  .tree-card-latest {
+    flex-wrap: wrap;
+    gap: 0.2rem 0.4rem;
+  }
+
+  .tree-card-title {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    flex-basis: 100%;
+  }
+}

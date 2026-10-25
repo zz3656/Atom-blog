@@ -8,6 +8,9 @@
   position: relative;
   display: flex;
   align-items: center;
+  /* 永远不撑破所在行 */
+  min-width: 0;
+  max-width: 100%;
 }
 
 /* 命令名，做成输入框左侧的一段 */
@@ -33,6 +36,9 @@
   border-left: 0;
   padding: 0.34rem 0.55rem;
   width: 152px;
+  /* 不允许超出父容器 */
+  min-width: 0;
+  max-width: 100%;
   font-family: var(--font-mono);
   font-size: 0.76rem;
   color: var(--text-primary);
@@ -49,6 +55,7 @@
 
 .search-input:focus {
   width: 232px;
+  max-width: 100%;
   background: var(--bg-card);
   border-color: var(--accent);
 }

@@ -34,6 +34,10 @@
     width: 200px;
     max-height: calc(100vh - var(--header-height) - 3rem);
     overflow-y: auto;
+    /* 侧栏固定宽 200px，内部内容偶尔多出几像素；
+     * 这里显式关掉横向滚动，避免目录区出现可以左右滑动的区域。
+     * （此处不能用 clip：overflow-y 是 auto，clip 会被规范降级成 hidden。） */
+    overflow-x: hidden;
     z-index: 10;
     background: none;
     border: 0;
@@ -71,6 +75,9 @@
   /* 保证触控热区 ≥ 24px（WCAG 2.5.8） */
   padding: 0.35rem 0;
   min-height: 26px;
+  /* 折叠箭头是 flex-shrink:0 的伪元素，窄屏下会顶出 summary；
+   * 这里裁掉多余宽度，内容改由 .toc-cmd 的省略号承载。 */
+  overflow: hidden;
 }
 
 .toc-prompt {
@@ -80,6 +87,7 @@
 }
 
 .toc-cmd {
+  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

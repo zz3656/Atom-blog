@@ -28,6 +28,60 @@
   }
 }
 
+/* ===== 900px：ls 行提前收敛为 3 列 =====
+ * 桌面态是 6 列 grid（序号/权限位/日期/大小/文件名/分类），
+ * 固有宽度在窄屏放不下 —— 这里提前砍掉权限位与大小两列，
+ * 只留 [序号] 日期 文件名，分类徽标换行到第二行。 */
+@media (max-width: 900px) {
+  .ls-list {
+    padding-left: 0.9rem;
+  }
+
+  .ls-entry {
+    grid-template-columns: 2.9rem 5rem minmax(0, 1fr);
+    column-gap: 0.7rem;
+    padding: 0.6rem 0.6rem 0.6rem 0;
+  }
+
+  .ls-mode,
+  .ls-size {
+    display: none;
+  }
+
+  .ls-index {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .ls-date {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .ls-name {
+    grid-column: 3;
+    grid-row: 1;
+    font-size: 0.98rem;
+    white-space: normal;
+  }
+
+  .ls-cat {
+    grid-column: 3;
+    grid-row: 2;
+    justify-self: start;
+  }
+
+  .ls-sub {
+    padding: 0 0.6rem 0.65rem 0;
+    gap: 0.5rem;
+  }
+
+  .ls-desc {
+    flex-basis: 100%;
+    font-size: 0.82rem;
+  }
+}
+
 /* ===== 768px：Mobile ===== */
 @media (max-width: 768px) {
   /* --- 标题栏 --- */
@@ -136,6 +190,8 @@
   .nav-actions {
     order: 2;
     margin-left: auto;
+    flex: 1 1 auto;
+    min-width: 0;
     flex-direction: row;
     justify-content: flex-end;
     gap: 0.4rem;
@@ -146,12 +202,21 @@
     margin-left: 0.1rem;
   }
 
+  /* 搜索框改为可伸缩：窄屏下不再用固定宽度，
+   * 聚焦时也不会突然变宽把顶栏撑破（iOS 聚焦还会自动放大页面）。 */
+  .search-wrapper {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
   .search-input {
-    width: 112px;
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
   }
 
   .search-input:focus {
-    width: 158px;
+    width: auto;
   }
 
   /* --- 页面标题区 --- */
@@ -169,58 +234,16 @@
     font-size: 1.25rem;
   }
 
-  /* --- ls 行重排：去掉权限位与大小两列 --- */
+  /* --- ls 行重排（≤900px 已收敛为 3 列，这里只做间距微调）--- */
   .ls-list {
     padding-left: 0.9rem;
   }
 
-  .ls-entry {
-    grid-template-columns: 2.9rem 5rem minmax(0, 1fr);
-    column-gap: 0.7rem;
-    padding: 0.6rem 0.6rem 0.6rem 0;
-  }
-
-  .ls-mode,
-  .ls-size {
-    display: none;
-  }
-
-  .ls-index {
-    grid-column: 1;
-    grid-row: 1;
-  }
-
-  .ls-date {
-    grid-column: 2;
-    grid-row: 1;
-  }
-
-  .ls-name {
-    grid-column: 3;
-    grid-row: 1;
-    font-size: 0.98rem;
-    white-space: normal;
-  }
-
-  .ls-cat {
-    grid-column: 3;
-    grid-row: 2;
-    justify-self: start;
-  }
-
-  .ls-sub {
-    padding: 0 0.6rem 0.65rem 0;
-    gap: 0.5rem;
-  }
-
-  .ls-desc {
-    flex-basis: 100%;
-    font-size: 0.82rem;
-  }
-
   /* --- 目录行重排 --- */
   .dir-entry {
-    grid-template-columns: 5.4rem 4.8rem minmax(0, 1fr);
+    /* 日期列改成 max-content：日期是 nowrap 文本，
+     * 固定 4.8rem 会比内容窄几像素，导致内容溢出格子。 */
+    grid-template-columns: 5.4rem max-content minmax(0, 1fr);
     column-gap: 0.7rem;
     padding: 0.55rem 0.6rem 0.55rem 0;
   }
@@ -309,6 +332,11 @@
 
 /* ===== 480px：极窄屏 ===== */
 @media (max-width: 480px) {
+  /* --- About 主题面板：极窄屏收成单列 ---
+   * 两列布局在 320px 下每列只剩 ~61px，卡片里的标签 chip 会溢出卡片。 */
+  .about-topics {
+    grid-template-columns: minmax(0, 1fr);
+  }
   .hero {
     padding: 1.75rem 0 1.25rem;
   }
@@ -346,14 +374,7 @@
     display: none;
   }
 
-  .search-input {
-    width: 96px;
-  }
-
-  .search-input:focus {
-    width: 132px;
-  }
-
+  /* 搜索框宽度由 ≤768px 的可伸缩规则统一处理，这里不再覆盖 */
   .theme-toggle .theme-icon {
     width: 22px;
     height: 22px;

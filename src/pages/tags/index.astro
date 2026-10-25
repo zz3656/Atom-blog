@@ -1,8 +1,16 @@
 ---
+// Atom Blog — 所有标签（TUI: 词频面板）
+//
+// 形态刻意区别于文章列表页（ls 行平铺）：
+//   ① 索引摘要行（tags / cats / posts 真实计数）
+//   ② 频次分布条形图（纯 CSS，宽度按占比）
+//   ③ 按频次分档的面板 —— 每个档位一块，档内是带计数与热度条的 chip
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import CommandHeader from '../../components/CommandHeader.astro';
+import IndexSummary from '../../components/IndexSummary.astro';
 import { SITE_TITLE } from '../../consts';
 import { getPublishedPosts } from '../../utils/collection';
+import { normalizeCategory } from '../../utils/blog';
 import { getTagUrl } from '../../utils/path';
 
 const posts = await getPublishedPosts();
@@ -17,6 +25,30 @@ posts.forEach((post) => {
 });
 
 const sortedTags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].length);
+const categoryCount = new Set(posts.map((p) => normalizeCategory(p.data.category))).size;
+
+// 频次分档（阈值固定，数字来自真实计数）
+const TIER_DEFS = [
+  { key: 'hot', label: '高频', range: '≥ 5 篇', min: 5, max: Number.MAX_SAFE_INTEGER },
+  { key: 'mid', label: '中频', range: '3 - 4 篇', min: 3, max: 4 },
+  { key: 'low', label: '低频', range: '1 - 2 篇', min: 1, max: 2 },
+];
+
+const tiers = TIER_DEFS.map((def) => ({
+  ...def,
+  tags: sortedTags.filter(([, tagPosts]) => tagPosts.length >= def.min && tagPosts.length <= def.max),
+}))
+  .filter((tier) => tier.tags.length > 0)
+  .map((tier) => ({
+    ...tier,
+    refs: tier.tags.reduce((sum, [, tagPosts]) => sum + tagPosts.length, 0),
+  }));
+
+// 热度条比例（0~1 的真实篇数比，注入为无单位数，配合 calc() 解析）
+const maxCount = sortedTags.length > 0 ? sortedTags[0][1].length : 1;
+const heat = (count: number) => (count / maxCount).toFixed(3);
+const share = (count: number) =>
+  sortedTags.length > 0 ? `${((count / sortedTags.length) * 100).toFixed(1)}%` : '0%';
 ---
 
 <BaseLayout title={`所有标签 | ${SITE_TITLE}`}>
@@ -24,24 +56,72 @@ const sortedTags = [...tagMap.entries()].sort((a, b) => b[1].length - a[1].lengt
     <CommandHeader
       cmd="grep -h '^tags:' ~/posts/*.md | sort | uniq -c | sort -rn"
       title="所有标签"
-      count={`共 ${sortedTags.length} 个标签 · ${posts.length} 篇文章`}
+      count={`${sortedTags.length} 个标签 · ${posts.length} 篇文章`}
     />
 
+    <IndexSummary tags={sortedTags.length} cats={categoryCount} posts={posts.length} />
+
     {
-      sortedTags.length > 0 ? (
-        <ul class="grep-list">
-          {sortedTags.map(([tag, tagPosts]) => (
-            <li class="grep-row">
-              <a href={getTagUrl(tag)} class="grep-entry">
-                <span class="grep-count">{tagPosts.length}</span>
-                <span class="grep-name">#{tag}</span>
-              </a>
-            </li>
+      tiers.length > 0 && (
+        <div
+          class="freq-chart"
+          role="img"
+          aria-label={tiers
+            .map((tier) => `${tier.label}（${tier.range}）${tier.tags.length} 个标签`)
+            .join('，')}
+        >
+          {tiers.map((tier) => (
+            <div class="freq-chart-row">
+              <span class="freq-chart-label">{tier.label}</span>
+              <span class="freq-chart-track">
+                <span
+                  class="freq-chart-bar"
+                  style={`--w: ${share(tier.tags.length)}`}
+                  aria-hidden="true"
+                />
+              </span>
+              <span class="freq-chart-val">{tier.tags.length}</span>
+            </div>
           ))}
-        </ul>
-      ) : (
-        <p class="empty-state">暂无标签</p>
+        </div>
       )
     }
+
+    {
+      tiers.map((tier) => (
+        <section class="freq-tier" data-tier={tier.key}>
+          <h2 class="freq-tier-title">
+            <span class="freq-tier-mark" aria-hidden="true">
+              ▌
+            </span>
+            <span class="freq-tier-name">{tier.label}</span>
+            <span class="freq-tier-range">{tier.range}</span>
+            <span class="freq-tier-meta">
+              {tier.tags.length} tags · {tier.refs} refs
+            </span>
+          </h2>
+
+          <ul class="freq-chips">
+            {tier.tags.map(([tag, tagPosts]) => (
+              <li class="freq-chip">
+                <a
+                  href={getTagUrl(tag)}
+                  class="freq-chip-link"
+                  style={`--heat: ${heat(tagPosts.length)}`}
+                >
+                  <span class="freq-chip-name">#{tag}</span>
+                  <span class="freq-chip-count">{tagPosts.length}</span>
+                  <span class="freq-chip-bar" aria-hidden="true">
+                    <span class="freq-chip-bar-fill" />
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))
+    }
+
+    {sortedTags.length === 0 && <p class="empty-state">暂无标签</p>}
   </section>
 </BaseLayout>
