@@ -15,9 +15,31 @@ All notable changes to this project will be documented in this file.
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+## [1.6.1] — 2026-10-26
+
 ### 📝 Content
 
 - **新文章《Atom Geek：把博客做成一台终端机——一套客制化主题的设计与安装说明》**：把 atom-geek 主题的**设计想法**（终端语义当信息架构、磷光终端/磷光纸双模、零圆角辉光代替投影、等宽字体只管真实数据、只留两条语义色通道）与**使用说明**（45 个 token 的契约、为什么版式必须走 overlay 而非主题包、两条安装路径、硬性红线）一次写全，并附实测数据：合规自查（0 `!important` / 0 组件选择器 / 0 布局 token 覆盖 / light-dark token 完全对齐 45）、WCAG 对比度实测表、移动端 48 组判定 0 不合格
+  - 后续订正了两处不实表述：主题的实际开发周期（当天做完，不是「跑了半年多」）、亮色底上的绿色对比度（`#00e88f` 实测 1.49:1，2.83:1 属于 `#00a86b`），并同步了 overlay 的真实文件数（46）与「样式层必须整份覆盖」的警告
+
+### 🐛 Fixed
+
+- **搜索结果与 RSS 链接大量指向 404（12 / 26 篇）**：postbuild 脚本把**文件名原样**当 slug 用，而 Astro 7 自己用 github-slugger 生成内容路由（转小写 + 去标点 + 空格转连字符）—— `DrawThings完全使用指南.md` 的真实路由是 `/blog/drawthings完全使用指南/`，脚本却生成了 `/blog/DrawThings完全使用指南/`。现已抽出 `src/utils/slug.ts` 的 `astroSlug()`，与 Astro 规则逐字对齐（真实语料 0 差异），搜索结果 / RSS 链接现为 **26 / 26 全部命中真实路由**
+  - 修掉后搜索框里选一条结果按 Enter，会直接落到 `command not found` 的 404 页 —— 之前一直误以为是快捷键没实现
+- **sitemap 的 `lastmod` 只覆盖 9 / 29 条 blog URL**：`fix-sitemap.mjs` 拿未编码的 slug 去拼正则，中文 slug 全部匹配不上。改为先把 `<loc>` 百分号解码再比对，现在 **26 篇文章全部带 `lastmod`**（剩下 3 条是列表页与分页页，本就不该有）
+- **部署出去的搜索索引比源码旧一个版本**：postbuild 只写 `public/_assets/search-index.json`，而 Astro 在构建开始时就把 `public/` 拷进了 `dist/`。现在索引同时写入 `dist/_assets/` 与 `public/_assets/`，部署的那份永远是最新的
+- **搜索快捷键在焦点离开输入框后全部失灵**：键盘监听原先挂在 `searchInput` / `.search-wrapper` 上，而 ↓ 会把焦点移到结果项、结果列表重渲染又会销毁被聚焦项。改挂 `document`，作用域仍由「结果面板是否展开」限定 —— 页脚那行 `[↑↓] 切换结果 · [Enter] 打开 · [Esc] 关闭` 现在是真的
+- **弱网下第一次搜索被静默丢弃**：旧实现是 `setInterval` 轮询 + 3 秒清空窗口，而线上索引 fetch 实测可达 11.5 秒，窗口一过查询就没了。改成挂起式（`pendingQuery` + 索引到位后补跑），加载期显示「正在加载索引…」
+
+### ✨ Changed
+
+- **页脚改成两段式**：桌面端右侧块内两行（`github rss about Atom` 一行，构建信息 `build v1.6.1 · astro · static` 落在其正下方），窄屏整块左对齐
+
+### 验收
+
+- 构建期新增一道闸门：postbuild 会拿 `dist/blog/` 的真实路由反查每一篇文章的 slug（依据是文章页 JSON-LD 里的 `BlogPosting`），对不上就让**构建直接失败** —— 宁可构建红，也别上线一批 404 链接
+- 新增 `tests/slug.test.ts`：固定期望表覆盖全部真实语料，并断言每篇文章算出的 slug 都能在 `dist/blog/` 里找到
+- 浏览器实测（headless Chrome + CDP）：↓ 落焦第 1 项 / 第二次 ↓ 到第 2 项 / Esc 收起面板 / Enter 打开结果文章页，**4 / 4 全绿**（此前 v2 脚本用导航后读 `location.pathname` 的方式判定，执行上下文销毁时会读到 `'/'` 这样的假值，v3 改为跟踪 `frameNavigated` + 读标题判定 404）
 
 ## [1.6.0] — 2026-10-25
 

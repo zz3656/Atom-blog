@@ -2,6 +2,7 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { readdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { markdownToPlainText, stripFrontmatter } from '../src/utils/markdown-strip.ts';
+import { astroSlug } from '../src/utils/slug.ts';
 
 function escapeXml(str) {
   var map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' };
@@ -91,7 +92,10 @@ var posts = files
       description: fm.description || '',
       pubDate: new Date(fm.pubDate),
       updatedDate: fm.updatedDate ? new Date(fm.updatedDate) : null,
-      slug: f.replace('.md', ''),
+      // slug 必须走 astroSlug：文件名原样当 slug 用会跟 Astro 的真实路由对不上
+      // （'DrawThings完全使用指南' 的路由其实是 'drawthings完全使用指南'）
+      slug: astroSlug(f.replace(/\.md$/, '')),
+      file: f,
       category: fm.category || '',
       tags: fm.tags || [],
       draft: fm.draft === true || fm.draft === 'true',
@@ -171,10 +175,72 @@ var searchIndex = posts.map(function (p) {
     }),
   };
 });
-// 写入 public/_assets/，Astro 构建时会自动复制到 dist/
+
+/**
+ * 校验：算出来的 slug 必须对应构建产物里真实存在的文章路由。
+ *
+ * 依据是 dist/blog/<slug>/index.html 里的 BlogPosting 结构化数据——
+ * 分页页（/blog/2/、/blog/3/）是 og:type=website，不会被误认成文章。
+ * 对不上就直接让构建失败：宁可构建红，也别上线一批 404 链接。
+ */
+function verifyRoutesAgainstBuild(posts) {
+  var blogDist = join(distDir, 'blog');
+  if (!existsSync(blogDist)) {
+    console.warn('未找到 dist/blog，跳过路由校验');
+    return;
+  }
+  var postRoutes = new Set();
+  var entries = readdirSync(blogDist, { withFileTypes: true });
+  for (var i = 0; i < entries.length; i++) {
+    if (!entries[i].isDirectory()) continue;
+    var page = join(blogDist, entries[i].name, 'index.html');
+    if (!existsSync(page)) continue;
+    if (readFileSync(page, 'utf-8').indexOf('"@type":"BlogPosting"') !== -1) {
+      postRoutes.add(entries[i].name);
+    }
+  }
+  var problems = [];
+  var claimed = new Set();
+  for (var j = 0; j < posts.length; j++) {
+    if (postRoutes.has(posts[j].slug)) {
+      claimed.add(posts[j].slug);
+    } else {
+      problems.push(
+        '  ✗ ' + posts[j].slug + '（源文件 ' + posts[j].file + '）在 dist/blog/ 里没有对应的文章页',
+      );
+    }
+  }
+  postRoutes.forEach(function (route) {
+    if (!claimed.has(route)) {
+      problems.push('  ✗ 路由 ' + route + ' 没有出现在搜索索引里');
+    }
+  });
+  if (problems.length > 0) {
+    throw new Error('文章 slug 与构建路由不一致：\n' + problems.join('\n'));
+  }
+  console.log('路由校验通过：' + postRoutes.size + ' 篇文章的 slug 与 dist/blog/ 完全一致');
+}
+
+verifyRoutesAgainstBuild(posts);
+
+// 索引要同时写进两处：
+//   dist/_assets/  —— 真正被部署的那份
+//   public/_assets/ —— 提交进仓库、供 dev server 使用的那份
+// 以前只写 public/，而 Astro 在构建开始时就把 public/ 拷进了 dist/，
+// postbuild 阶段再写 public/ 只会让线上的索引比源码旧一个版本。
+var indexJson = JSON.stringify(searchIndex);
 var publicAssetsDir = join(process.cwd(), 'public', '_assets');
+var distAssetsDir = join(distDir, '_assets');
 if (!existsSync(publicAssetsDir)) {
   mkdirSync(publicAssetsDir, { recursive: true });
 }
-writeFileSync(join(publicAssetsDir, 'search-index.json'), JSON.stringify(searchIndex));
-console.log('Search index generated: public/_assets/search-index.json');
+if (!existsSync(distAssetsDir)) {
+  mkdirSync(distAssetsDir, { recursive: true });
+}
+writeFileSync(join(distAssetsDir, 'search-index.json'), indexJson);
+writeFileSync(join(publicAssetsDir, 'search-index.json'), indexJson);
+console.log(
+  'Search index generated: dist/_assets/search-index.json + public/_assets/search-index.json (' +
+    searchIndex.length +
+    ' posts)',
+);

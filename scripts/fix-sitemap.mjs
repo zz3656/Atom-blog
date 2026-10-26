@@ -5,6 +5,7 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 import { readdirSync } from 'fs';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
+import { astroSlug } from '../src/utils/slug.ts';
 
 const distDir = join(process.cwd(), 'dist');
 const blogDir = join(process.cwd(), 'src', 'content', 'blog');
@@ -18,7 +19,8 @@ async function collectArticleDates() {
   const articles = {};
   for (const file of files) {
     const content = await readFile(join(blogDir, file), 'utf-8');
-    const slug = file.replace(/\.md$/, '');
+    // slug 走 astroSlug：文件名原样当 slug 用，跟 Astro 的真实路由对不上
+    const slug = astroSlug(file.replace(/\.md$/, ''));
     const fmMatch = content.match(/^---([\s\S]*?)---/);
     if (!fmMatch) continue;
     const fm = fmMatch[1];
@@ -34,21 +36,30 @@ async function collectArticleDates() {
 
 /**
  * 为 sitemap 中每个 /blog/<slug>/ 插入 <lastmod>
+ *
+ * 匹配方式：先把 <loc> 里的百分号编码解码，再跟文章的 slug 比对。
+ * 早先直接拿未编码的 slug 去拼正则，中文 slug 全部匹配不上，
+ * 29 条 blog URL 里只有 9 条（纯 ASCII 的那些）能拿到 lastmod。
  */
 function injectLastmod(content, articles) {
   let added = 0;
-  let updated = content;
-  for (const [slug, isoDate] of Object.entries(articles)) {
-    // 匹配 <url><loc>.../blog/<slug>/</loc>[可选 changefreq]</url>
-    const pattern = new RegExp(
-      `(<url><loc>[^<]*\\/blog\\/${slug}\\/<\\/loc>(?:<changefreq>[^<]*<\\/changefreq>)?)(</url>)`,
-      'g',
-    );
-    if (pattern.test(updated)) {
-      updated = updated.replace(pattern, `$1<lastmod>${isoDate}</lastmod>$2`);
-      added++;
+  const updated = content.replace(/<url>[\s\S]*?<\/url>/g, (block) => {
+    const locMatch = block.match(/<loc>([^<]*)<\/loc>/);
+    if (!locMatch) return block;
+    if (block.includes('<lastmod>')) return block;
+    let decoded;
+    try {
+      decoded = decodeURIComponent(locMatch[1]);
+    } catch {
+      decoded = locMatch[1];
     }
-  }
+    const slugMatch = decoded.match(/\/blog\/([^/]+)\/?$/);
+    if (!slugMatch) return block;
+    const isoDate = articles[slugMatch[1]];
+    if (!isoDate) return block;
+    added++;
+    return block.replace('</url>', `<lastmod>${isoDate}</lastmod></url>`);
+  });
   return { content: updated, added };
 }
 

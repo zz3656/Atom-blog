@@ -48,6 +48,7 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（「因特吧」，�
 - `@astrojs/markdown-remark` 在 Astro 7 里是 **peer dependency**，必须显式留在 `devDependencies`
 - Markdown 管线走 `astro.config.mjs` 的 `markdown.processor: unified({ ... })`（旧的 `markdown.remarkPlugins` 顶层写法已废弃）
 - 链接要走 `src/utils/path.ts` 的 `withBase`，不要手写 base 前缀
+- **文章 slug 必须走 `src/utils/slug.ts` 的 `astroSlug()`**——Astro 7 用 github-slugger 生成内容路由（转小写 + 去标点 + 空格转连字符），文件名原样当 slug 用会跟真实路由对不上。`DrawThings完全使用指南.md` 的路由是 `/blog/drawthings完全使用指南/`，不是 `/blog/DrawThings完全使用指南/`。曾因此让 12 / 26 篇文章的搜索结果与 RSS 链接全部指向 404；postbuild 现在会用 `dist/blog/` 的真实路由反查校验，对不上就让构建失败
 
 ## Testing instructions
 
