@@ -11,6 +11,17 @@ All notable changes to this project will be documented in this file.
 
 ---
 
+## [1.6.2] — 2026-10-26
+
+### 🐛 Fixed
+
+- **canonical / og:url / sitemap / RSS 全部指向了错的域名**：Cloudflare Pages 的自定义域名是 `www.inte8.top`（裸域 `inte8.top` 指向同一份站点），但 `astro.config.mjs` 里 `CF_DOMAIN` 的默认值写的是 `atom.inte8.top` —— 结果三个域名下发的都是 `atom.inte8.top`，等于告诉搜索引擎「正版在另一个域名上」。现默认值改为 `www.inte8.top`，构建产物实测：canonical / og:url / og:image / RSS 频道地址 / sitemap 全 102 条**无一例外**指向 `https://www.inte8.top/`
+  - GitHub Pages 那条部署不受影响：`DEPLOY_TARGET=github` 走的是仓库名推导的独立分支，仍以 `https://zz3656.github.io/Atom-blog/` 为准
+
+### 📚 Documentation
+
+- `README.md` 的环境变量说明同步更新：`CF_DOMAIN` 默认值改为 `www.inte8.top`
+
 ## [Unreleased]
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->

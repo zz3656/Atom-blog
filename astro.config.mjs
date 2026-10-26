@@ -19,9 +19,12 @@ const REPO_NAME = process.env.REPO_NAME || 'Atom';
 const base = isGitHubPages ? `/${REPO_NAME}` : '';
 
 // site: 部署目标的实际域名
+// Cloudflare Pages 的自定义域名是 www.inte8.top（裸域 inte8.top 指向同一份站点）。
+// 这个值决定 canonical / og:url / sitemap / RSS 的绝对地址，写错会让搜索引擎
+// 把另一个域名当成正版 —— 默认值必须跟对外主域名一致。
 const site = isGitHubPages
   ? `https://${process.env.GITHUB_USER || 'zz3656'}.github.io/${REPO_NAME}`
-  : `https://${process.env.CF_DOMAIN || 'atom.inte8.top'}`;
+  : `https://${process.env.CF_DOMAIN || 'www.inte8.top'}`;
 
 export default defineConfig({
   integrations: [

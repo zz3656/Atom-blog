@@ -456,7 +456,7 @@ npx wrangler pages deploy dist
 > - `DEPLOY_TARGET=cf` — Cloudflare Pages 模式（需要 `CF_DOMAIN`）
 > - 不设置 — 自动检测，优先 GitHub Pages
 > - `REPO_NAME` — GitHub Pages 子路径（默认 `Atom`，从 `${{ github.event.repository.name }}` 自动推导）
-> - `CF_DOMAIN` — Cloudflare 自定义域名（默认 `atom.inte8.top`）
+> - `CF_DOMAIN` — Cloudflare 自定义域名（默认 `www.inte8.top`，即对外主域名；裸域 `inte8.top` 指向同一份站点）
 
 > ⚡ 如果默认值不满足需求，可以手动调整 `astro.config.mjs` 中的 `site` 和 `base` 字段。
 
