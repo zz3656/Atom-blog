@@ -8,10 +8,19 @@ interface Props {
   articles: number;
   categories: number;
   tags: number;
+  /** 全站文章 Markdown 正文的字节总数（构建期统计，UTF-8） */
+  totalBytes: number;
   generator: string;
 }
 
-const { articles, categories, tags, generator } = Astro.props;
+const { articles, categories, tags, totalBytes, generator } = Astro.props;
+
+/** 字节数 → 终端风格的人类可读单位 */
+const fmtBytes = (n: number): string => {
+  if (n >= 1048576) return `${(n / 1048576).toFixed(1)} MB`;
+  if (n >= 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${n} B`;
+};
 ---
 
 <div class="term-boot">
@@ -29,6 +38,10 @@ const { articles, categories, tags, generator } = Astro.props;
     <span class="term-boot-msg">
       {categories} cats · {tags} tags
     </span>
+  </p>
+  <p class="term-boot-line">
+    <span class="term-boot-key">volume:</span>
+    <span class="term-boot-msg">{fmtBytes(totalBytes)} of markdown</span>
   </p>
   <p class="term-boot-line">
     <span class="term-boot-key">status:</span>

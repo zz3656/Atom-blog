@@ -27,6 +27,12 @@ const totalPosts = allPosts.length;
 const categoryCount = new Set(allPosts.map((p) => normalizeCategory(p.data.category))).size;
 const tagCount = new Set(allPosts.flatMap((p) => p.data.tags ?? [])).size;
 
+// 全站文章 Markdown 正文的字节总数（UTF-8 编码长度，与磁盘上的字符内容一致口径）
+const totalBytes = allPosts.reduce(
+  (sum, post) => sum + new TextEncoder().encode(post.body ?? '').length,
+  0,
+);
+
 // 渲染时过滤掉被 hide 的按钮；空数组则不渲染整块 hero-actions
 const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
 ---
@@ -49,6 +55,7 @@ const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
         articles={totalPosts}
         categories={categoryCount}
         tags={tagCount}
+        totalBytes={totalBytes}
         generator={Astro.generator}
       />
 

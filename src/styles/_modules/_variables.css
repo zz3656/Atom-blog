@@ -27,8 +27,11 @@
   --font-display: 'Archivo', var(--font-cjk), system-ui, sans-serif;
   --font-sans: 'Archivo', var(--font-cjk), system-ui, -apple-system, sans-serif;
   --font-mono:
-    'JetBrains Mono', 'SFMono-Regular', 'Fira Code', 'Cascadia Code', Consolas, 'PingFang SC',
-    monospace;
+    'JetBrains Mono', 'SFMono-Regular', Menlo, 'Fira Code', 'Cascadia Code', Consolas,
+    'Courier New', monospace;
+  /* 注意：栈里绝不能放 PingFang SC 等比例字体 —— Hero 点阵字标（TerminalAscii）
+   * 依赖真正的等宽字体逐行对齐；若比例字体兜底，ASCII art 会逐行漂移错位。
+   * SFMono-Regular 在 macOS 上不对网页开放，Menlo 才是可用的系统等宽兜底。 */
 
   /* ===== Layout ===== */
   --max-width: 1180px;
