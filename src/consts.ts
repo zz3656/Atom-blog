@@ -82,7 +82,7 @@ export const POSTS_PER_PAGE = 12;
 /** 终端用户名 —— 标题栏 `user@host` 的前一段 */
 export const TUI_USER = 'zz3656';
 /** 终端主机名 */
-export const TUI_HOST = 'node';
+export const TUI_HOST = 'inte8';
 /** 工作目录 —— 提示符里显示的路径 */
 export const TUI_CWD = '~/yinteba';
 /** 家目录符号 */
