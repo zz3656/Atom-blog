@@ -38,8 +38,10 @@ export default defineConfig({
   // HTML 压缩优化
   build: {
     compressHTML: true,
-    // 项目所有 CSS 都内联到 HTML，省一次 HTTP 请求（适合博客这种小项目）
-    inlineStylesheets: 'always',
+    // 'auto'：小样式内联，全局样式（~48KB）外链成独立文件 ——
+    // 26 篇文章页原来各自重复内联整份 CSS，外链后浏览器跨页缓存，
+    // 每页 HTML 瘦 ~40KB。首页/404 等小页面仍内联，不增加请求。
+    inlineStylesheets: 'auto',
   },
   // 启用 Vite 预构建以加快冷启动
   vite: {

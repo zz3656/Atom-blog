@@ -1,0 +1,42 @@
+/* Atom Blog — 自托管字体 @font-face
+ *
+ * 来源：@fontsource-variable/archivo（standard 变体，含 wdth+wght 双轴）
+ *      与 @fontsource/jetbrains-mono（latin 400/500/700），文件位于 src/assets/fonts/（经 Vite 资产管线打包，自动携带部署 base）。
+ * 原因：Google Fonts 在国内网络基本不可达（Hero 点阵字标错位 bug 的根因），
+ *      改为同源自托管后零外域请求、视觉行为与线上一致。
+ * 字体族名保持 'Archivo' / 'JetBrains Mono'，与 --font-display/--font-sans/--font-mono
+ * 引用名完全兼容，token 栈无需改动。
+ */
+
+/* Archivo 可变字体（wght 100-900 + wdth 62%-125%） */
+@font-face {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 100 900;
+  font-stretch: 62% 125%;
+  font-display: swap;
+  src: url('../../assets/fonts/archivo-latin-standard-normal.woff2') format('woff2-variations');
+}
+
+/* JetBrains Mono（等宽，只用于真实数据） */
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../../assets/fonts/jetbrains-mono-latin-400-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../../assets/fonts/jetbrains-mono-latin-500-normal.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'JetBrains Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../../assets/fonts/jetbrains-mono-latin-700-normal.woff2') format('woff2');
+}

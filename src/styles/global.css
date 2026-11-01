@@ -32,6 +32,9 @@
  * 原因：CSS 全内联进每个 HTML，全局引入等于让所有页面为用不到的样式买单。
  */
 
+/* 1. Self-hosted fonts (@font-face — 零外域请求，国内可用) */
+@import './_modules/_fonts.css';
+
 /* 1. Shared variables (layout, typography, radius — 跨主题共享) */
 @import './_modules/_variables.css';
 

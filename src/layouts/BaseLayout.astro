@@ -85,18 +85,11 @@ const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
     <!-- PWA Manifest -->
     <link rel="manifest" href={baseAssetsPath('/manifest.json')} />
 
-    <!-- Font preconnect -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <!--
-      Archivo：可变字体（含 wdth 宽度轴），标题用宽字重变化制造标识感
-      JetBrains Mono：等宽字体，只承担「数据」与代码
-    -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=JetBrains+Mono:wght@400;500;700&display=swap"
-      rel="stylesheet"
-      crossorigin="anonymous"
-    />
+      字体已自托管（src/assets/fonts/ + _fonts.css，经 Vite 打包）：
+      Archivo 可变字体（wdth+wght）与 JetBrains Mono 400/500/700。
+      原 Google Fonts 外链在国内网络基本不可达，且曾导致 Hero 点阵字标
+      兜底到比例字体逐行错位——现已零外域请求。 -->
     <title>{fullTitle}</title>
     <script is:inline define:vars={{ defaultThemeId, themeIds }}>
       // Apply theme synchronously before page render to avoid FOUC
