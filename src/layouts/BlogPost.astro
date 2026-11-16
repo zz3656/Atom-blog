@@ -1,12 +1,12 @@
 ---
 // Atom Blog — 文章页（TUI: cat 输出）
 //
-// 刊头 = 命令回显：~/yinteba $ cat posts/<slug>.md
+// 刊头 = 命令回显：~/inte8 $ cat posts/<slug>.md
 // 刊头下方 = 文件元信息（大小 / 行数 / 日期 / 分类 / 阅读时长）
 // 正文   = cat 的输出，左侧带行号槽（纯装饰，app.js 渲染）
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
-import { AUTHOR, SITE_TITLE } from '../consts';
+import { AUTHOR, SITE_TITLE, TUI_PROMPT } from '../consts';
 import { blogPostUrl, rootPath, baseAssetsPath } from '../utils/path';
 import { readingTime, countWords } from '../utils/blog';
 import { formatDateISO } from '../utils/date';
@@ -100,7 +100,7 @@ const fileLines = body ? body.split('\n').length : 0;
   <article class="post" data-post-slug={slug}>
     <header class="post-header">
       <p class="post-command">
-        <span class="post-prompt" aria-hidden="true">~/yinteba $</span>
+        <span class="post-prompt" aria-hidden="true">{TUI_PROMPT}</span>
         <span class="post-cmd">cat posts/{slug}.md</span>
       </p>
       <h1>{title}</h1>

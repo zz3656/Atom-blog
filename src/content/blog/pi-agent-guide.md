@@ -1,6 +1,6 @@
 ---
 title: Pi Agent 详细使用指南：从安装到自部署
-description: "Pi Agent 详细使用指南：从安装到自部署"
+description: "Pi 是一个可自扩展的终端编程 agent，核心只做四件事，其余全交给扩展。含安装、认证、交互模式、会话分支与压缩，以及自定义扩展与子 agent。"
 pubDate: 2026-09-03
 category: 技术笔记
 tags: [AI, 编程, AI Agent]

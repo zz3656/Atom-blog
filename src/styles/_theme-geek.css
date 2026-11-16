@@ -72,29 +72,20 @@ html[data-theme='atom-geek'] .about-stat dt {
 }
 
 /* 卡片：终端面板 */
-html[data-theme='atom-geek'] .project-card,
 html[data-theme='atom-geek'] .topic-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-left: 2px solid var(--accent);
 }
 
-html[data-theme='atom-geek'] .project-card:hover,
 html[data-theme='atom-geek'] .topic-card:hover {
   border-color: var(--border-glow);
   border-left-color: var(--accent);
   box-shadow: var(--shadow-md);
 }
 
-html[data-theme='atom-geek'] .project-emoji,
 html[data-theme='atom-geek'] .topic-icon {
   font-family: var(--font-mono);
-}
-
-html[data-theme='atom-geek'] .skill-tag {
-  border: 1px solid var(--border-color);
-  background: var(--bg-card);
-  color: var(--text-secondary);
 }
 
 /* == ⑥ 降级路径 == */

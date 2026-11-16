@@ -31,7 +31,7 @@ export const SITE_VERSION = pkg.version;
 export const HERO_TITLE = '因特吧';
 export const HERO_DESCRIPTION =
   '因特网里的一间小吧 —— 聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。全部以终端会话的形式记录。';
-export const HERO_EYEBROW = '~/yinteba';
+export const HERO_EYEBROW = '~/inte8';
 export const HERO_EYEBROW_SUB = 'terminal session · since 2026';
 export const HERO_ACTIONS: Array<{
   label: string;
@@ -75,7 +75,7 @@ export const POSTS_PER_PAGE = 12;
  * 全站外壳按终端会话来组织，这组常量是它的身份：
  *   标题栏  user@host:~      ← TUI_USER / TUI_HOST
  *   导航行  ~/ ~/posts ...    ← TUI_NAV
- *   提示符  ~/yinteba $       ← TUI_PROMPT
+ *   提示符  ~/inte8 $        ← TUI_PROMPT
  * 值都是站点级配置，与主题包无关（主题包只管颜色 token）。
  */
 
@@ -84,7 +84,7 @@ export const TUI_USER = 'zz3656';
 /** 终端主机名 */
 export const TUI_HOST = 'inte8';
 /** 工作目录 —— 提示符里显示的路径 */
-export const TUI_CWD = '~/yinteba';
+export const TUI_CWD = '~/inte8';
 /** 家目录符号 */
 export const TUI_HOME = '~';
 /** 终端提示符（含尾部空格，渲染时再接光标） */

@@ -11,6 +11,7 @@ import {
   HERO_EYEBROW,
   HERO_EYEBROW_SUB,
   HERO_ACTIONS,
+  TUI_PROMPT,
   POSTS_PER_PAGE,
 } from '../consts';
 import { getPublishedPosts } from '../utils/collection';
@@ -62,7 +63,7 @@ const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
       <p class="hero-desc">{HERO_DESCRIPTION}</p>
 
       <p class="hero-prompt">
-        <span class="hero-prompt-path" aria-hidden="true">~/yinteba $</span>
+        <span class="hero-prompt-path" aria-hidden="true">{TUI_PROMPT}</span>
         <span class="cursor-block" aria-hidden="true"></span>
       </p>
 

@@ -2,9 +2,13 @@
 title: Markdown 写作完全指南
 description: 掌握 Atom 支持的 Markdown 语法——标题、列表、代码块、表格、引用、链接、图片——以及 Atom 为长文准备的排版增强：首字下沉、刻度分隔、表格横向滑动。
 pubDate: 2026-09-18
-category: guide
+updatedDate: 2026-11-16
+category: 技术教程
 tags: [Markdown, 写作, 教程, 文档]
 ---
+
+> 🧭 **本篇定位：本站语法速查** —— 只覆盖 Atom 博客用得到的语法与排版增强，够写文章用。
+> 需要完整规范与边界情况，见[《Markdown 完全使用指南：从入门到精通》](/blog/markdown完全使用指南/)。
 
 Markdown 是一种轻量级标记语言，可以用纯文本写出结构化文档。本指南覆盖 Atom 博客支持的所有常用语法，以及 Atom 为长文额外准备的几处排版增强。
 

@@ -2,7 +2,7 @@
 title: 定制你的 Atom 博客 — 上线后第一步该改什么
 description: 拿到 Atom 模板后的最小可行动清单：站点信息、文章内容、Logo/Favicon、主题 Token、关于页面，以及每项该改哪些文件。
 pubDate: 2026-09-18
-category: guide
+category: 技术教程
 tags: [Atom, 入门, 客制化]
 ---
 

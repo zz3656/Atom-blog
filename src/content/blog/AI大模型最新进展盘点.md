@@ -1,6 +1,6 @@
 ---
 title: AI 大模型最新进展盘点
-description: "AI 大模型最新进展盘点"
+description: "盘点 2026 年中主流大模型的真实进展：闭源旗舰三家格局、开源生态逼近闭源、多模态与 Agent 趋势、成本断崖式下降，并给出个人使用建议。"
 pubDate: 2026-04-29
 category: 前沿技术
 tags: [AI, 大模型, GPT]

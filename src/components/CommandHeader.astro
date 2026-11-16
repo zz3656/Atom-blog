@@ -8,12 +8,14 @@ interface Props {
   count?: string;
 }
 
+import { TUI_PROMPT } from '../consts';
+
 const { cmd, title, count } = Astro.props;
 ---
 
 <header class="cmd-header">
   <p class="cmd-header-line">
-    <span class="cmd-prompt" aria-hidden="true">~/yinteba $</span>
+    <span class="cmd-prompt" aria-hidden="true">{TUI_PROMPT}</span>
     <span class="cmd-text">{cmd}</span>
   </p>
   <h1 class="cmd-title">{title}</h1>

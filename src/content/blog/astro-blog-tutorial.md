@@ -2,7 +2,7 @@
 title: Atom 博客的技术架构解析
 description: 从 Astro 7.4 内容集合、主题 Token 体系、构建流水线到 GitHub Pages 自动部署，完整拆解 Atom 博客是怎么从 Markdown 文件变成可访问的静态网站。
 pubDate: 2026-09-19
-category: tutorial
+category: 技术笔记
 tags: [Astro, 架构, GitHub Pages, 部署, 设计系统]
 ---
 

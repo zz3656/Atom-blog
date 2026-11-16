@@ -1,10 +1,14 @@
 ---
 title: RouterOS v7 从入门到精通完整指南
-description: "RouterOS v7 从入门到精通完整指南"
+description: "面向新手的 RouterOS v7 完整指南：从系统概念、首次配置、网络基础，到 NAT 端口转发、防火墙与路由进阶，基于 MikroTik 官方文档 v7.5+ 整理。"
 pubDate: 2026-09-16
+updatedDate: 2026-11-16
 category: 网络路由
 tags: [RouterOS, ROS, 软路由, MikroTik, 网络, 进阶]
 ---
+
+> 🧭 **本篇定位：从零入门** —— 写给第一次接触 RouterOS 的人，从系统概念、首次配置讲到 NAT 端口转发、防火墙与路由进阶。
+> 想看 v7 的新特性与进阶专题（WireGuard / ZeroTier / Container / IoT），移步[《RouterOS v7 入门到精通学习笔记》](/blog/routeros-v7入门到精通学习笔记/)。
 
 > **参考资料**：本文内容基于 [MikroTik 官方文档](https://help.mikrotik.com/docs/)（RouterOS v7.5+），结合社区翻译版 [RouterOS 中文手册](https://mikrotik-doc-cn.readthedocs.io/) 整理。MikroTik 官方文档仅英文版，中文资源主要靠社区力量。v7 与 v6 差异较大，请注意版本区别。
 

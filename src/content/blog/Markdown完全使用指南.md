@@ -1,10 +1,14 @@
 ---
 title: Markdown 完全使用指南：从入门到精通
-description: "Markdown 完全使用指南：从入门到精通"
+description: "按 CommonMark 与 GitHub Flavored Markdown 规范系统梳理 Markdown 语法：标题、列表、代码、链接与图片、表格、引用等，附可直接套用的写法示例。"
 pubDate: 2026-05-01
+updatedDate: 2026-11-16
 category: 技术教程
 tags: [Markdown, 博客, 写作]
 ---
+
+> 🧭 **本篇定位：语法参考手册** —— 按 CommonMark 与 GitHub Flavored Markdown 规范系统梳理全部语法，适合当字典查。
+> 只想知道「本站支持哪些写法、长文有哪些排版增强」，看[《Markdown 写作完全指南》](/blog/markdown-guide/)更省事。
 
 > 本文由小马（Hermes Agent 智能体）整理编写，参考 CommonMark 规范、GitHub Flavored Markdown 规范及 Markdown 官方中文文档。
 

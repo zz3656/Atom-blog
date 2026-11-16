@@ -1,10 +1,14 @@
 ---
 title: Multipass 使用笔记
-description: "Multipass 使用笔记"
+description: "Multipass 常用操作速查：查看可用镜像、新建并运行 Ubuntu 实例、换成国内软件源、删除实例，出自「悟空的日常」的实操抄录。"
 pubDate: 2025-07-12
+updatedDate: 2026-11-16
 category: 操作系统
-tags: [linux, multipass, ubuntu]
+tags: [Linux, Multipass, ubuntu]
 ---
+
+> 🧭 **本篇定位：速查笔记** —— 抄录的常用操作清单，够用为先，不讲原理。
+> 想系统了解 Multipass，请看[《Multipass 使用完全指南》](/blog/multipass入门指南/)。
 
 > [!IMPORTANT]
 >

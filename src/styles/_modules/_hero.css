@@ -22,7 +22,7 @@
 }
 
 /* ===== Eyebrow =====
- * 文案大小写按 consts.ts 的原文显示（'~/yinteba' / 'terminal session · since 2026'），
+ * 文案大小写按 consts.ts 的原文显示（'~/inte8' / 'terminal session · since 2026'），
  * 这里不做 uppercase 变换。 */
 .hero-eyebrow {
   display: flex;

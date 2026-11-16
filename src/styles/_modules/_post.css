@@ -1,6 +1,6 @@
 /* Atom Blog — Blog Post Content（TUI: cat 输出）
  *
- * 刊头   = ~/yinteba $ cat posts/<slug>.md + 文件元信息
+ * 刊头   = ~/inte8 $ cat posts/<slug>.md + 文件元信息
  * 正文   = cat 的输出，左侧一行号槽（纯 CSS counter，零 JS）
  * 引用   = 终端回显（绿色竖条 + > 前缀）
  * 代码块 = 带标题栏的终端窗口（标题取 Shiki 的 data-language）

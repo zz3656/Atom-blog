@@ -1,10 +1,14 @@
 ---
 title: Multipass 使用完全指南：本地 Ubuntu 虚拟化管理利器
-description: "Multipass 使用完全指南：本地 Ubuntu 虚拟化管理利器"
+description: "Canonical 出品的轻量虚拟机工具 Multipass：在 Linux、macOS、Windows 上几秒拉起 Ubuntu 实例，涵盖镜像管理、实例创建与调整、Primary 实例与配置修改。"
 pubDate: 2026-04-30
+updatedDate: 2026-11-16
 category: 技术教程
 tags: [Multipass, ubuntu, 虚拟机]
 ---
+
+> 🧭 **本篇定位：完整入门** —— 从安装、镜像管理一路讲到实例配置调整，适合系统学一遍。
+> 只想查几条常用命令，直接看[《Multipass 使用笔记》](/blog/multipasshelp/)。
 
 ## 什么是 Multipass
 

@@ -1,6 +1,6 @@
 ---
 title: OpenClaw 全方位指南
-description: "OpenClaw 全方位指南"
+description: "OpenClaw 是一款跑在自己设备上的开源个人 AI 助手，GitHub 星标超 36 万。本文覆盖核心特性、快速安装、架构设计、聊天频道与 Agent 运行时。"
 pubDate: 2026-04-30
 category: 前沿技术
 tags: [OpenClaw, AI助手, 开源]

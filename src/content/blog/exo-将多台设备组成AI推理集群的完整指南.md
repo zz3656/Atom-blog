@@ -1,6 +1,6 @@
 ---
 title: exo：将多台设备组成 AI 推理集群的完整指南
-description: "exo：将多台设备组成 AI 推理集群的完整指南"
+description: "用 exo 把 Mac 与 Linux 服务器组成统一的 AI 推理集群，跑单机装不下的大模型。含核心特性、实测性能、安装部署、Thunderbolt 5 RDMA 与 API 用法。"
 pubDate: 2026-05-03
 category: 前沿技术
 tags: [exo, AI集群, 分布式推理]

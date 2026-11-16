@@ -1,9 +1,9 @@
 ---
 title: 科技Lion一键脚本：Linux服务器运维工具箱 监控管理建站一个脚本全搞定
-description: "科技Lion一键脚本：Linux服务器运维工具箱 监控管理建站一个脚本全搞定"
+description: "科技lion 一键脚本：一条命令装好 Linux 服务器运维工具箱，集监控、管理、建站于一体。记录个人使用过程与脚本主界面的主要功能。"
 pubDate: 2025-07-12
 category: 操作系统
-tags: [linux, shell, 教程]
+tags: [Linux, shell, 教程]
 ---
 
 # 科技lion一键 脚本  Linux服务器运维工具箱 监控管理建站一个脚本全搞定！

@@ -1,10 +1,14 @@
 ---
 title: RouterOS v7 入门到精通学习笔记
-description: "RouterOS v7 入门到精通学习笔记"
+description: "整理自余松《RouterOS 入门到精通 v7.4e》192 页教程：v7 的升级要点、路由表与策略路由、PCC 负载均衡、OSPF，以及 WireGuard、ZeroTier、Container 与 IoT 章节。"
 pubDate: 2026-04-30
+updatedDate: 2026-11-16
 category: 网络路由
 tags: [RouterOS, 软路由, MikroTik]
 ---
+
+> 🧭 **本篇定位：进阶专题** —— 整理自余松老师 192 页教程，聚焦 v7 的路由架构、策略路由、PCC 负载均衡、OSPF，以及 WireGuard / ZeroTier / Container / IoT 等专题。
+> 第一次配置 RouterOS，建议先读[《RouterOS v7 从入门到精通完整指南》](/blog/routeros7use/)。
 
 本文整理自余松老师的《RouterOS 入门到精通 v7.4e》教程（共 192 页），系统梳理了 RouterOS v7 的核心新功能和配置要点。教程官网：[www.irouteros.com](http://www.irouteros.com)
 

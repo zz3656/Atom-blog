@@ -1,6 +1,6 @@
 ---
 title: Cloud Mail 基于 Cloudflare 的免费邮箱服务部署指南
-description: "Cloud Mail 基于 Cloudflare 的免费邮箱服务部署指南"
+description: "只用一个域名，在 Cloudflare Workers 上搭起自己的邮箱：Cloud Mail 支持多用户与附件收发，近乎零成本。含界面、GitHub Actions、命令行三种部署路径与增强功能配置。"
 pubDate: 2026-05-05
 category: 技术教程
 tags: [Cloudflare, 邮箱服务, 教程]
