@@ -21,7 +21,7 @@
     "new": "node scripts/atom-cli.mjs new",
     "list": "node scripts/atom-cli.mjs list",
     "theme:create": "node scripts/create-theme.mjs",
-    "postbuild": "node scripts/generate-rss.mjs && node scripts/generate-og.mjs",
+    "postbuild": "node scripts/generate-rss.mjs && node ops/tools/generate-og.mjs",
     "verify:links": "node scripts/verify-build-links.mjs",
     "verify:search": "node scripts/verify-search-index.mjs"
   },

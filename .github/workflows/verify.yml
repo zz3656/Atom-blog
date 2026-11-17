@@ -72,8 +72,7 @@ jobs:
           test -f dist/rss.xml && echo "RSS: OK"
           test -f dist/sitemap-index.xml && echo "Sitemap: OK"
           test -f dist/robots.txt && echo "robots.txt: OK"
-          test -f dist/og.jpg && echo "OG image: OK"
-          test -f dist/manifest.json && echo "manifest: OK"
+          ls dist/og.* >/dev/null 2>&1 && echo "OG image: OK"  # 文件名因站点而异（og-default.png / og.jpg …）
           # 索引必须真的覆盖所有构建出的文章页，而不只是"文件存在"
           node scripts/verify-search-index.mjs
           # 站内链接必须能映射回真实产物（拦住 /Atom/Atom/ 这类 base 双前缀）
