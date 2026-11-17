@@ -1,0 +1,6 @@
+{
+  "$comment": "站点元数据（数据文件，不是源码）。派生站点只改这里，不必改 astro.config.mjs。",
+  "domain": "www.inte8.top",
+  "repo": "Atom-blog",
+  "githubUser": "zz3656"
+}

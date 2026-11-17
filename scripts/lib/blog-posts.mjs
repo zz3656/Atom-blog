@@ -11,7 +11,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { markdownToPlainText, stripFrontmatter } from '../../src/utils/markdown-strip.ts';
-import { astroSlug } from '../../src/utils/slug.ts';
 
 export const BLOG_DIR = 'src/content/blog';
 
@@ -88,9 +87,7 @@ export function loadPosts(blogDir = BLOG_DIR) {
         description: fm.description || '',
         pubDate: new Date(fm.pubDate),
         updatedDate: fm.updatedDate ? new Date(fm.updatedDate) : null,
-        // slug 必须与 Astro 的内容路由逐字一致（github-slugger：转小写 + 去标点），
-        // 文件名原样当 slug 会让中文/大驼峰文章的搜索索引与 RSS 指向 404。
-        slug: astroSlug(f.replace(/\.md$/, '')),
+        slug: f.replace(/\.md$/, ''),
         category: fm.category || '',
         tags: fm.tags || [],
         draft: fm.draft === true || fm.draft === 'true',

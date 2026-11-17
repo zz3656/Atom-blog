@@ -12,9 +12,9 @@ import { loadPosts } from './scripts/lib/blog-posts.mjs';
 //   不设置                → 若有 PAGES_ENV 则按 GitHub Pages 处理
 const isGitHubPages = process.env.DEPLOY_TARGET === 'github' || process.env.PAGES_ENV === 'true';
 
-const repoName = process.env.REPO_NAME || 'Atom-blog';
+const repoName = process.env.REPO_NAME || 'Atom';
 const githubUser = process.env.GITHUB_USER || 'zz3656';
-const cfDomain = process.env.CF_DOMAIN || 'www.inte8.top';
+const cfDomain = process.env.CF_DOMAIN || 'atom.inte8.top';
 
 // base 与 site 各管一件事，不要互相包含：
 //   site 只写 origin（不含子路径），base 单独给子路径。

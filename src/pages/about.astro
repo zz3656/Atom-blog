@@ -5,40 +5,41 @@ import { SITE_TITLE } from '../consts';
 
 <BaseLayout
   title={`关于 | ${SITE_TITLE}`}
-  description={`关于 ${SITE_TITLE}：这是一台什么机器、怎么搭的、怎么读。`}
+  description={`关于 ${SITE_TITLE}：技术栈、设计系统与联系方式。`}
 >
   <section class="about">
     <div class="unified-page-header">
       <p class="unified-page-eyebrow">About</p>
-      <h1>关于因特吧</h1>
+      <h1>关于 Atom 博客</h1>
       <div class="rule"></div>
     </div>
     <div class="about-content">
       <p class="about-bio">
-        <strong>因特吧</strong> 是因特网里的一间小吧 —— 聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。
-        全站以终端会话的形式记录：命令是导航，输出来是文章，刻度尺是分隔线。
+        <strong>Atom 博客</strong> 是一个用{' '}
+        <a href="https://astro.build" target="_blank" rel="noopener">
+          Astro
+        </a>{' '}
+        构建的现代轻量级静态博客。灵感来自电影《铁甲钢拳》(Real Steel) 中的机器人 Atom —
+        小巧、精准、充满力量。
       </p>
 
-      <h2>这台机器怎么搭的</h2>
+      <h2>为什么选择 Atom</h2>
       <div class="about-projects">
         <div class="project-card">
-          <h3>零运行时</h3>
-          <p>
-            静态输出，无水合。原生 JS 只负责搜索、日夜切换与图片放大，其余全是 HTML 与 CSS。
-          </p>
+          <h3>极致性能</h3>
+          <p>无框架运行时、无水合，仅约 8.7KB 原生 JS 负责搜索与主题切换，Lighthouse 性能评分接近满分。</p>
           <div class="project-links">
-            <a href="https://astro.build" target="_blank" class="tag">Astro 7.x</a>
+            <a href="https://astro.build" target="_blank" class="tag">
+              Astro 7.x
+            </a>
             <a href="https://developer.mozilla.org/zh-CN/docs/Web/HTML" target="_blank" class="tag">
               HTML5
             </a>
           </div>
         </div>
         <div class="project-card">
-          <h3>磷光终端</h3>
-          <p>
-            atom-geek 主题：暗色磷光终端 / 亮色磷光纸双模，47 个 CSS token 定义全部颜色。
-            等宽字体只承载真实数据，中文界面保持无衬线。
-          </p>
+          <h3>精准的排版</h3>
+          <p>等宽字体承载数据、几何字承载标题，刻度尺串联全站，让长文也像仪表一样易读。</p>
           <div class="project-links">
             <a
               href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/CSS_cascade/Cascade"
@@ -57,16 +58,19 @@ import { SITE_TITLE } from '../consts';
           </div>
         </div>
         <div class="project-card">
-          <h3>两条部署线</h3>
-          <p>
-            主站走 Cloudflare Pages（www.inte8.top），副本走 GitHub Pages——
-            同一份源码、两套域名口径，构建期由 <code>DEPLOY_TARGET</code> 决定 base 与 canonical。
-          </p>
+          <h3>移动优先</h3>
+          <p>汉堡菜单导航、安全区域适配、多断点渐进缩放，各类设备完美体验。</p>
           <div class="project-links">
-            <a href="https://developers.cloudflare.com/pages/" target="_blank" class="tag">
-              Cloudflare Pages
+            <a href="https://www.w3.org/TR/mediaqueries-4/" target="_blank" class="tag">
+              响应式
             </a>
-            <a href="https://pages.github.com/" target="_blank" class="tag">GitHub Pages</a>
+            <a
+              href="https://developer.mozilla.org/zh-CN/docs/Web/CSS/@media"
+              target="_blank"
+              class="tag"
+            >
+              媒体查询
+            </a>
           </div>
         </div>
       </div>
@@ -77,41 +81,37 @@ import { SITE_TITLE } from '../consts';
           <strong>内容管理</strong> — Astro Content Collections + Markdown，零数据库依赖
         </li>
         <li>
-          <strong>搜索</strong> — 构建期生成索引（<code>prebuild</code>），浏览器端做子串匹配
+          <strong>构建部署</strong> — GitHub Actions 自动构建，支持 GitHub Pages / Cloudflare Pages
         </li>
         <li>
-          <strong>构建门禁</strong> — 单条 CI 跑完 check → lint → test → build，再用
-          <code>verify:links</code> 校验每条站内链接都能落到真实产物
+          <strong>SEO 优化</strong> — Open Graph / Twitter Card / JSON-LD / Sitemap / RSS 全内置
         </li>
         <li>
-          <strong>SEO</strong> — canonical / Open Graph / JSON-LD / Sitemap / RSS 全部构建期生成
+          <strong>主题系统</strong> — CSS Token 驱动，日夜双模式，第三方主题零配置接入
         </li>
         <li>
-          <strong>主题系统</strong> — token 契约 47 个，主题包只放颜色，实现层跟上游走
+          <strong>开发体验</strong> — TypeScript 类型安全，CLI 工具快速创建文章
         </li>
       </ul>
 
-      <h2>关于代码</h2>
-      <p>
-        本站是 <a href="https://github.com/zz3656/Atom" target="_blank" rel="noopener">Atom</a>
-        模板的派生站点：文章、站点标识与 atom-geek 主题属于本站，工程层跟随上游版本。
-      </p>
+      <h2>社区</h2>
+      <p>Atom 博客是一个开源项目，欢迎 Fork、提 Issue 或提交 PR。</p>
       <div class="about-links">
-        <a
-          href="https://github.com/zz3656/Atom-blog"
-          target="_blank"
-          rel="noopener"
-          class="btn btn-secondary"
-        >
-          本站源码
-        </a>
         <a
           href="https://github.com/zz3656/Atom"
           target="_blank"
           rel="noopener"
           class="btn btn-secondary"
         >
-          上游模板
+          GitHub
+        </a>
+        <a
+          href="https://github.com/zz3656/Atom/issues"
+          target="_blank"
+          rel="noopener"
+          class="btn btn-secondary"
+        >
+          提交 Issue
         </a>
       </div>
     </div>
