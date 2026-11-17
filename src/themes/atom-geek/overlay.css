@@ -139,14 +139,29 @@ html[data-theme='atom-geek']::after {
  * ============================================================ */
 
 html[data-theme='atom-geek'] .hero--tui {
-  padding: 3.25rem 0 2.25rem;
+  padding: clamp(2.25rem, 4.5vw, 3.5rem) 0 clamp(1.75rem, 3vw, 2.5rem);
 }
 
 html[data-theme='atom-geek'] .hero--tui .hero-inner {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: clamp(1.05rem, 2.1vw, 1.65rem);
   max-width: 46rem;
+}
+
+/* 提示符行：~/inte8 cat welcome.md █ */
+html[data-theme='atom-geek'] .hero--tui .hero-prompt {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-prompt-path {
+  color: var(--accent);
+  font-weight: 600;
 }
 
 /* 无障碍隐藏（项目没有 .sr-only，主题自带一个） */
@@ -165,7 +180,7 @@ html[data-theme='atom-geek'] .term-sr {
 /* 「因特吧」点阵字标：22 行 × 73 列，只用 # 与空格，任何等宽字体都不错位 */
 html[data-theme='atom-geek'] .term-wordmark {
   font-family: var(--font-mono);
-  font-size: min(clamp(0.42rem, 1.55vw, 0.82rem), calc((100vw - 3.5rem) / 43.8));
+  font-size: min(clamp(0.5rem, 1.85vw, 0.95rem), calc((100vw - 3.2rem) / 43.8));
   line-height: 0.66;
   color: var(--accent);
   margin: 0;
@@ -179,13 +194,13 @@ html[data-theme='atom-geek'] .term-wordmark {
 html[data-theme='atom-geek'] .term-boot {
   display: flex;
   flex-direction: column;
-  gap: 0.12rem;
+  gap: 0.18rem;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  line-height: 1.7;
+  font-size: clamp(0.74rem, 0.78rem + 0.1vw, 0.82rem);
+  line-height: 1.75;
   color: var(--text-secondary);
   border-left: 2px solid var(--border-color);
-  padding-left: 0.95rem;
+  padding-left: 1rem;
 }
 
 html[data-theme='atom-geek'] .term-boot-line {
@@ -278,6 +293,23 @@ html[data-theme='atom-geek'] .hero-eyebrow-sub {
   letter-spacing: 0.12em;
 }
 
+/* 窄屏：自检键名收窄，字标与描述让位给正文 */
+@media (width <= 600px) {
+  html[data-theme='atom-geek'] .term-boot {
+    font-size: 0.72rem;
+    padding-left: 0.75rem;
+  }
+
+  html[data-theme='atom-geek'] .term-boot-key {
+    min-width: 7ch;
+  }
+
+  html[data-theme='atom-geek'] .hero--tui .hero-desc {
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+}
+
 @keyframes atomGeekType {
   from {
     clip-path: inset(0 100% 0 0);
@@ -353,5 +385,137 @@ html[data-theme='atom-geek'] .cursor-block {
   html[data-theme='atom-geek'] {
     --border-color: var(--text-secondary);
     --border-light: var(--text-muted);
+  }
+}
+
+/* ============================================================
+ * ⑨ 文章列表 = ls -la 输出
+ * ============================================================ */
+html[data-theme='atom-geek'] .log-row + .log-row {
+  border-top: 1px dashed var(--border-light);
+}
+
+html[data-theme='atom-geek'] .log-row a {
+  padding-left: 0.75rem;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+html[data-theme='atom-geek'] .log-row a:hover {
+  border-left-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
+html[data-theme='atom-geek'] .log-index {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--text-muted);
+}
+
+html[data-theme='atom-geek'] .log-row a:hover .log-index {
+  color: var(--accent);
+}
+
+html[data-theme='atom-geek'] .log-date {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.03em;
+  color: var(--text-muted);
+}
+
+html[data-theme='atom-geek'] .log-category,
+html[data-theme='atom-geek'] .log-tags {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================
+ * ⑩ About 页 = cat README.md
+ * ============================================================ */
+html[data-theme='atom-geek'] .unified-page-eyebrow {
+  font-family: var(--font-mono);
+  color: var(--accent);
+  letter-spacing: 0.16em;
+}
+
+html[data-theme='atom-geek'] .about-bio {
+  border-left: 2px solid var(--border-color);
+  padding-left: 1rem;
+  color: var(--text-secondary);
+}
+
+html[data-theme='atom-geek'] .about-content h2::before {
+  content: '▍';
+  color: var(--accent);
+  margin-right: 0.45rem;
+  font-family: var(--font-mono);
+}
+
+html[data-theme='atom-geek'] .about-content ul li::marker {
+  content: '› ';
+  color: var(--accent);
+  font-family: var(--font-mono);
+}
+
+html[data-theme='atom-geek'] .project-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 2px solid var(--accent);
+  border-radius: 0;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+html[data-theme='atom-geek'] .project-card:hover {
+  border-color: var(--border-glow);
+  border-left-color: var(--accent);
+  box-shadow: var(--shadow-glow);
+}
+
+html[data-theme='atom-geek'] .project-card h3 {
+  font-family: var(--font-mono);
+  font-size: 0.95rem;
+  letter-spacing: 0.02em;
+}
+
+html[data-theme='atom-geek'] .project-links .tag,
+html[data-theme='atom-geek'] .about-links .btn {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+/* ============================================================
+ * ⑪ 图片灯箱 = 终端里的全屏图像
+ * ============================================================ */
+html[data-theme='atom-geek'] .image-zoom-overlay {
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+html[data-theme='atom-geek'] .image-zoom-overlay .image-zoom-img {
+  border-radius: 0;
+  border: 1px solid var(--overlay-control-border);
+  box-shadow: var(--shadow-glow);
+}
+
+html[data-theme='atom-geek'] .image-zoom-close {
+  border-radius: 0;
+  font-family: var(--font-mono);
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+html[data-theme='atom-geek'] .image-zoom-close:hover {
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+@media (width <= 600px) {
+  html[data-theme='atom-geek'] .image-zoom-overlay {
+    padding: 1rem;
   }
 }
