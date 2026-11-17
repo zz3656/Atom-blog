@@ -1,5 +1,5 @@
 ---
-import { SITE_NAME, SITE_LOGO } from '../consts';
+import { SITE_NAME, SITE_LOGO, SITE_TAGLINE } from '../consts';
 import {
   baseAssetsPath,
   rootPath,
@@ -38,7 +38,7 @@ const navLinks = [
     <a href={rootPath()} class="site-title">
       <img src={logoSrc} alt="" class="site-logo" width="26" height="26" />
       <span class="site-name-text">{SITE_NAME}</span>
-      <span class="site-tagline">Precision Log</span>
+      <span class="site-tagline">{SITE_TAGLINE}</span>
     </a>
 
     <!-- Hamburger toggle button (mobile only) -->

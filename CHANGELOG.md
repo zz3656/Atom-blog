@@ -43,7 +43,7 @@ Based on Atom **1.1.5**（`package.json` 的 `upstream` 字段记录基础版本
 
 - **token 契约升到 47 个**：上游组件层新增 `--overlay-bg` / `--on-overlay` / `--overlay-control-*` / `--on-success` / `--control-border` / `--code-inset`（灯箱、控件描边、成功态），已按磷光终端 / 磷光纸两套配色补齐；同时清掉 6 个本仓独有但已无引用的 token（`--accent-secondary`、`--accent-gradient`、`--accent-glow-strong`、`--glow-secondary`、`--purple-glow`、`--shadow-sm`）
 - **overlay 重新对齐上游 DOM**：`src/styles/_theme-geek.css` 从旧的 `.term-bar` / `.nav-row` 改写为上游的 `.site-header` / `.hero-eyebrow` / `.section-heading` / `.log-row` / `.search-*`，保留直角化、等宽角色、终端标题栏、CRT 扫描线、焦点辉光；由 `global.css` 末尾 import
-- 站点标识（因特吧 / `~/inte8` / Hero 文案 / `OG_IMAGE=/og.jpg` / `DEFAULT_THEME_COLORS`）回填到 `src/consts.ts`；`CF_DOMAIN` 默认值仍是 `www.inte8.top`（上游模板默认 `atom.inte8.top` 会把 canonical 指错域名）
+- 站点标识（因特吧 / `~/inte8` / Hero 文案 / `OG_IMAGE=/og.jpg` / `DEFAULT_THEME_COLORS`）回填到 `src/consts.ts`；页头与页脚里写死的 "Precision Log" 抽成 `SITE_TAGLINE = 'phosphor terminal'`；`CF_DOMAIN` 默认值仍是 `www.inte8.top`（上游模板默认 `atom.inte8.top` 会把 canonical 指错域名）
 
 ### 🛠️ 运维
 

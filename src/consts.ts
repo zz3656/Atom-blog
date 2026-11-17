@@ -15,6 +15,9 @@ export const SITE_DESCRIPTION =
   '因特网里的一间小吧——聊网络、Linux、AI、折腾，以及在数字世界里踩过的每一个坑。基于 Astro 构建，零 JavaScript，Lighthouse 满分。';
 export const AUTHOR = 'zz3656';
 
+/** 站点副标（页头标识旁的小字 / 页脚品牌后缀），一句话说清这台机器是什么 */
+export const SITE_TAGLINE = 'phosphor terminal';
+
 /** 站点版本号（显示在页脚）。数据源：package.json 的 version 字段。 */
 export const SITE_VERSION = pkg.version;
 
