@@ -1,0 +1,111 @@
+---
+/**
+ * Atom Geek — 主题自带首页 Hero（终端启动画面）
+ *
+ * 这是**主题包的一部分**：装主题 = 把 src/themes/atom-geek/ 放进去，
+ * 首页会自动改用这份 Hero，项目源码一行都不用改（见 src/pages/index.astro 的
+ * import.meta.glob 槽位）。删掉本文件就回落到项目内置 Hero。
+ *
+ * 数据全部由页面以 props 传入（文章数 / 分类数 / 标签数 / 正文字节数），不写死。
+ */
+interface Props {
+  title: string;
+  description: string;
+  eyebrow: string;
+  eyebrowSub?: string;
+  actions: Array<{ label: string; href: string; variant?: string }>;
+  stats: { posts: number; categories: number; tags: number; totalBytes: number };
+  generator: string;
+}
+
+const { title, description, eyebrow, eyebrowSub, actions, stats, generator } = Astro.props;
+
+/** 字节数 → 终端风格的人类可读单位 */
+const fmtBytes = (n: number): string => {
+  if (n >= 1048576) return `${(n / 1048576).toFixed(1)} MB`;
+  if (n >= 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${n} B`;
+};
+
+// 「因特吧」点阵字标（22 行 × 73 列：只用 # 与空格，任何等宽字体下都不会错位）
+const WORDMARK = `                                ##        ##
+    ####################        ##        ##                 ###########
+    ####################    ##  ##        ##        #######  ###########
+    ###               ##    ##  ##    ##########    #######  ##  ##   ##
+    ###       ##      ##    ##  ##    ##########    ##   ##  ##  ##   ##
+    ###      ###      ##    ########      ##        ##   ##  ##  ##   ##
+    ###      ##       ##    ########      ##        ##   ##  ##  ##   ##
+    ### ############# ##    ##  ##  #############   ##   ##  ##  ##   ##
+    ### ############# ##    ##  ##  #############   ##   ##  ##  ##   ##
+    ###      ##       ##   ##   ##                  ##   ##  ##  ##   ##
+    ###      ##       ##    #   ##           ##     ##   ##  ###########
+    ###     ####      ##        ##          ###     ##   ##  ###########
+    ###     #####     ##        #### ############   ##   ##  ##
+    ###    ### ###    ##       #####        ###     ##   ##  ##
+    ###   ###   ###   ##   #######    #      ##     ##   ##  ##
+    ###  ###     ###  ##   #### ##   ###     ##     ##   ##  ##
+    ### ###       ### ##        ##    ###    ##     #######  ##        ##
+    ### ##         ## ##        ##     ###   ##     #######  ##        ##
+    ###               ##        ##      #    ##     ##   ##  ##        ##
+    ####################        ##           ##     ##   ##  ##        ##
+    ####################        ##       ######              ############
+    ###               ##        ##       #####                ##########
+`;
+---
+
+<section class="hero hero--tui">
+  <div class="hero-inner">
+    <p class="hero-eyebrow">
+      <span class="hero-eyebrow-mark" aria-hidden="true"></span>
+      {eyebrow}
+      {eyebrowSub && <span class="hero-eyebrow-sub">{eyebrowSub}</span>}
+    </p>
+
+    <h1 class="hero-title">
+      <pre class="term-wordmark" aria-hidden="true">{WORDMARK}</pre>
+      <span class="term-sr">{title}</span>
+    </h1>
+
+    <div class="term-boot">
+      <p class="term-boot-line">
+        <span class="term-boot-key">kernel:</span>
+        <span class="term-boot-msg">{generator} · static output</span>
+        <span class="term-boot-status term-boot-status--ok">ok</span>
+      </p>
+      <p class="term-boot-line">
+        <span class="term-boot-key">articles:</span>
+        <span class="term-boot-msg">{stats.posts} loaded</span>
+      </p>
+      <p class="term-boot-line">
+        <span class="term-boot-key">index:</span>
+        <span class="term-boot-msg">{stats.categories} cats · {stats.tags} tags</span>
+      </p>
+      <p class="term-boot-line">
+        <span class="term-boot-key">volume:</span>
+        <span class="term-boot-msg">{fmtBytes(stats.totalBytes)} of markdown</span>
+      </p>
+      <p class="term-boot-line">
+        <span class="term-boot-key">status:</span>
+        <span class="term-boot-status term-boot-status--online">online</span>
+      </p>
+    </div>
+
+    <p class="hero-desc">{description}</p>
+
+    {actions.length > 0 && (
+      <div class="hero-actions">
+        {actions.map((action) => (
+          <a href={action.href} class:list={['btn', `btn-${action.variant ?? 'primary'}`]}>
+            {action.label}
+          </a>
+        ))}
+      </div>
+    )}
+
+    <p class="hero-prompt">
+      <span class="hero-prompt-path">{eyebrow}</span>
+      <span>cat welcome.md</span>
+      <span class="cursor-block" aria-hidden="true"></span>
+    </p>
+  </div>
+</section>

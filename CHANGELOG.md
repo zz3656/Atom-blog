@@ -28,7 +28,39 @@ Based on Atom **1.1.5**（`package.json` 的 `upstream` 字段记录基础版本
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
+<<<<<<< HEAD
 ### 🔄 Upstream sync — 全量同步 Atom v1.1.5 的代码层
+=======
+### ✨ Added — 主题包机制：主题自带规则与首页 Hero（装主题不改项目源码）
+
+- **主题包可以携带 `overlay.css`**：该主题作用域下的规则（直角化 / 等宽数据位 / CRT / 焦点辉光），
+  `theme-loader` 会自动 `@import` 进 `src/generated/themes.css`。规则必须 `html[data-theme='<id>']`
+  前缀，禁 `!important`，不改版式宽度
+- **主题包可以携带 `hero.astro`**：首页通过 `import.meta.glob('../themes/*/hero.astro')` 取当前主题的
+  Hero，没有则回落项目内置 Hero。Hero 的数据（文章数 / 分类数 / 标签数 / 正文字节数 / 生成器）全部由
+  页面以 props 传入
+- **`manifest.json` 支持 `"default": true`**：排序置顶并被站点当作默认主题，装主题不必改
+  `src/consts.ts`；主题清单仍按 id 字典序（无 per-id 特例）
+- `theme-loader` 产出的清单新增 `default` / `overlay` / `hero` / `themeColor` 标志，`ThemeManifest` 同步
+- **新增主题 `atom-geek`**：磷光终端 / 磷光纸双模（47 token）+ `overlay.css` + 终端启动 Hero
+  （点阵字标 / 自检输出 / 闪烁光标），演示「一个目录装完，不改项目源码」
+
+### ✨ Added — 站点元数据外置
+
+- 新增 `site.config.json`（数据文件）：`domain` / `repo` / `githubUser`。`astro.config.mjs` 读它，
+  环境变量优先；派生站点改这一个文件即可，不必再改构建配置
+
+### 🐛 Fixed
+
+- **搜索索引 / RSS 的 slug 与 Astro 真实路由对齐**：新增项目级 `src/utils/slug.ts`（github-slugger 规则：
+  小写 + 去标点 + 空格转连字符），`scripts/lib/blog-posts.mjs` 统一使用；文件名含中文或大驼峰时，
+  索引与 RSS 不再指向 404
+- **`verify-search-index.mjs` 会把分页页当文章**：`/blog/2/`、`/blog/3/` 是 dist/blog 下的目录但不是文章，
+  已排除；文章数超过一页的站点不再误报
+
+
+### 📝 Docs
+>>>>>>> upstream/main
 
 - **工程层整树跟随上游**（以 git 合并记录基线，后续同步只需再 merge）：`scripts/`（`lib/blog-posts.mjs` 共享文章读取、`generate-search-index.mjs`、`verify-build-links.mjs`、`verify-search-index.mjs`）、`astro-plugins/`、`src/{components,layouts,pages,styles,utils,scripts,generated}`、`tests/`、`astro.config.mjs`、`vitest.config.ts`、`eslint.config.js`、`.nvmrc`、`.gitignore`
 - **站内搜索索引改 prebuild 生成**：以前在 postbuild 写 `public/_assets/`，而 Astro 构建开始时只拷一次 `public/` —— 新文章要等下一次构建才搜得到。现在 `prebuild` 先产出索引，构建期自然带进 `dist/`

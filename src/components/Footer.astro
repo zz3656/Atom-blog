@@ -1,5 +1,5 @@
 ---
-import { REPO_URL, SOCIAL_LINKS, SITE_NAME, SITE_VERSION } from '../consts';
+import { REPO_URL, SOCIAL_LINKS, SITE_NAME, SITE_TAGLINE, SITE_VERSION } from '../consts';
 import { rssUrl, aboutUrl } from '../utils/path';
 
 const year = new Date().getFullYear();
@@ -22,7 +22,7 @@ const socialLinks = [
     <div class="footer-top">
       <div class="footer-brand">
         <span class="footer-brand-name">{SITE_NAME}</span>
-        <span class="footer-brand-tag">Precision Log</span>
+        <span class="footer-brand-tag">{SITE_TAGLINE}</span>
       </div>
       <div class="footer-links">
         {SOCIAL_LINKS.github && (

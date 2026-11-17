@@ -4,6 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import remarkImgLazy from './astro-plugins/remark-img-lazy.mjs';
 import rehypeTableScroll from './astro-plugins/rehype-table-scroll.mjs';
 import themeLoader from './astro-plugins/theme-loader.mjs';
+import { readFileSync } from 'node:fs';
 import { loadPosts } from './scripts/lib/blog-posts.mjs';
 
 // 部署目标自动检测:
@@ -12,9 +13,13 @@ import { loadPosts } from './scripts/lib/blog-posts.mjs';
 //   不设置                → 若有 PAGES_ENV 则按 GitHub Pages 处理
 const isGitHubPages = process.env.DEPLOY_TARGET === 'github' || process.env.PAGES_ENV === 'true';
 
-const repoName = process.env.REPO_NAME || 'Atom';
-const githubUser = process.env.GITHUB_USER || 'zz3656';
-const cfDomain = process.env.CF_DOMAIN || 'atom.inte8.top';
+// 站点元数据来自 site.config.json（数据文件；派生站点只改它，不动本文件）
+// 环境变量优先，便于 CI / 多目标部署覆盖。
+const siteConfig = JSON.parse(readFileSync(new URL('./site.config.json', import.meta.url), 'utf-8'));
+
+const repoName = process.env.REPO_NAME || siteConfig.repo || 'Atom';
+const githubUser = process.env.GITHUB_USER || siteConfig.githubUser || 'zz3656';
+const cfDomain = process.env.CF_DOMAIN || siteConfig.domain || 'atom.inte8.top';
 
 // base 与 site 各管一件事，不要互相包含：
 //   site 只写 origin（不含子路径），base 单独给子路径。

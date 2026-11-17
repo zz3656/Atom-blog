@@ -17,6 +17,7 @@ import { getPublishedPosts } from '../utils/collection';
 import { normalizeCategory } from '../utils/blog';
 import { formatDateISO } from '../utils/date';
 import { blogListUrl, baseAssetsPath } from '../utils/path';
+import { themes } from '../generated/themes';
 
 const allPosts = await getPublishedPosts();
 const pagePosts = allPosts.slice(0, POSTS_PER_PAGE);
@@ -31,9 +32,47 @@ const latestDate = allPosts.length > 0 ? allPosts[0].data.pubDate : null;
 
 // 渲染时过滤掉被 hide 的按钮；空数组则不渲染整块 hero-actions
 const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
+
+// ===== 主题自带的首页 Hero =====
+// 主题包可以放一份 hero.astro（src/themes/<id>/hero.astro）：装主题 = 放目录，
+// 不改项目源码。当前主题没有 hero.astro 时回落到下面这段内置 Hero。
+const themeHeroes = import.meta.glob('../themes/*/hero.astro', { eager: true }) as Record<
+  string,
+  { default: any }
+>;
+const activeThemeId = themes[0]?.id ?? '';
+const ThemeHero = themeHeroes[`../themes/${activeThemeId}/hero.astro`]?.default;
+
+// 全站文章正文的 UTF-8 字节数（构建期统计，真实数据）
+const totalBytes = allPosts.reduce(
+  (sum, post) => sum + new TextEncoder().encode(post.body ?? '').length,
+  0,
+);
+
+const heroProps = {
+  title: HERO_TITLE,
+  description: HERO_DESCRIPTION,
+  eyebrow: HERO_EYEBROW,
+  eyebrowSub: HERO_EYEBROW_SUB,
+  actions: visibleHeroActions.map((action) => ({
+    label: action.label,
+    href: baseAssetsPath(action.href),
+    variant: action.variant ?? 'primary',
+  })),
+  stats: {
+    posts: totalPosts,
+    categories: categorySet.size,
+    tags: tagSet.size,
+    totalBytes,
+  },
+  generator: Astro.generator,
+};
 ---
 
 <BaseLayout title={SITE_TITLE} description={SITE_DESCRIPTION}>
+  {ThemeHero ? (
+    <ThemeHero {...heroProps} />
+  ) : (
   <section class="hero">
     <div class="hero-inner">
       <div class="hero-main">
@@ -87,6 +126,7 @@ const visibleHeroActions = HERO_ACTIONS.filter((action) => !action.hide);
       </aside>
     </div>
   </section>
+  )}
 
   <section class="recent-posts">
     <div class="section-header">

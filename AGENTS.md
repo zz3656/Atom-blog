@@ -19,9 +19,8 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（「因特吧」，�
 
 - `src/` — Astro 应用：`pages/` 路由、`components/`、`layouts/`、`content/` 文章集合、`themes/`、`styles/`、`utils/`、`consts.ts` 站点配置
 - `src/content/blog/` — Markdown 文章（frontmatter 见 `src/content.config.ts`）
-- `src/themes/<id>/{light,dark}.css` — 主题，**只放 CSS token**，不放规则。本站是**单主题站点**：唯一主题 `atom-geek`（`src/themes/atom-geek/`）
+- `src/themes/<id>/` — 主题包：`manifest.json` + `light.css`（token 必填）、`dark.css`、`overlay.css`（该主题作用域下的规则，可选）、`hero.astro`（该主题自己的首页 Hero，可选）。**安装 = 放一个目录，不改项目源码**。本站是单主题站点：唯一主题 `atom-geek`
 - `src/styles/_modules/` — 共享 CSS 模块（布局/字体/刻度尺），**不含颜色**
-- `src/styles/_theme-geek.css` — 站点级作用域增补（L2）：把上游组件层（`.site-header`/`.hero`/`.log-row`/`.section-*`）重新表述成磷光终端语法（直角化 / 等宽角色 / 终端标题栏 / CRT）。**每条规则必须以 `html[data-theme='atom-geek']` 开头**，禁 `!important`、不改 `--max-width`/`--content-width`；由 `global.css` 末尾 import
 - `src/generated/` — 构建时生成的主题汇总入口（`themes.ts` 已被跟踪，但内容会被 build 重写，别手改）
 - `src/assets/og/` — 社交卡片底板用的构建资产（等宽字体 + 许可），说明见 `src/assets/og/README.md`
 - `public/` — 静态资源（`logos/`、`favicon.svg`、PWA 图标 `icon-192/512.png`+`apple-touch-icon.png`）；`public/og.jpg` 是社交卡片**底板**（不含文章计数，计数在构建期叠加）。`robots.txt` 与 `manifest.json` **不再是静态文件**，由 `src/pages/robots.txt.ts`、`src/pages/manifest.json.ts` 构建期生成（才跟得上部署 base）
@@ -40,8 +39,9 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（「因特吧」，�
 
 ## Project rules (违反会被 review 打回)
 
-- **组件层不得写死任何颜色**——只用语义 token（`--accent`、`--bg-primary`、`--rule-tick` …）。主题目录只放 token；组件 CSS 写死颜色会让换主题时渲染出错的配色
-- **单主题站点**：唯一主题 `atom-geek`，主题清单按 id 字典序（通用规则，无 per-id 特例），`DEFAULT_THEME_ID` 只是文档化常量，实际入口是清单第一个
+- **组件层不得写死任何颜色**——只用语义 token（`--accent`、`--bg-primary`、`--rule-tick` …）。颜色只来自主题的 token 层；组件 CSS 写死颜色会让第三方主题渲染出错的配色
+- **主题包自带 overlay 与 hero，项目只提供槽位**——`theme-loader` 自动注入 `overlay.css`，首页用 `import.meta.glob` 取主题的 `hero.astro`；装/删主题都不该改 `consts.ts`、`pages/`、`components/`
+- **单主题站点**：唯一主题 `atom-geek`（清单按 id 字典序，无 per-id 特例；单主题时它自然就是默认）
 - **文章目录永远不挤压正文宽度**——正文列固定 `--content-width`(740px) 居中，TOC 只能待在两侧空白区（≥1280px 左侧刻度栏 / <1280px 顶部折叠条）。曾因在 1100–1279px 把 TOC 塞进文章块当左列，正文被压到 508px 且右移 116px
 - 主题 token 契约是 **47 个**（`src/themes/atom-geek/{light,dark}.css` 各 47 且集合完全相同）；新增/修改 token 时，`scripts/create-theme.mjs` 脚手架和 `docs/THEMING.md` 必须同步，`tests/theme-tokens.test.ts` 会三方比对
 - JetBrains Mono **只用于真实数据**（日期、计数、序号、刻度、代码）；中文界面一律无衬线

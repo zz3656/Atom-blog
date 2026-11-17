@@ -57,6 +57,11 @@ function scan() {
         console.warn(`[theme-loader] Skipping "${id}": no light.css / dark.css found`);
         continue;
       }
+      // 主题包自带的两个可选项（安装主题 = 放一个目录，不改项目源码）：
+      //   overlay.css → 该主题作用域下的规则，随主题一起加载
+      //   hero.astro  → 该主题自己的首页 Hero，首页通过 import.meta.glob 取用
+      const hasOverlay = existsSync(join(THEMES_DIR, id, 'overlay.css'));
+      const hasHero = existsSync(join(THEMES_DIR, id, 'hero.astro'));
       themes.push({
         id: parsed.id,
         name: parsed.name,
@@ -65,13 +70,27 @@ function scan() {
         description: parsed.description || '',
         modes: availableModes,
         preview: parsed.preview || '',
+        themeColor: parsed.themeColor || undefined,
+        default: parsed.default === true,
+        overlay: hasOverlay,
+        hero: hasHero,
       });
     } catch (e) {
       console.warn(`[theme-loader] Skipping "${id}":`, e.message);
     }
   }
+<<<<<<< HEAD
   // 排序: 按 id 字典序（通用规则，无 per-id 特例）
   themes.sort((a, b) => a.id.localeCompare(b.id));
+=======
+  // 排序: 声明 default:true 的置顶，其余按 id 字典序（通用规则，无 per-id 特例）
+  themes.sort((a, b) => {
+    const ad = a.default ? 1 : 0;
+    const bd = b.default ? 1 : 0;
+    if (ad !== bd) return bd - ad;
+    return a.id.localeCompare(b.id);
+  });
+>>>>>>> upstream/main
   return themes;
 }
 
@@ -105,6 +124,9 @@ function emitCss(themes) {
     if (t.modes.includes('dark')) {
       out.push(`@import '../themes/${t.id}/dark.css';`);
     }
+    if (t.overlay) {
+      out.push(`@import '../themes/${t.id}/overlay.css';`);
+    }
     return out;
   });
 
@@ -112,9 +134,12 @@ function emitCss(themes) {
  * Aggregates all theme CSS files. Regenerate by running dev/build
  * (or delete this file to force rebuild).
  *
- * To add a new theme: drop a directory under src/themes/<id>/ with
- * manifest.json + light.css (+ optional dark.css) — this file updates
- * automatically.
+ * 主题包形态（安装 = 放一个目录，不改项目源码）：
+ *   src/themes/<id>/manifest.json   必填；可选 "default": true 让站点直接用它
+ *   src/themes/<id>/light.css       必填（token）
+ *   src/themes/<id>/dark.css        可选（token）
+ *   src/themes/<id>/overlay.css     可选（该主题作用域下的规则）
+ *   src/themes/<id>/hero.astro      可选（该主题自己的首页 Hero）
  */`;
   const content = `${header}\n${lines.join('\n')}\n`;
 

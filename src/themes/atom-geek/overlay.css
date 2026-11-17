@@ -1,0 +1,357 @@
+/* Atom Geek — overlay.css
+ *
+ * 主题作用域下的「规则」层：随主题一起加载（theme-loader 会把它并入 themes.css），
+ * 因此**安装这个主题不需要改项目任何源码**。
+ *
+ * 契约：
+ *   · 每条规则必须以 html[data-theme='atom-geek'] 开头（只在本书题激活时生效）
+ *   · 可以改观感（圆角、字距、质感、动画），不改版式宽度（--max-width / --content-width）
+ *   · 不写 !important
+ */
+
+/* ===== ① 直角化：终端没有圆角 ===== */
+html[data-theme='atom-geek'] {
+  --radius: 0px;
+  --radius-lg: 0px;
+  --radius-sm: 0px;
+}
+
+/* ===== ② 终端标题栏 ===== */
+html[data-theme='atom-geek'] .site-header {
+  border-bottom: 1px solid var(--border-glow);
+}
+
+html[data-theme='atom-geek'] .site-header::before {
+  content: '';
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 2px;
+  background: var(--accent);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+html[data-theme='atom-geek'] .site-title,
+html[data-theme='atom-geek'] .site-name-text {
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+}
+
+html[data-theme='atom-geek'] .site-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+html[data-theme='atom-geek'] .nav-link {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+html[data-theme='atom-geek'] .nav-link::before {
+  content: '~/';
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+html[data-theme='atom-geek'] .nav-link.active::before {
+  color: var(--accent);
+  opacity: 1;
+}
+
+/* ===== ③ 等宽只给真实数据 ===== */
+html[data-theme='atom-geek'] .hero-eyebrow,
+html[data-theme='atom-geek'] .section-eyebrow,
+html[data-theme='atom-geek'] .telemetry-label,
+html[data-theme='atom-geek'] .log-index,
+html[data-theme='atom-geek'] .log-date,
+html[data-theme='atom-geek'] .log-category {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+html[data-theme='atom-geek'] .hero-eyebrow,
+html[data-theme='atom-geek'] .section-eyebrow {
+  color: var(--accent);
+  letter-spacing: 0.12em;
+}
+
+html[data-theme='atom-geek'] .section-heading::before {
+  content: '▍';
+  color: var(--accent);
+  margin-right: 0.45rem;
+  font-family: var(--font-mono);
+}
+
+/* ===== ④ 列表读作 ls -la 输出 ===== */
+html[data-theme='atom-geek'] .log-row {
+  border-left: 2px solid transparent;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease;
+}
+
+html[data-theme='atom-geek'] .log-row:hover {
+  border-left-color: var(--accent);
+  background: var(--bg-card-hover);
+}
+
+html[data-theme='atom-geek'] .rule--draw {
+  border-color: var(--rule-tick);
+}
+
+/* ===== ⑤ 焦点与浮层 ===== */
+html[data-theme='atom-geek'] :focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--accent-glow);
+}
+
+html[data-theme='atom-geek'] .search-input,
+html[data-theme='atom-geek'] .search-results {
+  border: 1px solid var(--control-border);
+  background: var(--bg-card);
+}
+
+html[data-theme='atom-geek'] .search-results {
+  box-shadow: var(--shadow-glow);
+}
+
+html[data-theme='atom-geek'] .search-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+/* ===== ⑥ CRT 扫描线（作用于 html 自身，单独成组）===== */
+html[data-theme='atom-geek']::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.03) 0 1px, transparent 1px 3px);
+}
+
+/* ============================================================
+ * ⑦ 终端首页 Hero（主题自带 hero.astro 的配套样式）
+ * ============================================================ */
+
+html[data-theme='atom-geek'] .hero--tui {
+  padding: 3.25rem 0 2.25rem;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  max-width: 46rem;
+}
+
+/* 无障碍隐藏（项目没有 .sr-only，主题自带一个） */
+html[data-theme='atom-geek'] .term-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 「因特吧」点阵字标：22 行 × 73 列，只用 # 与空格，任何等宽字体都不错位 */
+html[data-theme='atom-geek'] .term-wordmark {
+  font-family: var(--font-mono);
+  font-size: min(clamp(0.42rem, 1.55vw, 0.82rem), calc((100vw - 3.5rem) / 43.8));
+  line-height: 0.66;
+  color: var(--accent);
+  margin: 0;
+  white-space: pre;
+  max-width: 100%;
+  overflow: hidden;
+  text-shadow: 0 0 22px var(--accent-glow);
+  animation: atomGeekType 1.6s steps(73, end) both;
+}
+
+html[data-theme='atom-geek'] .term-boot {
+  display: flex;
+  flex-direction: column;
+  gap: 0.12rem;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+  border-left: 2px solid var(--border-color);
+  padding-left: 0.95rem;
+}
+
+html[data-theme='atom-geek'] .term-boot-line {
+  display: flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  opacity: 1;
+  animation: atomGeekBoot 0.3s ease both;
+}
+
+html[data-theme='atom-geek'] .term-boot-line:nth-child(1) {
+  animation-delay: 0.28s;
+}
+html[data-theme='atom-geek'] .term-boot-line:nth-child(2) {
+  animation-delay: 0.4s;
+}
+html[data-theme='atom-geek'] .term-boot-line:nth-child(3) {
+  animation-delay: 0.52s;
+}
+html[data-theme='atom-geek'] .term-boot-line:nth-child(4) {
+  animation-delay: 0.64s;
+}
+html[data-theme='atom-geek'] .term-boot-line:nth-child(5) {
+  animation-delay: 0.76s;
+}
+
+html[data-theme='atom-geek'] .term-boot-key {
+  color: var(--accent);
+  min-width: 9ch;
+  flex-shrink: 0;
+}
+
+html[data-theme='atom-geek'] .term-boot-msg {
+  color: var(--text-secondary);
+}
+
+html[data-theme='atom-geek'] .term-boot-status--ok,
+html[data-theme='atom-geek'] .term-boot-status--online {
+  color: var(--success);
+  font-weight: 700;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-desc {
+  font-size: 1rem;
+  color: var(--text-secondary);
+  max-width: 38rem;
+  line-height: 1.85;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-actions {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-actions .btn {
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-eyebrow,
+html[data-theme='atom-geek'] .hero--tui .hero-desc,
+html[data-theme='atom-geek'] .hero--tui .hero-actions {
+  animation: atomGeekRise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-eyebrow {
+  animation-delay: 0.04s;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-desc {
+  animation-delay: 0.18s;
+}
+
+html[data-theme='atom-geek'] .hero--tui .hero-actions {
+  animation-delay: 0.3s;
+}
+
+html[data-theme='atom-geek'] .hero-eyebrow-mark {
+  width: 7px;
+  height: 7px;
+  background: var(--accent);
+  flex-shrink: 0;
+  display: inline-block;
+}
+
+html[data-theme='atom-geek'] .hero-eyebrow-sub {
+  color: var(--text-muted);
+  font-weight: 400;
+  letter-spacing: 0.12em;
+}
+
+@keyframes atomGeekType {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes atomGeekBoot {
+  from {
+    opacity: 0;
+    transform: translateX(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes atomGeekRise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes atomGeekBlink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+html[data-theme='atom-geek'] .cursor-block {
+  display: inline-block;
+  width: 0.55em;
+  height: 1.05em;
+  background: var(--accent);
+  animation: atomGeekBlink 1.1s step-end infinite;
+}
+
+/* ===== ⑧ 降级路径 ===== */
+@media (prefers-reduced-motion: reduce) {
+  html[data-theme='atom-geek']::after {
+    display: none;
+  }
+  html[data-theme='atom-geek'] .term-wordmark,
+  html[data-theme='atom-geek'] .term-boot-line,
+  html[data-theme='atom-geek'] .cursor-block,
+  html[data-theme='atom-geek'] .hero--tui .hero-eyebrow,
+  html[data-theme='atom-geek'] .hero--tui .hero-desc,
+  html[data-theme='atom-geek'] .hero--tui .hero-actions {
+    animation: none;
+  }
+}
+
+@media (forced-colors: active) {
+  html[data-theme='atom-geek']::after {
+    display: none;
+  }
+}
+
+@media (prefers-contrast: more) {
+  html[data-theme='atom-geek'] {
+    --border-color: var(--text-secondary);
+    --border-light: var(--text-muted);
+  }
+}

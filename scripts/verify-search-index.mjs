@@ -23,6 +23,8 @@ const index = JSON.parse(readFileSync(INDEX, 'utf-8'));
 const indexed = new Set(index.map((p) => p.slug));
 const built = new Set(
   readdirSync(BLOG_DIR)
+    // 分页页（/blog/2/、/blog/3/…）也是 dist/blog 下的目录，但不是文章，不能算进索引
+    .filter((name) => !/^\d+$/.test(name))
     .filter((name) => statSync(join(BLOG_DIR, name)).isDirectory())
     .map((name) => name),
 );

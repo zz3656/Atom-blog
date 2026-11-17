@@ -29,6 +29,12 @@ export interface ThemeManifest {
    * 组件层不能写死颜色，所以 theme-color 这类 meta 也从主题里取。
    */
   themeColor?: { light: string; dark: string };
+  /** manifest 声明 default:true → 站点默认用它（装主题不必改 consts） */
+  default?: boolean;
+  /** 主题包自带 overlay.css（该主题作用域下的规则） */
+  overlay?: boolean;
+  /** 主题包自带 hero.astro（首页 Hero 由主题提供） */
+  hero?: boolean;
 }
 
 /**
@@ -68,6 +74,9 @@ export function scanThemes(): ThemeManifest[] {
         modes: parsed.modes.filter((m) => m === 'light' || m === 'dark'),
         preview: parsed.preview ?? '',
         themeColor: parsed.themeColor ?? undefined,
+        default: parsed.default === true,
+        overlay: existsSync(join(THEMES_DIR, entry, 'overlay.css')),
+        hero: existsSync(join(THEMES_DIR, entry, 'hero.astro')),
       });
     } catch (err) {
       console.warn(`[themes] Failed to parse ${manifestPath}:`, (err as Error).message);

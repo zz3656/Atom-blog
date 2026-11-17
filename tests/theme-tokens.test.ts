@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const read = (path: string) => readFileSync(new URL(`../${path}`, import.meta.url), 'utf-8');
@@ -8,9 +8,13 @@ function definedTokens(css: string): Set<string> {
   return new Set([...css.matchAll(/^\s*(--[\w-]+)\s*:/gm)].map((m) => m[1]));
 }
 
-describe('主题 token 契约（主题 ↔ 文档 ↔ 脚手架 三方一致）', () => {
-  const light = definedTokens(read('src/themes/atom-geek/light.css'));
-  const dark = definedTokens(read('src/themes/atom-geek/dark.css'));
+const THEME_IDS = readdirSync(new URL('../src/themes/', import.meta.url))
+  .filter((dir) => statSync(new URL(`../src/themes/${dir}`, import.meta.url)).isDirectory())
+  .filter((dir) => !dir.startsWith('.'));
+
+describe.each(THEME_IDS)('主题 %s 的 token 契约（主题 ↔ 文档 ↔ 脚手架 三方一致）', (id) => {
+  const light = definedTokens(read(`src/themes/${id}/light.css`));
+  const dark = definedTokens(read(`src/themes/${id}/dark.css`));
   const docTokens = new Set(
     [...read('docs/THEMING.md').matchAll(/`(--[\w-]+)`/g)].map((m) => m[1]),
   );

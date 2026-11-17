@@ -35,17 +35,35 @@ Atom v2 起重新定位为**轻量化博客**：
 每个主题是一个独立的目录，位于 `src/themes/<theme-id>/`：
 
 ```
-src/themes/atom-default/
-├── manifest.json     # 主题元数据
-├── light.css         # 浅色模式 token
-└── dark.css          # 暗色模式 token (可选)
+src/themes/atom-geek/
+├── manifest.json     # 主题元数据（可选 "default": true）
+├── light.css         # 浅色模式 token（必填）
+├── dark.css          # 暗色模式 token（可选）
+├── overlay.css       # 可选：该主题作用域下的规则
+└── hero.astro        # 可选：该主题自己的首页 Hero
 ```
 
 **规则**：
 
 1. 目录名必须与 `manifest.json` 中的 `id` 字段一致
-2. 文件名固定：`manifest.json`、`light.css`、`dark.css`（`dark.css` 可选，单模式主题可不提供）
-3. 主题目录**只能**包含 CSS token；不要放组件、HTML 或 JS
+2. `manifest.json` + `light.css` 必填；`dark.css` 可选（单模式主题可不提供）
+3. **token 层**（`light.css` / `dark.css`）只放 CSS 变量，不放选择器
+4. **overlay 层**（`overlay.css`，可选）放规则，但每条规则必须以 `html[data-theme='<id>']` 开头；
+   不写 `!important`；不改版式宽度（`--max-width` / `--content-width`）——宽度是项目的事
+5. **hero 层**（`hero.astro`，可选）是该主题的首页 Hero 组件：项目首页通过
+   `import.meta.glob('../themes/*/hero.astro')` 取当前主题的版本，没有就回落到项目内置 Hero。
+   Hero 用到的所有数据（文章数 / 分类数 / 标签数 / 正文字节数 / 生成器版本）都以 props 传入，
+   **不要在主题里读内容集合**
+6. 主题包可以有 `overlay.css` 与 `hero.astro`，但不应该 import 项目组件或改项目文件
+
+**安装一个主题 = 把目录放进去**。`theme-loader` 会自动：
+
+- 生成 `src/generated/themes.ts`（清单，含 `default` / `overlay` / `hero` 标志）
+- 生成 `src/generated/themes.css`（`@import` 所有 token 文件 + `overlay.css`）
+- 按 `default: true` 置顶，其余按 id 字典序
+
+所以安装主题不需要改 `src/consts.ts`、`src/pages/index.astro` 或任何工程文件；
+删掉主题目录就自动回落（单主题站点会回落到项目内置 Hero 与默认外观）。
 
 ---
 
@@ -228,7 +246,8 @@ html[data-theme='<your-theme-id>'] {
   "description": "简短说明（主题选择器 tooltip）",
   "modes": ["light", "dark"],
   "preview": "/themes/your-theme-id/preview.png",
-  "themeColor": { "light": "#ffffff", "dark": "#0a0a0f" }
+  "themeColor": { "light": "#ffffff", "dark": "#0a0a0f" },
+  "default": true
 }
 ```
 
@@ -242,6 +261,7 @@ html[data-theme='<your-theme-id>'] {
 | `modes` | array | ✅ | `['light']` 或 `['light', 'dark']` |
 | `preview` | path | ❌ | 预览图（相对 `public/`） |
 | `themeColor` | object | ❌ | 浏览器地址栏 / PWA 主题色 `{light, dark}`；缺省用 `src/consts.ts` 的 `DEFAULT_THEME_COLORS`。组件层不能写死颜色，所以这类 meta 也从主题里取 |
+| `default` | boolean | ❌ | `true` → 该主题排在最前并被站点当作默认主题（装主题不必改 `consts.ts`） |
 
 **id 校验**：`^[a-z0-9][a-z0-9_-]{0,31}$`（防 XSS / 文件系统遍历，最多 32 字符）
 
