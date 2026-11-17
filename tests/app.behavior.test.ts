@@ -335,6 +335,29 @@ describe('image zoom', () => {
     expect(document.body.style.overflow).toBe('hidden');
   });
 
+  it('键盘 Enter 也能打开，关闭后焦点回到原图', () => {
+    const overlay = document.querySelector('.image-zoom-overlay') as HTMLElement;
+    const img = document.querySelector('.post-content img') as HTMLImageElement;
+    expect(img.getAttribute('tabindex')).toBe('0');
+    expect(img.getAttribute('role')).toBe('button');
+    img.focus();
+    img.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+    expect(overlay.style.display).toBe('flex');
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+    expect(overlay.style.display).toBe('none');
+    expect(document.activeElement).toBe(img);
+  });
+
+  it('打开后 Tab 焦点留在遮罩内', () => {
+    const overlay = document.querySelector('.image-zoom-overlay') as HTMLElement;
+    const img = document.querySelector('.post-content img') as HTMLImageElement;
+    img.click();
+    expect(overlay.style.display).toBe('flex');
+    document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Tab' }));
+    const closeBtn = overlay.querySelector('.image-zoom-close');
+    expect(document.activeElement).toBe(closeBtn);
+  });
+
   it('closes overlay on ESC key', () => {
     const overlay = document.querySelector('.image-zoom-overlay') as HTMLElement;
     const img = document.querySelector('.post-content img') as HTMLImageElement;

@@ -1,65 +1,31 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import PostCard from '../../components/PostCard.astro';
-import CommandHeader from '../../components/CommandHeader.astro';
+import PostList from '../../components/PostList.astro';
+import Pagination from '../../components/Pagination.astro';
 import { POSTS_PER_PAGE, SITE_TITLE } from '../../consts';
 import { getPublishedPosts } from '../../utils/collection';
-import { blogPostUrl, blogListUrl } from '../../utils/path';
+import { paginationInfo } from '../../utils/pagination';
 
 const allPosts = await getPublishedPosts();
 const totalPosts = allPosts.length;
-const totalPages = Math.ceil(totalPosts / POSTS_PER_PAGE) || 1;
+const { totalPages } = paginationInfo(totalPosts, POSTS_PER_PAGE);
 // 第 1 页：固定渲染前 POSTS_PER_PAGE 篇
-const paginatedPosts = allPosts.slice(0, POSTS_PER_PAGE);
-
-const getPageUrl = (p: number) => {
-  if (p <= 1) return blogListUrl();
-  return `${blogListUrl()}${p}/`;
-};
-const pageNumbers: number[] = [];
-for (let i = 1; i <= totalPages; i++) pageNumbers.push(i);
+const firstPagePosts = allPosts.slice(0, POSTS_PER_PAGE);
 ---
 
-<BaseLayout title={`所有文章 | ${SITE_TITLE}`} description="查看所有文章">
+<BaseLayout
+  title={`所有文章 | ${SITE_TITLE}`}
+  description={`${SITE_TITLE} 的全部文章，按发布时间倒序排列。`}
+>
   <section class="blog-list">
-    <CommandHeader
-      cmd="ls -la ~/posts"
-      title="所有文章"
-      count={`共 ${totalPosts} 篇 · ${totalPages} pages`}
-    />
-    <ul class="ls-list">
-      {paginatedPosts.map((post, idx) => (
-        <PostCard
-          slug={blogPostUrl(post.id)}
-          title={post.data.title}
-          description={post.data.description}
-          body={post.body}
-          pubDate={post.data.pubDate}
-          category={post.data.category}
-          tags={post.data.tags}
-          index={idx}
-        />
-      ))}
-    </ul>
+    <div class="unified-page-header">
+      <p class="unified-page-eyebrow">Archive</p>
+      <h1>所有文章</h1>
+      <div class="rule"></div>
+      <p class="unified-page-subtitle">共 {totalPosts} 篇</p>
+    </div>
 
-    {totalPages > 1 && (
-      <nav class="pagination" aria-label="文章分页">
-        <div class="page-numbers">
-          {pageNumbers.map((p) => (
-            <a
-              href={getPageUrl(p)}
-              class:list={['page-link', p === 1 && 'active']}
-              aria-label={p === 1 ? '当前页' : `第 ${p} 页`}
-              aria-current={p === 1 ? 'page' : undefined}
-            >
-              {p}
-            </a>
-          ))}
-        </div>
-        <a href={getPageUrl(2)} class="page-btn next">
-          $ ls ~/posts/2 →
-        </a>
-      </nav>
-    )}
+    <PostList posts={firstPagePosts} />
+    <Pagination currentPage={1} totalPages={totalPages} />
   </section>
 </BaseLayout>

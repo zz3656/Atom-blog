@@ -1,20 +1,9 @@
 ---
-// Atom Blog — 所有分类（TUI: 目录树面板）
-//
-// 形态刻意区别于文章列表页（ls 行平铺）：
-//   ① 索引摘要行（tags / cats / posts 真实计数）
-//   ② 目录树 —— 每个分类一张「目录卡片」，卡片之间用 ├── / └── 串成树
-//      卡片内容：分类名（等宽大号）· 文章数 · 最新文章标题与日期 · 该分类的标签
 import BaseLayout from '../../layouts/BaseLayout.astro';
-import CommandHeader from '../../components/CommandHeader.astro';
-// 索引面板样式只在分类页引入 —— 全局引入会让每个页面都为用不到的 8KB 样式买单
-import '../../styles/_modules/_index.css';
-import IndexSummary from '../../components/IndexSummary.astro';
 import { SITE_TITLE } from '../../consts';
 import { normalizeCategory } from '../../utils/blog';
 import { getPublishedPosts } from '../../utils/collection';
 import { getCategoryUrl } from '../../utils/path';
-import { formatDateISO } from '../../utils/date';
 
 const posts = await getPublishedPosts();
 
@@ -27,69 +16,34 @@ posts.forEach((post) => {
 });
 
 const sortedCategories = [...categoryMap.entries()].sort((a, b) => b[1].length - a[1].length);
-const tagCount = new Set(posts.flatMap((p) => p.data.tags ?? [])).size;
-
-// 每个分类的元信息：最新文章（真实标题 + 日期）与标签集合
-const categories = sortedCategories.map(([name, catPosts]) => {
-  const latest = catPosts.reduce(
-    (max, p) => (p.data.pubDate > max.data.pubDate ? p : max),
-    catPosts[0],
-  );
-  const tags = [...new Set(catPosts.flatMap((p) => p.data.tags ?? []))];
-  return {
-    name,
-    count: catPosts.length,
-    latestTitle: latest.data.title,
-    latestDate: formatDateISO(latest.data.pubDate),
-    tags: tags.slice(0, 6),
-    tagTotal: tags.length,
-  };
-});
 ---
 
-<BaseLayout title={`所有分类 | ${SITE_TITLE}`}>
+<BaseLayout
+  title={`所有分类 | ${SITE_TITLE}`}
+  description={`${SITE_TITLE} 的全部分类与文章数。`}
+>
   <section class="listing-page">
-    <CommandHeader
-      cmd="ls -la ~/cats"
-      title="所有分类"
-      count={`${sortedCategories.length} 个目录 · ${posts.length} 篇文章`}
-    />
+    <div class="unified-page-header">
+      <p class="unified-page-eyebrow">Taxonomy</p>
+      <h1>所有分类</h1>
+      <div class="rule"></div>
+      <p class="unified-page-subtitle">
+        共 <span class="accent">{sortedCategories.length}</span> 个分类 ·{' '}
+        <span class="accent">{posts.length}</span> 篇文章
+      </p>
+    </div>
 
-    <IndexSummary tags={tagCount} cats={sortedCategories.length} posts={posts.length} />
-
-    {
-      categories.length > 0 ? (
-        <ul class="tree-list">
-          {categories.map((cat, i) => (
-            <li class="tree-node">
-              <span class="tree-branch" aria-hidden="true">
-                {i === categories.length - 1 ? '└──' : '├──'}
-              </span>
-              <a href={getCategoryUrl(cat.name)} class="tree-card">
-                <span class="tree-card-head">
-                  <span class="tree-card-name">{cat.name}</span>
-                  <span class="tree-card-count">{cat.count} 篇</span>
-                </span>
-                <span class="tree-card-latest">
-                  <span class="tree-card-key">latest</span>
-                  <span class="tree-card-title">{cat.latestTitle}</span>
-                  <span class="tree-card-date">{cat.latestDate}</span>
-                </span>
-                <span class="tree-card-tags">
-                  {cat.tags.map((tag) => (
-                    <span class="tag">#{tag}</span>
-                  ))}
-                  {cat.tagTotal > cat.tags.length && (
-                    <span class="tag">+{cat.tagTotal - cat.tags.length}</span>
-                  )}
-                </span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p class="empty-state">暂无分类</p>
-      )
-    }
+    {sortedCategories.length > 0 ? (
+      <div class="category-grid">
+        {sortedCategories.map(([category, catPosts]) => (
+          <a href={getCategoryUrl(category)} class="category-card">
+            <span class="category-card-name">{category}</span>
+            <span class="category-card-count">{catPosts.length}</span>
+          </a>
+        ))}
+      </div>
+    ) : (
+      <p class="empty-state">暂无分类</p>
+    )}
   </section>
 </BaseLayout>

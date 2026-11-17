@@ -1,0 +1,110 @@
+name: Verify & Deploy
+
+# 一条流水线跑完「校验 → 构建 → 部署」，取代原来的 test.yml + deploy.yml：
+#   · 旧结构里 deploy.yml 与 test.yml 并行，测试红了照样发布
+#   · 两处都各自 npm ci + npm run build，构建产物也没复用
+# 现在部署是 needs: verify 的下游 job，只下载 verify 产出的 dist 再发布。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: verify-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Setup Node
+        uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Type check
+        run: npm run check
+        env:
+          ASTRO_TELEMETRY_DISABLED: '1'
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Unit tests with coverage
+        run: npm run test:coverage
+
+      - name: Upload coverage
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: test-results
+          path: |
+            coverage/
+            *.log
+          if-no-files-found: ignore
+          retention-days: 7
+
+      - name: Build
+        env:
+          DEPLOY_TARGET: github
+          REPO_NAME: ${{ github.event.repository.name }}
+          GITHUB_USER: ${{ github.repository_owner }}
+          ASTRO_TELEMETRY_DISABLED: '1'
+        run: npm run build
+
+      - name: Verify build output
+        run: |
+          find dist -name '*.html' | wc -l | xargs echo "HTML pages:"
+          test -f dist/rss.xml && echo "RSS: OK"
+          test -f dist/sitemap-index.xml && echo "Sitemap: OK"
+          test -f dist/robots.txt && echo "robots.txt: OK"
+          test -f dist/og.jpg && echo "OG image: OK"
+          test -f dist/manifest.json && echo "manifest: OK"
+          # 索引必须真的覆盖所有构建出的文章页，而不只是"文件存在"
+          node scripts/verify-search-index.mjs
+          # 站内链接必须能映射回真实产物（拦住 /Atom/Atom/ 这类 base 双前缀）
+          node scripts/verify-build-links.mjs
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: dist-${{ github.sha }}
+          path: dist
+          retention-days: 7
+
+  deploy:
+    # 只有 push 到 main（或手动触发）且 verify 通过才发布
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && github.ref == 'refs/heads/main')
+    needs: [verify]
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      # 直接复用 verify 的构建产物，不再重新 npm ci + build
+      - uses: actions/download-artifact@v7
+        with:
+          name: dist-${{ github.sha }}
+          path: dist
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,6 +1,7 @@
 /* Atom Blog — Section Headers
  *
- * 区块标题区 = 一条命令 + 中文小标题 + 右侧计数。
+ * 每个区块由「eyebrow（小写标签） + 标题 + 计数」和一根刻度尺组成。
+ * 刻度尺是本站的签名元素：它既是分隔线，也是"标尺"。
  */
 
 .section-header {
@@ -8,50 +9,59 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 1.5rem;
-  padding-top: 1.75rem;
+  margin-bottom: 0.85rem;
 }
 
 .section-heading {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
-  min-width: 0;
+  gap: 0.3rem;
 }
 
-/* 命令回显：提示符由 CSS 生成，前缀带色 */
 .section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--accent);
   display: flex;
   align-items: center;
-  font-family: var(--font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.03em;
-  color: var(--text-bright);
-  overflow-wrap: anywhere;
+  gap: 0.5rem;
 }
 
 .section-eyebrow::before {
-  content: '~/inte8 $';
-  color: var(--accent);
-  font-weight: 600;
-  margin-right: 0.55rem;
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
   flex-shrink: 0;
 }
 
 .section-title {
-  font-family: var(--font-sans);
-  font-size: 1.45rem;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  font-variation-settings:
+    'wdth' 104,
+    'wght' 700;
+  letter-spacing: -0.025em;
   color: var(--text-bright);
-  line-height: 1.2;
+  line-height: 1.15;
 }
 
 .section-count {
   font-family: var(--font-mono);
-  font-size: 0.74rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
   color: var(--text-muted);
   white-space: nowrap;
-  font-variant-numeric: tabular-nums;
+  padding-bottom: 0.2rem;
+}
+
+/* 标题下方的刻度尺 */
+.section-rule {
+  margin-bottom: 1.75rem;
 }
 
 /* ===== 页面内的强调数值 ===== */

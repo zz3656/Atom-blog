@@ -1,0 +1,37 @@
+---
+// 分页控件：页码 + 下一页。URL 生成交给 utils/pagination，页面只传当前页与总页数。
+import { blogPageUrl } from '../utils/pagination';
+
+interface Props {
+  currentPage: number;
+  totalPages: number;
+}
+
+const { currentPage, totalPages } = Astro.props;
+const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1);
+const hasNext = currentPage < totalPages;
+---
+
+{
+  totalPages > 1 && (
+    <nav class="pagination" aria-label="文章分页">
+      <div class="page-numbers">
+        {pageNumbers.map((p) => (
+          <a
+            href={blogPageUrl(p)}
+            class:list={['page-link', p === currentPage && 'active']}
+            aria-label={p === currentPage ? '当前页' : `第 ${p} 页`}
+            aria-current={p === currentPage ? 'page' : undefined}
+          >
+            {p}
+          </a>
+        ))}
+      </div>
+      {hasNext && (
+        <a href={blogPageUrl(currentPage + 1)} class="page-btn next">
+          下一页 →
+        </a>
+      )}
+    </nav>
+  )
+}

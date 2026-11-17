@@ -16,9 +16,10 @@
  */
 
 import { readdir, readFile, writeFile, mkdir } from 'node:fs/promises';
-import { basename, join, dirname, resolve, extname } from 'node:path';
+import { basename, join, dirname, resolve, extname, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createInterface } from 'node:readline';
+import { composeFrontmatter } from './lib/post-template.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
@@ -149,15 +150,18 @@ async function cmdNew(args) {
   }
 
   // 5. 生成 frontmatter
+  // draft / reward 必须写在收尾 `---` 之前，否则会落进正文（历史 bug）
   const desc = description || `这是一篇关于「${title}」的文章。`;
-  const tagsLine = tags.length > 0 ? `tags: [${tags.join(', ')}]` : '';
-  const fmLines = ['---', `title: ${title}`, `description: "${desc}"`, `pubDate: ${pubDate}`];
-  if (category) fmLines.push(`category: ${category}`);
-  if (tagsLine) fmLines.push(tagsLine);
-  if (heroImage) fmLines.push(`heroImage: ${heroImage}`);
-  fmLines.push('---', '');
-  if (draft) fmLines.push('draft: true');
-  const fm = fmLines.join('\n');
+  const fm = composeFrontmatter({
+    title,
+    description: desc,
+    pubDate,
+    category,
+    tags,
+    heroImage,
+    reward: Boolean(reward),
+    draft: Boolean(draft),
+  });
 
   // 6. 写入文件
   await writeFile(filePath, fm, 'utf-8');

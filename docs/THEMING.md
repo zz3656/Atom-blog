@@ -2,68 +2,20 @@
 
 > 想为 Atom 博客开发一个新主题？本文档解释主题结构、必需 token、选择器约定和发布流程。
 
-## 项目状态说明（2026-10-25 起）
+## 项目状态说明（v2 以后）
 
-「因特吧」是**单主题站点**——站点只有一套设计，不做多主题并存：
+Atom v2 起重新定位为**轻量化博客**：
 
-- **唯一主题**：`atom-geek`（位于 `src/themes/atom-geek/`，自带 light + dark；暗色磷光绿 `#00e88f` + 亮色磷光纸 `#00794c`）
-- **不内置主题选择器 UI**：右上角只有日/夜切换按钮（`localStorage.themeMode`）
-- **站点默认主题由 `src/consts.ts` 的 `DEFAULT_THEME_ID` 决定**——既不是 manifest 字段，也不是扫描顺序
-- **原 `atom-default`（冷轧钢 + 黄铜）已移出本站**，去向见 [「主题的去向」](#主题的去向)
+- **默认只附带一个主题**：`atom-default`（位于 `src/themes/atom-default/`，自带 light + dark）
+- **不内置多主题选择器 UI**：右上角只有简单的日/夜切换按钮
+- **多主题基础设施保留**：你（第三方开发者）仍可开发新主题并发布
 
-多主题基础设施仍在：`npm run theme:create <id>` 脚手架会自动创建 `src/themes/<id>/` 目录，构建时会**自动被扫描加入**（无需修改任何其他文件）；扫描顺序按 id 字典序（通用规则，无任何 per-id 特例），与 `src/utils/themes.ts` 的 `scanThemes()` 保持一致。
+`npm run theme:create <id>` 脚手架会自动创建 `src/themes/<id>/` 目录，构建时会**自动被扫描加入**（无需修改任何其他文件）。
 
 如果你想让用户能在 UI 切换多个主题，需自己扩展 `src/components/Header.astro`——本文档专注于"主题本身"如何开发，不涉及 UI 集成。
 
----
-
-## 主题的去向
-
-| 主题 | 状态 | 说明 |
-|---|---|---|
-| `atom-geek` | **本站在用**，并已独立发布 | `src/themes/atom-geek/`，双模式磷光绿/磷光纸；因特吧的整套视觉。同时以**独立第三方主题仓**发布：<https://github.com/zz3656/atom-geek> |
-| `atom-default` | 已移出本站 | 冷轧钢 + 黄铜指示灯，保留在 git 历史中（`git show 1d6073b:src/themes/atom-default/light.css`）；上游框架仓 [zz3656/Atom](https://github.com/zz3656/Atom) 的 `src/themes/atom-default/` 原版**仍然保留**，本仓不另发 |
-| `sepia` / `solarized` | 已发布为第三方主题 | 独立仓库 <https://github.com/zz3656/atom-themes>，目录即主题包（`sepia/` / `solarized/`） |
-
-### 第三方主题仓
-
-主题可以脱离本站单独分发，Atom 的主题契约对第三方主题一视同仁：
-
-| 仓库 | 内容 | 装上后得到什么 |
-|---|---|---|
-| [zz3656/atom-geek](https://github.com/zz3656/atom-geek) | `atom-geek/` 主题包 + `overlay/` 组件层覆盖包 | 主题包 = 只有配色；overlay = 完整 TUI 版式 |
-| [zz3656/atom-themes](https://github.com/zz3656/atom-themes) | `sepia/` / `solarized/` 主题包 | 只有配色 |
-
-> ⚠️ 两条安装路径不等价。Atom 的主题契约规定**主题目录只能放 CSS token**，所以复制 `atom-geek/` 目录只会得到一套配色，**不会**得到 TUI 版式——版式差异必须靠覆盖组件层（`src/components/` `src/layouts/` `src/pages/` `src/styles/` `src/scripts/`）实现。详见 [zz3656/atom-geek 的 README](https://github.com/zz3656/atom-geek#readme)。
-
----
-
-## 站点级作用域增补（L2）
-
-有些视觉差异**无法用 token 表达**（直角化、等宽字体承担数据、CRT 扫描线、终端标题栏），而主题包被禁止写组件样式。为此本站采用两层结构：
-
-| 层 | 位置 | 允许写什么 | 作用域 |
-|---|---|---|---|
-| **L1 主题包** | `src/themes/<id>/*.css` | **只有 CSS 变量** | `html[data-theme='<id>'][data-mode='...']` |
-| **L2 站点级增补** | `src/styles/_theme-geek.css` | 选择器级规则 | **每条规则**以 `html[data-theme='atom-geek']` 开头 |
-
-L2 的铁律（写错了会污染其它主题或破坏布局）：
-
-- ❌ 不用 `!important`
-- ❌ 不覆盖布局 token：`--radius*` / `--font-*` / `--max-width` / `--content-width` / `--header-height` / `--rule-*` / `--log-gutter`
-- ❌ 出现任何无作用域规则
-- ✅ 需要圆角变化就在作用域内写 `border-radius: 0`，不改 token 本身
-- ✅ 需要等宽字体就显式声明 `font-family: var(--font-mono)`，不改 `--font-*`
-
-删掉 `src/styles/_theme-geek.css` 一个文件 = 完整回退到纯 token 形态，这是 L1/L2 分离的核心收益。
-
----
-
 ## 目录
 
-- [项目状态说明](#项目状态说明2026-10-25-起)
-- [主题的去向](#主题的去向)
-- [站点级作用域增补（L2）](#站点级作用域增补l2)
 - [主题结构](#主题结构)
 - [必需 CSS Token](#必需-css-token)
 - [可选 CSS Token](#可选-css-token)
@@ -83,7 +35,7 @@ L2 的铁律（写错了会污染其它主题或破坏布局）：
 每个主题是一个独立的目录，位于 `src/themes/<theme-id>/`：
 
 ```
-src/themes/atom-geek/
+src/themes/atom-default/
 ├── manifest.json     # 主题元数据
 ├── light.css         # 浅色模式 token
 └── dark.css          # 暗色模式 token (可选)
@@ -92,7 +44,7 @@ src/themes/atom-geek/
 **规则**：
 
 1. 目录名必须与 `manifest.json` 中的 `id` 字段一致
-2. 文件名固定：`manifest.json`、`light.css`、`dark.css`（仅 `light` 可选）
+2. 文件名固定：`manifest.json`、`light.css`、`dark.css`（`dark.css` 可选，单模式主题可不提供）
 3. 主题目录**只能**包含 CSS token；不要放组件、HTML 或 JS
 
 ---
@@ -134,8 +86,6 @@ src/themes/atom-geek/
 |-------|------|
 | `--accent` | 主色（链接、按钮、icon）|
 | `--accent-hover` | 主色 hover |
-| `--accent-secondary` | 副主色（次级高亮）|
-| `--accent-gradient` | 渐变（CTA、Logo）|
 | `--accent-glow` | 主色阴影/光晕 |
 
 ### Tag & Category (8 个)
@@ -152,11 +102,10 @@ src/themes/atom-geek/
 | `--success` | 成功状态 |
 | `--warning` | 警告状态 |
 
-### 阴影 (5 个)
+### 阴影 (4 个)
 
 | Token | 用途 |
 |-------|------|
-| `--shadow-sm` | 微阴影 |
 | `--shadow` | 标准阴影 |
 | `--shadow-md` | 中等阴影 |
 | `--shadow-lg` | 大阴影 |
@@ -165,6 +114,10 @@ src/themes/atom-geek/
 ### 语义表面 token（v3 新增，必需）
 
 v3 起，组件层**不再写死任何颜色**——所有"结构性"的表面与刻度都通过下面这组 token 表达。
+
+> **唯一例外：站点品牌图形。** `src/components/HeroIcon.astro` 内置的「黄铜原子」是品牌资产，
+> 颜色固定、不随主题变化（和 `public/logos/logo.svg` 同理）。第三方主题若要换外观，
+> 请通过 `src/consts.ts` 的 `SITE_HERO_ICON` 指定自己的图片，而不是期待它跟着 token 走。
 没有它们，导航栏底色、代码块底色、刻度尺颜色会退化成写死的值，第三方主题将无法正确着色。
 
 | Token | 用途 | 典型值 |
@@ -179,12 +132,21 @@ v3 起，组件层**不再写死任何颜色**——所有"结构性"的表面�
 | `--rule-tick` | 刻度尺的短刻度线 | `rgba(0,0,0,.22)` |
 | `--rule-tick-strong` | 刻度尺的长刻度线（主色）| `rgba(accent,.55)` |
 | `--focus-ring` | 键盘焦点环颜色 | 与 `--accent` 同色 |
-| `--glow-secondary` | 副色辉光（分类通道）| `rgba(accent-secondary,.09)` |
+| `--overlay-bg` | 图片灯箱遮罩底色 | `rgba(12,15,18,.92)` |
+| `--on-overlay` | 遮罩上的文字 / 图标 | `#ffffff` |
+| `--overlay-control-bg` | 遮罩内控件底色（关闭按钮）| `rgba(255,255,255,.12)` |
+| `--overlay-control-bg-hover` | 遮罩内控件悬浮底色 | `rgba(255,255,255,.22)` |
+| `--overlay-control-border` | 遮罩内控件描边 | `rgba(255,255,255,.24)` |
+| `--on-success` | 成功色实心块上的文字 | `#ffffff`（暗色主题常为深色）|
+| `--code-inset` | 代码块内阴影（完整 `box-shadow` 值）| `inset 0 1px 3px rgba(0,0,0,.06)` |
+| `--control-border` | 表单控件（搜索框/开关）描边，**对页面底色需 ≥3:1** | `#767f86` / `#5f6a75` |
 
-### 可选补充 token
+### 关于已移除的 token
 
-- `--accent-glow-strong`（accent 光晕加强版）
-- `--purple-glow`（副色辉光的旧别名，等价于 `--glow-secondary`）
+v1.1.3 起去掉了 6 个「定义了但全站零引用」的 token：`--accent-secondary`、`--accent-gradient`、
+`--accent-glow-strong`、`--glow-secondary`、`--purple-glow`、`--shadow-sm`。
+它们让第三方主题多背了 13% 的必填契约却毫无视觉效果。旧主题若仍定义这些 token 不会报错，
+只是不再被引用。
 
 ---
 
@@ -194,7 +156,6 @@ v3 起，组件层**不再写死任何颜色**——所有"结构性"的表面�
 
 | Token | 默认值 | 说明 |
 |-------|--------|------|
-| `--accent-glow-strong` | `rgba(accent, 0.15)` | 强光晕（用于 active 态）|
 
 布局相关 token（**必须**留在 `_variables.css`，**不要**在主题里覆盖）：
 - `--font-display` / `--font-sans` / `--font-mono`
@@ -266,7 +227,8 @@ html[data-theme='<your-theme-id>'] {
   "version": "1.0.0",
   "description": "简短说明（主题选择器 tooltip）",
   "modes": ["light", "dark"],
-  "preview": "/themes/your-theme-id/preview.png"
+  "preview": "/themes/your-theme-id/preview.png",
+  "themeColor": { "light": "#ffffff", "dark": "#0a0a0f" }
 }
 ```
 
@@ -279,6 +241,7 @@ html[data-theme='<your-theme-id>'] {
 | `description` | string | ❌ | tooltip 文本 |
 | `modes` | array | ✅ | `['light']` 或 `['light', 'dark']` |
 | `preview` | path | ❌ | 预览图（相对 `public/`） |
+| `themeColor` | object | ❌ | 浏览器地址栏 / PWA 主题色 `{light, dark}`；缺省用 `src/consts.ts` 的 `DEFAULT_THEME_COLORS`。组件层不能写死颜色，所以这类 meta 也从主题里取 |
 
 **id 校验**：`^[a-z0-9][a-z0-9_-]{0,31}$`（防 XSS / 文件系统遍历，最多 32 字符）
 
@@ -374,9 +337,7 @@ html[data-theme='ocean'][data-mode='light'] {
 
 **无需修改任何文件** — `astro-plugins/theme-loader.mjs` 会在 `dev` / `build` 时自动扫描 `src/themes/<id>/` 并生成 `src/generated/themes.css`，然后 `src/styles/global.css` 自动 `@import` 进去。
 
-只需 `npm run dev`（或 `npm run build`）即可生效——主题会被注册进 `src/generated/themes.ts`，并通过 `html[data-theme='<id>']` 作用域生效。
-
-> ⚠️ 本站**没有主题选择器 UI**（右上角只有日/夜切换）。要让访客手动切换新主题，需自行扩展 `src/components/Header.astro` 并写入 `localStorage.themeId`——见文末 FAQ。
+只需 `npm run dev`（或 `npm run build`）即可生效，新主题立即出现在右上角菜单。
 
 如果你不想手写脚手架：
 
@@ -387,9 +348,7 @@ npm run theme:create ocean --no-dark   # 单模式模板
 
 ### 5. 测试
 
-启动 `npm run dev` → 打开站点 → 在控制台执行 `document.documentElement.setAttribute('data-theme', 'ocean')` 验证新主题生效。
-
-> 本站没有主题选择器菜单；若要正式提供切换入口，需扩展 `src/components/Header.astro`（见 FAQ「主题菜单能否自定义」）。
+启动 `npm run dev` → 打开站点 → 右上角只在「日 / 夜」之间切换；本站**不提供主题选择 UI**，主题由 `src/consts.ts` 的默认主题（扫描顺序第一个）决定。要验证新主题，把它改成默认主题或临时改 `src/themes` 目录。
 
 ---
 
@@ -442,11 +401,6 @@ grep -c "data-theme=\"ocean\"" dist/index.html
 - 必需 token 是否全部实现
 - 浏览器测试矩阵
 
-**已发布的第三方主题仓**（可作为参考样例）：
-
-- [zz3656/atom-themes](https://github.com/zz3656/atom-themes) —— 纯主题包仓库，每个子目录即一个主题
-- [zz3656/atom-geek](https://github.com/zz3656/atom-geek) —— 主题包 + 组件层 overlay 的**双仓结构**样例：把「可分发的 token」与「必须替换组件层的版式」拆成两条安装路径，README 里明确说明二者不等价
-
 ---
 
 ## 最佳实践
@@ -473,7 +427,7 @@ grep -c "data-theme=\"ocean\"" dist/index.html
 
 ### Q: 主题 id 能否与现有主题重名？
 
-A: 不能。`scanThemes()` 按 id 去重，重名会被警告跳过。
+A: 不会重名——`id` 就是目录名，文件系统本身保证唯一；`scanThemes()` 只校验 id 是否匹配 `^[a-z0-9][a-z0-9_-]{0,31}$`，不合规的主题会被跳过并打印警告。
 
 ### Q: 我能加新 token 给组件用吗？
 
@@ -504,22 +458,12 @@ A: 现代 CSS Variables 在 IE11 不支持。Atom 默认放弃 IE11。
 
 ## 参考现有主题
 
-仓库现在只附带一个主题：
+仓库默认只附带一个主题：
 
-- `src/themes/atom-geek/` — 双模式、暗色磷光绿 + 亮色磷光纸（因特吧的整套视觉）
+- `src/themes/atom-default/` — 双模式、冷轧钢 + 黄铜指示灯
 
 它同时也是**最完整的 token 参考实现**——复制这个目录改名，就是一个合规的新主题起点。
-
-原 `atom-default`（冷轧钢 + 黄铜）已移出本站，去向见 [「主题的去向」](#主题的去向)；`sepia` / `solarized` 等第三方主题在本地 `~/Documents/GitHub/atom-themes/` 目录（尚未建仓）。
-
-### 主题排序规则
-
-扫描结果按 **id 字典序**排列（`localeCompare`），**不对任何具体主题 id 做特例**。两处实现必须保持同一顺序：
-
-- `src/utils/themes.ts` → `scanThemes()`（测试用）
-- `astro-plugins/theme-loader.mjs` → `scan()`（构建用）
-
-站点的**默认主题**与排序无关，由 `src/consts.ts` 的 `DEFAULT_THEME_ID` 决定。
+本仓库只内置 `atom-default` 一个主题。第三方主题由社区各自发布，放进 `src/themes/<id>/` 即可被自动扫描，不需要也不存在官方的 `atom-themes` 仓库。
 
 ### 版本要求
 

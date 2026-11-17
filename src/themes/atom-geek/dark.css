@@ -4,7 +4,7 @@
  * 设计概念：一台老式终端机 —— 近黑的蓝绿底面 + 一盏常亮的磷光绿指示灯。
  *  - 表面：近黑蓝绿（#05070a），不是纯黑，避免生硬
  *  - 强调色：磷光绿 #00e88f（链接 / 按钮 / 刻度，对比度 12.43:1）
- *  - 次强调色：青色 #22d3ee（仅用于「分类」这一语义通道）
+ *  - 分类通道由 --cat-* 承担（青色），标签由 --tag-* 承担（绿描边）
  *  - 投影让位给辉光：--shadow-glow 承担"发光"语义
  *
  * 选择器约定: html[data-theme="atom-geek"][data-mode="dark"]
@@ -33,13 +33,7 @@ html[data-theme='atom-geek'][data-mode='dark'] {
   /* ===== Accent — 点亮的磷光指示灯 ===== */
   --accent: #00e88f;
   --accent-hover: #4bffb6;
-  --accent-secondary: #22d3ee;
-  --accent-gradient: linear-gradient(135deg, #00e88f, #22d3ee);
   --accent-glow: rgba(0, 232, 143, 0.14);
-  --accent-glow-strong: rgba(0, 232, 143, 0.26);
-  --glow-secondary: rgba(34, 211, 238, 0.12);
-  /* 向后兼容：旧主题把副色辉光叫 --purple-glow */
-  --purple-glow: rgba(34, 211, 238, 0.12);
 
   /* ===== Tags — 中性描边 ===== */
   --tag-bg: transparent;
@@ -58,7 +52,6 @@ html[data-theme='atom-geek'][data-mode='dark'] {
   --warning: #ffb454;
 
   /* ===== Shadows — 辉光代替投影 ===== */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.5);
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.55);
   --shadow-md: 0 6px 18px rgba(0, 0, 0, 0.6);
   --shadow-lg: 0 14px 38px rgba(0, 0, 0, 0.7);
@@ -72,6 +65,16 @@ html[data-theme='atom-geek'][data-mode='dark'] {
   --grid-line: rgba(0, 232, 143, 0.045);
   --ambient-glow: rgba(0, 232, 143, 0.06);
   --highlight: rgba(0, 232, 143, 0.2);
+
+  /* ===== 浮层（灯箱 / 图片放大）与控件 ===== */
+  --overlay-bg: rgba(5, 7, 10, 0.94);
+  --on-overlay: #ffffff;
+  --overlay-control-bg: rgba(255, 255, 255, 0.1);
+  --overlay-control-bg-hover: rgba(0, 232, 143, 0.18);
+  --overlay-control-border: rgba(0, 232, 143, 0.35);
+  --on-success: #04140d;
+  --control-border: #55786c;
+  --code-inset: inset 0 1px 3px rgba(0, 0, 0, 0.45);
 
   /* ===== 刻度尺 ===== */
   --rule-tick: rgba(0, 232, 143, 0.18);

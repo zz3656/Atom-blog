@@ -2,8 +2,15 @@
 import '../styles/global.css';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION, AUTHOR, SITE_FAVICON, DEFAULT_THEME_ID } from '../consts';
-import { rssUrl, baseAssetsPath } from '../utils/path';
+import {
+  SITE_TITLE,
+  SITE_DESCRIPTION,
+  AUTHOR,
+  SITE_FAVICON,
+  DEFAULT_THEME_COLORS,
+  OG_IMAGE,
+} from '../consts';
+import { rssUrl, baseAssetsPath, absoluteUrl } from '../utils/path';
 import { themes } from '../generated/themes';
 
 interface Props {
@@ -23,23 +30,22 @@ const rssLink = rssUrl();
 const faviconLink = baseAssetsPath(SITE_FAVICON);
 const searchBase = baseAssetsPath('/');
 
-// Site URL for OG/Twitter images and RSS
-const siteUrl = String(Astro.site || '').replace(/\/$/, '');
-// 社交分享卡片（1200×630）——用站点自己的 TUI 视觉渲染，不再拿 favicon 当 og:image
-const ogImage = image ? `${siteUrl}${image}` : `${siteUrl}/og.jpg`;
+// OG/Twitter 图：文章自带封面优先，否则用默认分享图（SVG favicon 社交平台不认）
+const ogImage = absoluteUrl(image || OG_IMAGE);
 
 // 主题清单（构建时由 theme-loader 自动生成，仅包含有效主题 ID）
 // 用于内联脚本的运行时校验，防止老用户 localStorage 中的过期主题 ID 被吞
 const themeIds = themes.map((t) => t.id);
-// 默认主题：优先站点配置 DEFAULT_THEME_ID；
-// 该主题包缺失 / 未注册时回退到清单首个可用主题，保证站点始终可用。
-const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
-  ? DEFAULT_THEME_ID
-  : themeIds[0] || DEFAULT_THEME_ID;
+// 默认主题：清单中第一个
+const defaultThemeId = themeIds[0] || 'atom-geek';
+// 浏览器地址栏配色随主题走（组件层不写死颜色）
+const defaultTheme = themes.find((t) => t.id === defaultThemeId);
+const themeColorLight = defaultTheme?.themeColor?.light ?? DEFAULT_THEME_COLORS.light;
+const themeColorDark = defaultTheme?.themeColor?.dark ?? DEFAULT_THEME_COLORS.dark;
 ---
 
 <!doctype html>
-<html lang="zh-CN" data-theme={defaultThemeId} data-mode="light">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -49,8 +55,8 @@ const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
     <meta name="description" content={desc} />
     <meta name="generator" content={Astro.generator} />
     <meta name="author" content={AUTHOR} />
-    <meta name="theme-color" content="#f2f6f3" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#05070a" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content={themeColorLight} media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content={themeColorDark} media="(prefers-color-scheme: dark)" />
 
     <!-- Open Graph -->
     <meta property="og:title" content={fullTitle} />
@@ -58,6 +64,9 @@ const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
     <meta property="og:type" content={type} />
     <meta property="og:url" content={canonicalUrl} />
     <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
     <meta property="og:site_name" content={SITE_TITLE} />
 
     <!-- canonical URL: 避免 /blog/foo 与 /blog/foo/ 被重复索引 -->
@@ -68,28 +77,19 @@ const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
     <meta name="twitter:title" content={fullTitle} />
     <meta name="twitter:description" content={desc} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={fullTitle} />
 
-    <!-- RSS FEED -->
+    <!-- RSS Feed -->
     <link rel="alternate" type="application/rss+xml" title={SITE_TITLE} href={rssLink} />
 
-    <!-- OpenSearch -->
-    <link
-      rel="search"
-      type="application/opensearchdescription+xml"
-      href={baseAssetsPath('/opensearch.xml')}
-      title={SITE_TITLE}
-    />
-
     <link rel="icon" type="image/svg+xml" href={faviconLink} />
+    <link rel="apple-touch-icon" sizes="180x180" href={baseAssetsPath('/apple-touch-icon.png')} />
 
     <!-- PWA Manifest -->
     <link rel="manifest" href={baseAssetsPath('/manifest.json')} />
 
-    <!--
-      字体已自托管（src/assets/fonts/ + _fonts.css，经 Vite 打包）：
-      Archivo 可变字体（wdth+wght）与 JetBrains Mono 400/500/700。
-      原 Google Fonts 外链在国内网络基本不可达，且曾导致 Hero 点阵字标
-      兜底到比例字体逐行错位——现已零外域请求。 -->
+    <!-- 字体已自托管（fontsource），见 src/styles/global.css 顶部；
+         不再向 fonts.googleapis.com 发请求（大陆不可达时会挂住首屏渲染） -->
     <title>{fullTitle}</title>
     <script is:inline define:vars={{ defaultThemeId, themeIds }}>
       // Apply theme synchronously before page render to avoid FOUC
@@ -119,7 +119,7 @@ const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
           display: none;
         }
       </style>
-      <div style="background:var(--bg-secondary);color:var(--text-primary);padding:0.75rem 1rem;text-align:center;font-size:0.9rem;border-bottom:1px solid var(--warning);">
+      <div class="noscript-note">
         本站某些功能（主题切换 / 搜索 / 代码复制）需要 JavaScript。基础阅读不受影响。
       </div>
     </noscript>
@@ -128,18 +128,16 @@ const defaultThemeId = themeIds.includes(DEFAULT_THEME_ID)
     <a class="skip-link" href="#main-content">
       跳到主要内容
     </a>
-    <div class="term-window">
-      <Header />
-      <main id="main-content" tabindex="-1">
-        <slot />
-      </main>
-      <Footer />
-    </div>
+    <Header />
+    <main id="main-content" tabindex="-1">
+      <slot />
+    </main>
+    <Footer />
     <button id="back-to-top" class="back-to-top" aria-label="返回顶部" type="button">
       <svg
         viewBox="0 0 24 24"
-        width="18"
-        height="18"
+        width="20"
+        height="20"
         fill="none"
         stroke="currentColor"
         stroke-width="2.5"

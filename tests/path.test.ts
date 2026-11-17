@@ -10,6 +10,9 @@ import {
   aboutUrl,
   rssUrl,
   baseAssetsPath,
+  joinBase,
+  absoluteUrl,
+  stripBase,
 } from '../src/utils/path';
 
 /**
@@ -38,21 +41,20 @@ describe('path helpers (root base)', () => {
     expect(getTagUrl('Astro')).toBe('/tag/Astro/');
   });
 
-  it('categoriesUrl returns /categories', () => {
-    expect(categoriesUrl()).toBe('/categories');
+  it('categoriesUrl returns /categories/', () => {
+    expect(categoriesUrl()).toBe('/categories/');
   });
 
-  it('tagsUrl returns /tags', () => {
-    expect(tagsUrl()).toBe('/tags');
+  it('tagsUrl returns /tags/', () => {
+    expect(tagsUrl()).toBe('/tags/');
   });
 
-  it('rootPath returns path without trailing slash (avoid double-slash when concatenated)', () => {
-    expect(rootPath()).toBe('');
-    expect(rootPath() + '/blog').toBe('/blog');
+  it('rootPath returns the site root with trailing slash', () => {
+    expect(rootPath()).toBe('/');
   });
 
-  it('aboutUrl returns /about', () => {
-    expect(aboutUrl()).toBe('/about');
+  it('aboutUrl returns /about/', () => {
+    expect(aboutUrl()).toBe('/about/');
   });
 
   it('rssUrl returns /rss.xml', () => {
@@ -62,5 +64,41 @@ describe('path helpers (root base)', () => {
   it('baseAssetsPath forwards arbitrary path', () => {
     expect(baseAssetsPath('/favicon.svg')).toBe('/favicon.svg');
     expect(baseAssetsPath('/js/app.js')).toBe('/js/app.js');
+  });
+});
+
+describe('joinBase（子路径部署的核心逻辑）', () => {
+  it('根路径部署时原样返回', () => {
+    expect(joinBase('/', '/blog/')).toBe('/blog/');
+    expect(joinBase('', '/blog/')).toBe('/blog/');
+  });
+
+  it('子路径部署时拼上前缀，且不会产生双斜杠', () => {
+    expect(joinBase('/Atom', '/blog/')).toBe('/Atom/blog/');
+    expect(joinBase('/Atom/', '/blog/')).toBe('/Atom/blog/');
+    expect(joinBase('/a/b/', '/x')).toBe('/a/b/x');
+  });
+});
+
+describe('absoluteUrl', () => {
+  it('空值返回空串', () => {
+    expect(absoluteUrl('')).toBe('');
+  });
+
+  it('已是完整地址的外链原样返回', () => {
+    expect(absoluteUrl('https://cdn.example.com/a.png')).toBe('https://cdn.example.com/a.png');
+    expect(absoluteUrl('//cdn.example.com/a.png')).toBe('//cdn.example.com/a.png');
+  });
+
+  it('站内路径补上 base（测试环境 SITE 为空，因此只剩 base 分支）', () => {
+    expect(absoluteUrl('/medias/a.png')).toBe('/medias/a.png');
+    expect(absoluteUrl('medias/a.png')).toBe('/medias/a.png');
+  });
+});
+
+describe('stripBase（导航高亮判定）', () => {
+  it('根路径部署时原样返回', () => {
+    expect(stripBase('/blog/')).toBe('/blog/');
+    expect(stripBase('/')).toBe('/');
   });
 });

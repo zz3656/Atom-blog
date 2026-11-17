@@ -9,6 +9,8 @@ All notable changes to this project will be documented in this file.
 
 发布流程：改 `package.json` 的 `version` → 把下面 `[Unreleased]` 段改成 `[x.y.z] — 日期` → `git tag vx.y.z`。
 
+Based on Atom **1.1.5**（`package.json` 的 `upstream` 字段记录基础版本；两条版本线不互相对齐）
+
 ---
 
 ## [1.6.2] — 2026-10-26
@@ -25,6 +27,32 @@ All notable changes to this project will be documented in this file.
 ## [Unreleased]
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
+
+### 🔄 Upstream sync — 全量同步 Atom v1.1.5 的代码层
+
+- **工程层整树跟随上游**（以 git 合并记录基线，后续同步只需再 merge）：`scripts/`（`lib/blog-posts.mjs` 共享文章读取、`generate-search-index.mjs`、`verify-build-links.mjs`、`verify-search-index.mjs`）、`astro-plugins/`、`src/{components,layouts,pages,styles,utils,scripts,generated}`、`tests/`、`astro.config.mjs`、`vitest.config.ts`、`eslint.config.js`、`.nvmrc`、`.gitignore`
+- **站内搜索索引改 prebuild 生成**：以前在 postbuild 写 `public/_assets/`，而 Astro 构建开始时只拷一次 `public/` —— 新文章要等下一次构建才搜得到。现在 `prebuild` 先产出索引，构建期自然带进 `dist/`
+- **两道构建期门禁**：`npm run verify:links` 把每份 HTML 的站内链接映射回 `dist` 真实产物（拦 `/Atom/Atom/` 这类 base 双前缀）；`npm run verify:search` 断言索引与 `dist/blog/` 的文章页一一对应（本仓另有分页目录 `/blog/2/`、`/blog/3/`，已在脚本里排除）
+- **robots.txt / manifest.json 改为构建期端点**：`src/pages/robots.txt.ts` 带跟随 base 的 Sitemap 绝对地址；`src/pages/manifest.json.ts` 用 `absoluteUrl()` 拼 origin + base，子路径部署（GitHub Pages `/Atom-blog/`）下 PWA 不再指向域名根。`public/robots.txt`、`public/manifest.json` 已删除
+- **sitemap 的 lastmod 交给 `@astrojs/sitemap` 集成**（`serialize`），删掉 `scripts/fix-sitemap.mjs`；同时 `filter` 掉 404；`trailingSlash: 'always'` 让内链、canonical、sitemap 三者口径一致
+- **CI 合并为单条 `verify.yml`**：check → lint → test → build → 两道门禁 → 部署（部署是 `needs: verify` 的下游并复用产物）；删除 `test.yml` / `deploy.yml`，避免「测试红了照样发布」
+- **依赖与运行时口径**：`.nvmrc` = 24、`engines.node` = `>=24`、`sharp` 显式列入 `devDependencies`、`private: true`
+- 上游修掉的 bug 一并对齐：`remark-img-lazy` 首图不再 lazy（LCP）、`path.ts` 的 `encodeURIComponent`（含 `#`/空格的标签）、`sitemap-filter`、`stripBase` 导航高亮
+
+### 🎨 atom-geek 主题适配（本站）
+
+- **token 契约升到 47 个**：上游组件层新增 `--overlay-bg` / `--on-overlay` / `--overlay-control-*` / `--on-success` / `--control-border` / `--code-inset`（灯箱、控件描边、成功态），已按磷光终端 / 磷光纸两套配色补齐；同时清掉 6 个本仓独有但已无引用的 token（`--accent-secondary`、`--accent-gradient`、`--accent-glow-strong`、`--glow-secondary`、`--purple-glow`、`--shadow-sm`）
+- **overlay 重新对齐上游 DOM**：`src/styles/_theme-geek.css` 从旧的 `.term-bar` / `.nav-row` 改写为上游的 `.site-header` / `.hero-eyebrow` / `.section-heading` / `.log-row` / `.search-*`，保留直角化、等宽角色、终端标题栏、CRT 扫描线、焦点辉光；由 `global.css` 末尾 import
+- 站点标识（因特吧 / `~/inte8` / Hero 文案 / `OG_IMAGE=/og.jpg` / `DEFAULT_THEME_COLORS`）回填到 `src/consts.ts`；`CF_DOMAIN` 默认值仍是 `www.inte8.top`（上游模板默认 `atom.inte8.top` 会把 canonical 指错域名）
+
+### 🛠️ 运维
+
+- `ops/tools/sync-mirror.sh` 的 rsync 加 `--delete`：上游删掉的文件现在会真的从构建镜像里消失，不再残留成幻影路由/幻影规则（`node_modules`、`dist`、`.astro`、`public/js`、`public/_assets` 仍在排除列表里受保护）
+
+### ⚠️ 已知遗留（下一步）
+
+- 组件层的 TUI 化只做到「主题作用域」这一层：`CommandHeader`/`TerminalAscii`/`TerminalBoot`/`GrepHit`/`IndexSummary` 等站点自有组件随全量同步被上游组件替换，终端外壳的完整视觉（窗口按钮条、启动自检、grep 面板）需在组件层重新实现
+- `src/styles/_theme-geek.css` 的第一版映射未做逐页视觉回归（灯箱/移动端/窄屏 TOC 待验）
 
 ## [1.6.1] — 2026-10-26
 

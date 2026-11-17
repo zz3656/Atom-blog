@@ -46,15 +46,21 @@ export const HERO_ACTIONS: Array<{
 // Logo 与 Favicon（三个独立文件）
 // - Logo      → 导航栏左侧图标。放入 public/logos/logo.svg（或 .png / .webp），修改 SITE_LOGO 即可
 // - Favicon   → 浏览器标签页图标。放入 public/favicon.svg，修改 SITE_FAVICON 即可
-// - Hero Icon → 首页 Hero 区域的标识图形。
-//               TUI 版首页改用「因特吧」字符画（src/components/TerminalAscii.astro），
-//               默认不再渲染图片；此常量保留给需要恢复图片标识的客制化场景。
+// - Hero Icon → 首页 Hero 区域的标识图形。留空则使用内置原子 SVG
 //
 // 图形来源：内置标识由本机 Draw Things 生成原图，再描摹成矢量，颜色对齐设计系统 token。
 // 完整流水线见 DEVELOP.md「品牌图标（Draw Things 流水线）」。
 export const SITE_LOGO = '/logos/logo.svg'; // Logo 文件路径（对应 public/logos/logo.svg）
 export const SITE_FAVICON = '/favicon.svg'; // Favicon 文件路径（对应 public/favicon.svg）
 export const SITE_HERO_ICON = '/heroes/hero.svg'; // 首页 Hero 图标路径；留空则使用内置 Atom 原子 SVG
+
+/**
+ * 默认社交分享图（1200×630 PNG/JPG）。
+ * 微信 / X / LinkedIn 等平台不解析 SVG，所以不能拿 favicon 当 og:image。
+ * 未在文章中指定 featuredImage / heroImage 时用它兜底。
+ * 本站用自己的 TUI 底板（public/og.jpg，计数由 scripts/generate-og.mjs 构建期叠加）。
+ */
+export const OG_IMAGE = '/og.jpg';
 
 // 项目源代码仓库（Footer 的 🐙 GitHub 与 "站点标题" 链接使用）
 export const REPO_URL = 'https://github.com/zz3656/Atom';
@@ -65,6 +71,16 @@ export const SOCIAL_LINKS = {
   twitter: '',
   email: '',
 };
+
+/**
+ * 主题色兜底值（浏览器地址栏 / PWA manifest 使用）。
+ * 组件层禁止写死颜色；主题 manifest 里的 `themeColor` 优先，缺失时才回落到这里。
+ * 这里取 atom-geek 的两端：暗色磷光终端 / 亮色磷光纸。
+ */
+export const DEFAULT_THEME_COLORS = {
+  light: '#f2f6f3',
+  dark: '#05070a',
+} as const;
 
 // 分页配置（首页与文章列表共用）
 export const POSTS_PER_PAGE = 12;
@@ -105,12 +121,7 @@ export const TUI_NAV: Array<{ key: string; path: string; label: string }> = [
 /**
  * 站点默认主题 ID（构建期常量）。
  *
- * 「哪个主题是站点默认」属于站点配置，不是主题包属性 ——
- * 所以它住在 consts.ts，而不是 manifest.json 里。
- * 主题包被移除 / 未注册时，BaseLayout.astro 会自动回退到清单首个可用主题，
- * 因此删掉 src/themes/<id>/ 不会让站点构建失败。
- *
+ * 「哪个主题是站点默认」属于站点配置，不是主题包属性。
  * 本站是单主题站点：唯一主题是 atom-geek（因特吧 TUI 视觉）。
- * 原 atom-default（冷轧钢 + 黄铜）已移出本站，去向见 docs/THEMING.md。
  */
 export const DEFAULT_THEME_ID = 'atom-geek';

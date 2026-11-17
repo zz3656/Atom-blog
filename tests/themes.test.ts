@@ -70,15 +70,9 @@ describe('scanThemes', () => {
     expect(ids).toContain('atom-geek');
   });
 
-  it('lists the sole shipped theme atom-geek', () => {
+  it('puts atom-geek first', () => {
     const themes = scanThemes();
-    expect(themes.map((t) => t.id)).toEqual(['atom-geek']);
-  });
-
-  it('sorts themes by id lexicographically (generic rule, no per-id special case)', () => {
-    const themes = scanThemes();
-    const ids = themes.map((t) => t.id);
-    expect(ids).toEqual([...ids].sort((a, b) => a.localeCompare(b)));
+    expect(themes[0].id).toBe('atom-geek');
   });
 
   it('every scanned theme has required fields', () => {

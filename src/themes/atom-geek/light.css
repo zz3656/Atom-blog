@@ -6,7 +6,7 @@
  *  - 强调色：深磷光绿 #00794c（链接 / 按钮 / 刻度，对比度 5.01:1）
  *    ↑ 亮色主色按 WCAG AA 降饱和处理：鲜亮版 #00a86b 在纸面上只有 2.83:1，
  *      而 --accent 是正文链接色（小字号需 ≥4.5:1），故取深色版本。
- *  - 次强调色：深青 #0a5c72（仅用于「分类」这一语义通道）
+ *  - 分类通道由 --cat-* 承担（深青），标签由 --tag-* 承担（绿描边）
  *
  * 选择器约定: html[data-theme="atom-geek"][data-mode="light"]
  * 契约: docs/THEMING.md —— 本文件只定义 token，不含任何组件选择器。
@@ -34,13 +34,7 @@ html[data-theme='atom-geek'][data-mode='light'] {
   /* ===== Accent — 深磷光绿墨水 ===== */
   --accent: #00794c;
   --accent-hover: #00613f;
-  --accent-secondary: #0a5c72;
-  --accent-gradient: linear-gradient(135deg, #00794c, #0a5c72);
   --accent-glow: rgba(0, 121, 76, 0.12);
-  --accent-glow-strong: rgba(0, 121, 76, 0.22);
-  --glow-secondary: rgba(10, 92, 114, 0.12);
-  /* 向后兼容：旧主题把副色辉光叫 --purple-glow */
-  --purple-glow: rgba(10, 92, 114, 0.12);
 
   /* ===== Tags — 中性描边 ===== */
   --tag-bg: transparent;
@@ -59,7 +53,6 @@ html[data-theme='atom-geek'][data-mode='light'] {
   --warning: #b45309;
 
   /* ===== Shadows — 辉光代替投影 ===== */
-  --shadow-sm: 0 1px 2px rgba(10, 40, 30, 0.06);
   --shadow: 0 1px 3px rgba(10, 40, 30, 0.08);
   --shadow-md: 0 6px 18px rgba(10, 40, 30, 0.1);
   --shadow-lg: 0 14px 38px rgba(10, 40, 30, 0.12);
@@ -73,6 +66,16 @@ html[data-theme='atom-geek'][data-mode='light'] {
   --grid-line: rgba(0, 121, 76, 0.05);
   --ambient-glow: rgba(0, 121, 76, 0.05);
   --highlight: rgba(0, 121, 76, 0.16);
+
+  /* ===== 浮层（灯箱 / 图片放大）与控件 ===== */
+  --overlay-bg: rgba(8, 20, 16, 0.92);
+  --on-overlay: #ffffff;
+  --overlay-control-bg: rgba(255, 255, 255, 0.12);
+  --overlay-control-bg-hover: rgba(0, 121, 76, 0.22);
+  --overlay-control-border: rgba(255, 255, 255, 0.3);
+  --on-success: #ffffff;
+  --control-border: #5d726a;
+  --code-inset: inset 0 1px 3px rgba(10, 40, 30, 0.07);
 
   /* ===== 刻度尺 ===== */
   --rule-tick: rgba(0, 121, 76, 0.2);

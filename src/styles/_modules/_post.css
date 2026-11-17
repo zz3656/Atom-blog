@@ -1,12 +1,9 @@
-/* Atom Blog — Blog Post Content（TUI: cat 输出）
+/* Atom Blog — Blog Post Content
  *
- * 刊头   = ~/inte8 $ cat posts/<slug>.md + 文件元信息
- * 正文   = cat 的输出，左侧一行号槽（纯 CSS counter，零 JS）
- * 引用   = 终端回显（绿色竖条 + > 前缀）
- * 代码块 = 带标题栏的终端窗口（标题取 Shiki 的 data-language）
+ * 正文采用「刊头 + 刻度尺 + 首字下沉」的编辑排版，
+ * 标题层级用一枚黄铜刻度做锚点，颜色交给 token。
  */
 
-/* ===== 容器 ===== */
 .post {
   max-width: var(--content-width);
   margin: 0 auto;
@@ -14,45 +11,58 @@
 
 /* ===== 刊头 ===== */
 .post-header {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
-.post-command {
+.post-eyebrow {
   display: flex;
-  align-items: baseline;
-  gap: 0.55rem;
+  align-items: center;
+  gap: 0.6rem;
   font-family: var(--font-mono);
-  font-size: 0.86rem;
-  line-height: 1.6;
-  margin-bottom: 0.85rem;
-  overflow-wrap: anywhere;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
-.post-prompt {
-  color: var(--accent);
-  font-weight: 600;
+.post-eyebrow-mark {
+  width: 6px;
+  height: 6px;
+  background: var(--accent);
   flex-shrink: 0;
 }
 
-.post-cmd {
-  color: var(--text-bright);
+.post-eyebrow-sep {
+  color: var(--text-muted);
+  font-weight: 400;
 }
 
 .post-header h1 {
-  font-family: var(--font-sans);
-  font-size: clamp(1.75rem, 4.4vw, 2.55rem);
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 5vw, 3.05rem);
   font-weight: 800;
-  letter-spacing: -0.028em;
-  line-height: 1.22;
+  font-variation-settings:
+    'wdth' 106,
+    'wght' 800;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
   color: var(--text-bright);
-  margin-bottom: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.post-header .rule {
+  margin-bottom: 1.15rem;
 }
 
 .post-description {
-  font-size: 0.98rem;
+  font-size: 1.02rem;
   color: var(--text-secondary);
-  line-height: 1.8;
-  margin-bottom: 1rem;
+  line-height: 1.75;
+  max-width: 38rem;
+  margin-bottom: 1.1rem;
 }
 
 .post-meta {
@@ -66,47 +76,13 @@
   letter-spacing: 0.04em;
 }
 
-.updated {
-  color: var(--warning);
-}
-
-/* ===== 文件元信息 ===== */
-.post-filemeta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.3rem 1.15rem;
-  list-style: none;
-  padding: 0.55rem 0;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-}
-
-.post-filemeta li {
+.post-meta span {
   display: inline-flex;
-  align-items: baseline;
+  align-items: center;
   gap: 0.35rem;
 }
 
-.fm-key {
-  color: var(--text-muted);
-}
-
-.fm-key::after {
-  content: ':';
-}
-
-.fm-val {
-  color: var(--text-secondary);
-  font-variant-numeric: tabular-nums;
-}
-
-.fm-val--cat {
-  color: var(--cat-text);
-}
-
-.fm-val--warn {
+.updated {
   color: var(--warning);
 }
 
@@ -115,11 +91,11 @@
   align-items: center;
   gap: 0.5rem;
   flex-wrap: wrap;
-  margin-top: 0.8rem;
+  margin-top: 0.85rem;
 }
 
 .hero-image {
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
   border-radius: var(--radius);
   overflow: hidden;
   border: 1px solid var(--border-color);
@@ -132,88 +108,80 @@
   display: block;
 }
 
-/* ===== 正文（cat 输出 + 行号槽）===== */
+/* ===== 正文 ===== */
 .post-content {
   line-height: 1.85;
   font-size: 1rem;
   color: var(--text-primary);
-  counter-reset: ln;
-  position: relative;
-  padding-left: var(--term-gutter);
 }
 
-/* 行号槽里的竖线 */
-.post-content::before {
-  content: '';
-  position: absolute;
-  left: calc(var(--term-gutter) - 0.95rem);
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: var(--border-light);
-}
-
-/* 每个块级元素占一行号（li 不单独编号） */
-.post-content > * {
-  counter-increment: ln;
-  position: relative;
-}
-
-.post-content > *::before {
-  content: counter(ln, decimal-leading-zero);
-  position: absolute;
-  left: calc(-1 * var(--term-gutter));
-  width: calc(var(--term-gutter) - 1.35rem);
-  text-align: right;
-  top: 0.22em;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  line-height: 1.6;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-
-.post-content p {
-  margin-bottom: 1.15rem;
+/* 首字下沉 —— 仅当正文第一个元素是段落时生效 */
+.post-content > p:first-child::first-letter {
+  float: left;
+  font-family: var(--font-display);
+  font-size: 3.1em;
+  line-height: 0.82;
+  font-weight: 800;
+  font-variation-settings:
+    'wdth' 100,
+    'wght' 800;
+  color: var(--accent);
+  padding: 0.04em 0.1em 0 0;
+  margin-right: 0.04em;
 }
 
 .post-content h2 {
-  font-family: var(--font-sans);
-  font-size: 1.38rem;
+  font-family: var(--font-display);
+  font-size: 1.45rem;
   font-weight: 700;
+  font-variation-settings:
+    'wdth' 102,
+    'wght' 700;
   letter-spacing: -0.02em;
-  margin: 2.5rem 0 0.95rem;
+  margin: 2.75rem 0 1rem;
   color: var(--text-bright);
   line-height: 1.35;
-  border-left: 2px solid var(--accent);
-  padding-left: 0.7rem;
+}
+
+/* 标题前的黄铜刻度锚点 */
+.post-content h2::before {
+  content: '';
+  display: inline-block;
+  width: 15px;
+  height: 2px;
+  background: var(--accent);
+  margin-right: 0.65rem;
+  vertical-align: 0.3em;
 }
 
 .post-content h3 {
-  font-family: var(--font-sans);
-  font-size: 1.14rem;
+  font-family: var(--font-display);
+  font-size: 1.18rem;
   font-weight: 700;
   letter-spacing: -0.015em;
-  margin: 1.9rem 0 0.75rem;
+  margin: 2.1rem 0 0.8rem;
   color: var(--text-bright);
 }
 
 .post-content h4 {
-  font-size: 1rem;
+  font-size: 1.02rem;
   font-weight: 700;
-  margin: 1.5rem 0 0.6rem;
+  margin: 1.6rem 0 0.6rem;
   color: var(--text-bright);
+}
+
+.post-content p {
+  margin-bottom: 1.2rem;
 }
 
 .post-content ul,
 .post-content ol {
-  margin-bottom: 1.15rem;
-  padding-left: 1.4rem;
+  margin-bottom: 1.2rem;
+  padding-left: 1.5rem;
 }
 
 .post-content ul li::marker {
   color: var(--accent);
-  font-family: var(--font-mono);
 }
 
 .post-content ol li::marker {
@@ -226,11 +194,11 @@
   margin-bottom: 0.4rem;
 }
 
-/* 引用块 —— 终端回显：绿色竖条 + > 前缀 */
+/* 引用块 —— 不用斜体（中文斜体是伪斜体，很难看） */
 .post-content blockquote {
-  border-left: 2px solid var(--accent);
-  padding: 0.55rem 0 0.55rem 0.95rem;
-  margin: 1.6rem 0;
+  border-left: 3px solid var(--accent);
+  padding: 0.9rem 1.25rem;
+  margin: 1.75rem 0;
   background: var(--accent-glow);
   border-radius: 0 var(--radius) var(--radius) 0;
   color: var(--text-secondary);
@@ -240,16 +208,9 @@
   margin-bottom: 0;
 }
 
-.post-content blockquote p::before {
-  content: '> ';
-  font-family: var(--font-mono);
-  color: var(--accent);
-  font-weight: 700;
-}
-
 .post-content code {
   background: var(--bg-inline-code);
-  padding: 0.1rem 0.32rem;
+  padding: 0.14rem 0.4rem;
   border-radius: var(--radius-sm);
   font-family: var(--font-mono);
   font-size: 0.87em;
@@ -257,65 +218,39 @@
   border: 1px solid var(--border-light);
 }
 
-/* ===== 代码块：带标题栏的终端窗口 ===== */
 .post-content pre {
-  position: relative;
-  margin: 1.5rem 0;
+  margin: 1.6rem 0;
   border-radius: var(--radius);
-  overflow: hidden;
+  overflow-x: auto;
   background: var(--code-bg);
   border: 1px solid var(--border-color);
+  box-shadow: var(--code-inset);
 }
 
-/* 标题栏 —— 文件名（app.js 依据真实 slug / 块序号写入 data-file） */
+/* 代码块顶部的黄铜刻度 */
 .post-content pre::before {
-  content: attr(data-file);
+  content: '';
   display: block;
-  padding: 0.32rem 8.8rem 0.32rem 0.85rem;
-  font-family: var(--font-mono);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: var(--text-secondary);
-  background: var(--bg-secondary);
-  border-bottom: 1px solid var(--border-color);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* 标题栏右侧：语言名（Shiki 输出的 data-language） */
-.post-content pre::after {
-  content: attr(data-language);
-  position: absolute;
-  top: 0.34rem;
-  right: 5.4rem;
-  font-family: var(--font-mono);
-  font-size: 0.64rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--cat-text);
-  white-space: nowrap;
-  pointer-events: none;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent), transparent 60%);
+  opacity: 0.45;
 }
 
 .post-content pre code {
   background: none;
-  padding: 0.95rem 1rem;
+  padding: 1.2rem;
   display: block;
-  overflow-x: auto;
   font-size: 0.82rem;
   line-height: 1.65;
   color: var(--text-primary);
   border: none;
-  -webkit-overflow-scrolling: touch;
 }
 
 .post-content img {
   border-radius: var(--radius);
-  margin: 1.5rem 0;
+  margin: 1.6rem 0;
   border: 1px solid var(--border-color);
+  box-shadow: var(--shadow);
 }
 
 .post-content a {
@@ -329,19 +264,38 @@
   text-decoration-color: var(--accent);
 }
 
-/* 分隔线 —— 一行短横线 */
+/* 分隔线 —— 用一小段刻度代替菱形 */
 .post-content hr {
   border: none;
+  border-top: 1px solid var(--border-color);
+  margin: 2.75rem 0;
+  position: relative;
   height: 1px;
-  background: var(--border-color);
-  margin: 2.5rem 0;
 }
 
-/* ===== 表格 ===== */
+.post-content hr::after {
+  content: '';
+  position: absolute;
+  top: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30px;
+  height: 7px;
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--rule-tick-strong) 0 1px,
+    transparent 1px 6px
+  );
+}
+
+/* ===== 表格 =====
+ * 表格被 rehype 插件包在 .table-scroll 里：窄屏时表格自己横向滚动，
+ * 页面不会跟着横向溢出。边框与圆角由容器承担。
+ */
 .post-content .table-scroll {
   width: 100%;
   overflow-x: auto;
-  margin: 1.5rem 0;
+  margin: 1.6rem 0;
   border: 1px solid var(--border-color);
   border-radius: var(--radius);
   -webkit-overflow-scrolling: touch;
@@ -362,17 +316,21 @@
 .post-content th,
 .post-content td {
   border: 1px solid var(--border-color);
-  padding: 0.55rem 0.9rem;
+  padding: 0.6rem 1rem;
   text-align: left;
 }
 
+/* 表头不换行；单元格允许换行，避免窄屏下表格被撑得过宽 */
 .post-content th {
   white-space: nowrap;
+}
+
+.post-content th {
   background: var(--bg-secondary);
   font-weight: 700;
   color: var(--text-bright);
   font-family: var(--font-mono);
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
 }
@@ -384,18 +342,18 @@
 
 .code-copy-btn {
   position: absolute;
-  top: 0.26rem;
-  right: 0.42rem;
+  top: 0.6rem;
+  right: 0.6rem;
   display: inline-flex;
   align-items: center;
-  gap: 0.28rem;
-  padding: 0.24rem 0.48rem;
+  gap: 0.3rem;
+  padding: 0.3rem 0.55rem;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
-  font-size: 0.72rem;
-  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-family: var(--font-sans);
   cursor: pointer;
   opacity: 0;
   transition:
@@ -419,11 +377,12 @@
 
 .code-copy-btn.copied {
   background: var(--success);
-  color: var(--bg-primary);
+  color: var(--on-success);
   border-color: var(--success);
   opacity: 1;
 }
 
+/* 在移动端始终可见 */
 @media (max-width: 768px) {
   .code-copy-btn {
     opacity: 1;
@@ -434,7 +393,7 @@
 .image-zoom-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.92);
+  background: var(--overlay-bg);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -449,6 +408,7 @@
   max-height: 95vh;
   object-fit: contain;
   border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
   cursor: default;
 }
 
@@ -456,9 +416,9 @@
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #fff;
+  background: var(--overlay-control-bg);
+  border: 1px solid var(--overlay-control-border);
+  color: var(--on-overlay);
   font-size: 1.75rem;
   line-height: 1;
   width: 42px;
@@ -472,7 +432,7 @@
 }
 
 .image-zoom-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--overlay-control-bg-hover);
 }
 
 @keyframes fadeIn {
@@ -486,7 +446,7 @@
 
 /* ===== Shiki 双主题切换 =====
  * Astro/Shiki 输出的代码块结构:
- *   <pre class="astro-code github-light github-dark" data-language="js">
+ *   <pre class="astro-code github-light github-dark">
  *     <span style="color:#xxx;--shiki-dark:#yyy">token</span>
  *   </pre>
  *
@@ -494,7 +454,7 @@
  * dark  模式：用 --shiki-dark 覆盖 color，并使用 --shiki-dark-bg 作为背景
  */
 html[data-mode='dark'] .post-content pre.astro-code {
-  background-color: var(--shiki-dark-bg, #0d1117) !important;
+  background-color: var(--shiki-dark-bg, var(--code-bg)) !important;
 }
 
 html[data-mode='dark'] .post-content pre.astro-code span {

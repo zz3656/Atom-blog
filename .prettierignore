@@ -4,6 +4,7 @@ dist
 coverage
 public/_assets
 public/js
+src/generated
 package-lock.json
 *.min.js
 *.min.css

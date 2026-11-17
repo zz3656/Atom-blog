@@ -143,17 +143,11 @@
   // ============================================================
   var searchInput = document.getElementById('search-input');
   var searchResults = document.getElementById('search-results');
-  var searchWrapper = searchInput ? searchInput.closest('.search-wrapper') : null;
 
   if (searchInput && searchResults) {
     var searchIndex = [];
     var indexLoaded = false;
     var indexLoading = false;
-
-    // 索引尚未就绪时把查询挂起；索引到位后立刻补跑。
-    // 旧实现是 setInterval 轮询 + 3 秒超时：索引加载慢于 3 秒（弱网 / 大索引）
-    // 轮询就被清掉了，用户的第一次搜索被静默丢弃——搜不出东西还看不出原因。
-    var pendingQuery = null;
 
     function ensureIndexLoaded() {
       if (indexLoaded || indexLoading) return;
@@ -166,15 +160,9 @@
         .then(function (data) {
           searchIndex = data;
           indexLoaded = true;
-          if (pendingQuery) {
-            var q = pendingQuery;
-            pendingQuery = null;
-            doSearch(q);
-          }
         })
         .catch(function (e) {
           console.warn('Search index not loaded:', e.message);
-          pendingQuery = null;
         })
         .finally(function () {
           indexLoading = false;
@@ -183,21 +171,13 @@
     searchInput.addEventListener('focus', ensureIndexLoaded, { once: true });
     searchInput.addEventListener('input', ensureIndexLoaded, { once: true });
 
-    function renderLoading() {
-      while (searchResults.firstChild) searchResults.removeChild(searchResults.firstChild);
-      var loading = document.createElement('div');
-      loading.className = 'search-no-result';
-      loading.textContent = '正在加载索引…';
-      searchResults.appendChild(loading);
-      searchResults.classList.add('active');
-    }
-
     function renderResults(results, query) {
       while (searchResults.firstChild) searchResults.removeChild(searchResults.firstChild);
       if (results.length === 0) {
         var empty = document.createElement('div');
         empty.className = 'search-no-result';
         empty.textContent = '没有找到相关结果';
+        empty.setAttribute('role', 'option');
         searchResults.appendChild(empty);
         return;
       }
@@ -207,17 +187,13 @@
         var link = document.createElement('a');
         link.href = searchBase.replace(/\/+$/, '') + '/blog/' + r.item.slug + '/';
         link.className = 'search-result-item';
-        // 路径行 —— grep 输出的 "文件:行" 前缀
-        var pathEl = document.createElement('div');
-        pathEl.className = 'search-result-path';
-        pathEl.textContent = '~/posts/' + r.item.slug + '.md';
+        link.setAttribute('role', 'option');
         var titleEl = document.createElement('div');
         titleEl.className = 'search-result-title';
         titleEl.innerHTML = highlightSafe(r.item.title, query);
         var descEl = document.createElement('div');
         descEl.className = 'search-result-desc';
         descEl.innerHTML = highlightSafe(r.item.description || '', query);
-        link.appendChild(pathEl);
         link.appendChild(titleEl);
         link.appendChild(descEl);
         fragment.appendChild(link);
@@ -236,23 +212,29 @@
       });
       renderResults(results.slice(0, 10), query);
       searchResults.classList.add('active');
+      searchInput.setAttribute('aria-expanded', 'true');
     }
 
     function search(query) {
       query = query.trim().toLowerCase();
       if (!query) {
-        pendingQuery = null;
         searchResults.classList.remove('active');
+        searchInput.setAttribute('aria-expanded', 'false');
         return;
       }
       if (!indexLoaded) {
-        // 索引还在路上：把查询挂起，并显示加载态，别让面板空着像坏了
-        pendingQuery = query;
         ensureIndexLoaded();
-        renderLoading();
+        var pollId = setInterval(function () {
+          if (indexLoaded) {
+            clearInterval(pollId);
+            doSearch(query);
+          }
+        }, 50);
+        setTimeout(function () {
+          clearInterval(pollId);
+        }, 3000);
         return;
       }
-      pendingQuery = null;
       doSearch(query);
     }
 
@@ -265,28 +247,20 @@
     });
 
     document.addEventListener('click', function (e) {
-      if (!e.target.closest('.search-wrapper')) searchResults.classList.remove('active');
+      if (!e.target.closest('.search-wrapper')) {
+        searchResults.classList.remove('active');
+        searchInput.setAttribute('aria-expanded', 'false');
+      }
     });
 
-    // 键盘监听挂在 document 上，作用域用「结果面板是否展开」来限定。
-    // 为什么不用 searchInput：↓ 会把焦点移到结果项（<a>），焦点一离开 input，
-    // 挂在 input 上的 keydown 就再也收不到按键 —— ↑ / Enter / Esc 会全部失灵，
-    // 页脚那行快捷键提示就成了空话。
-    // 为什么不用 .search-wrapper：结果列表重渲染会销毁被聚焦的项，焦点掉回 body，
-    // 此时按键同样收不到（body 不是 wrapper 的祖先）。挂 document 最稳。
-    document.addEventListener('keydown', function (e) {
-      var panelOpen = searchResults.classList.contains('active');
-      var inInput = document.activeElement === searchInput;
-      var inWrapper = !!(searchWrapper && searchWrapper.contains(document.activeElement));
-
+    searchInput.addEventListener('keydown', function (e) {
       if (e.key === 'Escape') {
-        if (!panelOpen && !inInput) return;
         searchResults.classList.remove('active');
-        if (inInput) searchInput.blur();
-        else if (inWrapper) searchInput.focus(); // 焦点回到输入框，便于继续编辑
+        searchInput.setAttribute('aria-expanded', 'false');
+        searchInput.blur();
         return;
       }
-      if (!panelOpen) return;
+      if (!searchResults.classList.contains('active')) return;
       var items = searchResults.querySelectorAll('.search-result-item');
       if (items.length === 0) return;
       var idx = Array.prototype.indexOf.call(items, document.activeElement);
@@ -296,10 +270,9 @@
       } else if (e.key === 'ArrowUp') {
         e.preventDefault();
         items[idx > 0 ? idx - 1 : items.length - 1].focus();
-      } else if (e.key === 'Enter') {
+      } else if (e.key === 'Enter' && idx >= 0) {
         e.preventDefault();
-        // 没选中任何一条时，打开第一条（页脚提示的 [Enter] 打开）
-        items[idx >= 0 ? idx : 0].click();
+        items[idx].click();
       }
     });
   }
@@ -337,57 +310,9 @@
       '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>';
 
     var pres = postContent.querySelectorAll('pre');
-
-    // 代码块标题栏的文件名：文章 slug + 块序号 + 语言扩展名。
-    // 三个来源都是真实数据 —— slug 来自文章、序号是块在正文里的次序、
-    // 扩展名来自 Shiki 输出的 data-language。
-    var postEl = document.querySelector('.post');
-    var fileBase = (postEl && postEl.getAttribute('data-post-slug')) || 'snippet';
-    var LANG_EXT = {
-      bash: 'sh',
-      sh: 'sh',
-      shell: 'sh',
-      zsh: 'sh',
-      console: 'sh',
-      js: 'js',
-      javascript: 'js',
-      ts: 'ts',
-      typescript: 'ts',
-      json: 'json',
-      yaml: 'yml',
-      yml: 'yml',
-      toml: 'toml',
-      html: 'html',
-      css: 'css',
-      scss: 'scss',
-      md: 'md',
-      markdown: 'md',
-      py: 'py',
-      python: 'py',
-      rb: 'rb',
-      go: 'go',
-      rs: 'rs',
-      rust: 'rs',
-      sql: 'sql',
-      dockerfile: 'dockerfile',
-      nginx: 'conf',
-      conf: 'conf',
-      ini: 'ini',
-      diff: 'diff',
-      text: 'txt',
-      txt: 'txt',
-      plaintext: 'txt',
-    };
-
-    var codeIndex = 0;
     for (var pi = 0; pi < pres.length; pi++) {
       var pre = pres[pi];
       if (pre.parentElement && pre.parentElement.classList.contains('code-wrapper')) continue;
-      codeIndex++;
-      var lang = (pre.getAttribute('data-language') || '').toLowerCase();
-      var ext = LANG_EXT[lang] || (lang && lang.length <= 6 ? lang : 'txt');
-      var seq = codeIndex < 10 ? '0' + codeIndex : String(codeIndex);
-      pre.setAttribute('data-file', fileBase + '-' + seq + '.' + ext);
       var wrapper = document.createElement('div');
       wrapper.className = 'code-wrapper';
       pre.parentNode.insertBefore(wrapper, pre);
@@ -458,8 +383,11 @@
 
       var zoomImg = overlay.querySelector('.image-zoom-img');
       var closeBtn = overlay.querySelector('.image-zoom-close');
+      // 记住打开前的焦点，关闭时归还（否则键盘用户会被丢回文档开头）
+      var prevFocus = null;
 
       function openZoom(src, alt) {
+        prevFocus = document.activeElement;
         zoomImg.src = src;
         zoomImg.alt = alt || '';
         overlay.style.display = 'flex';
@@ -470,13 +398,25 @@
         overlay.style.display = 'none';
         zoomImg.src = '';
         document.body.style.overflow = '';
+        if (prevFocus && typeof prevFocus.focus === 'function') prevFocus.focus();
+        prevFocus = null;
       }
 
       for (var ii = 0; ii < images.length; ii++) {
         (function (img) {
           img.style.cursor = 'zoom-in';
+          // 键盘用户也要能打开：图片本身充当按钮
+          img.setAttribute('tabindex', '0');
+          img.setAttribute('role', 'button');
+          img.setAttribute('aria-label', img.alt ? '放大图片：' + img.alt : '放大图片');
           img.addEventListener('click', function () {
             openZoom(img.src, img.alt);
+          });
+          img.addEventListener('keydown', function (e) {
+            if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+              e.preventDefault();
+              openZoom(img.src, img.alt);
+            }
           });
         })(images[ii]);
       }
@@ -484,7 +424,16 @@
         if (e.target === overlay || e.target === closeBtn) closeZoom();
       });
       document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && overlay.style.display !== 'none') closeZoom();
+        if (overlay.style.display === 'none') return;
+        if (e.key === 'Escape') {
+          closeZoom();
+          return;
+        }
+        // 遮罩里只有关闭按钮可聚焦：Tab 时把焦点留在遮罩内
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          closeBtn.focus();
+        }
       });
     }
 
@@ -569,19 +518,6 @@
       } else if (wideToc.addListener) {
         wideToc.addListener(syncToc);
       }
-    }
-  }
-
-  // ============================================================
-  // 9. 404 真实路径回填
-  // ============================================================
-  // 静态 404.html 在构建期拿不到访客请求的真实路径，
-  // 这里用 location.pathname 回填 [data-404-path] 占位符。
-  var notFoundPaths = document.querySelectorAll('[data-404-path]');
-  if (notFoundPaths.length > 0) {
-    var requestedPath = window.location.pathname;
-    for (var nfp = 0; nfp < notFoundPaths.length; nfp++) {
-      notFoundPaths[nfp].textContent = requestedPath;
     }
   }
 })();

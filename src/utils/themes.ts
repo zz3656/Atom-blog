@@ -24,6 +24,11 @@ export interface ThemeManifest {
   modes: ('light' | 'dark')[];
   /** 预览图（public 下的相对路径，可空） */
   preview: string;
+  /**
+   * 浏览器地址栏 / PWA 的主题色（可选，缺省用 consts.ts 的 DEFAULT_THEME_COLORS）。
+   * 组件层不能写死颜色，所以 theme-color 这类 meta 也从主题里取。
+   */
+  themeColor?: { light: string; dark: string };
 }
 
 /**
@@ -62,18 +67,13 @@ export function scanThemes(): ThemeManifest[] {
         description: parsed.description ?? '',
         modes: parsed.modes.filter((m) => m === 'light' || m === 'dark'),
         preview: parsed.preview ?? '',
+        themeColor: parsed.themeColor ?? undefined,
       });
     } catch (err) {
       console.warn(`[themes] Failed to parse ${manifestPath}:`, (err as Error).message);
     }
   }
-  // 排序：按 id 字典序（通用规则，不对任何具体主题 id 做特例）。
-  // 显式化而非依赖 readdirSync 的实现细节 —— 新增主题目录时，
-  // 顺序不因文件系统行为变化而漂移（与 astro-plugins/theme-loader.mjs 保持一致）。
-  //
-  // 注意：站点默认主题由 src/consts.ts 的 DEFAULT_THEME_ID 决定，与这里的排序无关。
-  // 排序只保证「两处扫描产出同一顺序」（测试与构建一致）。
-  themes.sort((a, b) => a.id.localeCompare(b.id));
+  // 排序：第一个主题保持首位（通常是 atom-geek）
   return themes;
 }
 

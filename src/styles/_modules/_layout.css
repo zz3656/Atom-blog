@@ -1,24 +1,11 @@
-/* Atom Blog — Main Layout
- *
- * 整站被一个「终端窗口」包住：左右两条竖线是窗口边框，
- * 顶部是标题栏（见 _header.css），底部是状态栏（见 _footer.css）。
- */
-
-.term-window {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  border-left: 1px solid var(--border-color);
-  border-right: 1px solid var(--border-color);
-  background: var(--bg-primary);
-}
+/* Atom Blog — Main Layout & Animations */
 
 main {
   flex: 1;
-  width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 1.75rem 3.25rem;
+  padding: 2rem 1.75rem 3.5rem;
+  width: 100%;
 }
 
 /* ===== 主题切换过渡（仅颜色，不影响布局）===== */
@@ -26,11 +13,11 @@ html {
   transition: background-color 0.25s ease;
 }
 
-html body,
-html body * {
+/* 主题切换只给 body 挂颜色过渡。以前是 `html body *`（所有元素），
+   主题一换整页重绘、任意 hover 也带着颜色动画；具体组件需要过渡的在各自模块里声明。 */
+body {
   transition:
     background-color 0.25s ease,
-    border-color 0.25s ease,
     color 0.15s ease;
 }
 
@@ -47,9 +34,14 @@ html body * {
 
 /* ===== Safe area support for modern phones ===== */
 @supports (padding: max(0px)) {
-  .nav-container,
-  .term-bar,
-  main,
+  .nav-container {
+    padding-left: max(1.75rem, env(safe-area-inset-left));
+    padding-right: max(1.75rem, env(safe-area-inset-right));
+  }
+  main {
+    padding-left: max(1.75rem, env(safe-area-inset-left));
+    padding-right: max(1.75rem, env(safe-area-inset-right));
+  }
   .site-footer {
     padding-left: max(1.75rem, env(safe-area-inset-left));
     padding-right: max(1.75rem, env(safe-area-inset-right));
@@ -61,15 +53,15 @@ html body * {
   position: fixed;
   right: 1.5rem;
   bottom: 1.5rem;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--bg-card);
-  color: var(--accent);
-  border: 1px solid var(--accent);
+  background: var(--accent);
+  color: var(--on-accent);
   border-radius: var(--radius);
+  box-shadow: var(--shadow-md);
   cursor: pointer;
   opacity: 0;
   visibility: hidden;
@@ -89,8 +81,17 @@ html body * {
 }
 
 .back-to-top:hover {
-  background: var(--accent);
-  color: var(--on-accent);
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .back-to-top {
+    right: 1rem;
+    bottom: 1rem;
+    width: 38px;
+    height: 38px;
+  }
 }
 
 /* ===== TOC 锚点滚动补偿 ===== */
@@ -122,16 +123,12 @@ main:focus {
   outline: none;
 }
 
-@media (max-width: 768px) {
-  .back-to-top {
-    right: 1rem;
-    bottom: 1rem;
-    width: 36px;
-    height: 36px;
-  }
-
-  .term-window {
-    border-left: 0;
-    border-right: 0;
-  }
+/* JS 关闭时的提示条（原文在 BaseLayout.astro 的 <noscript> 里写死了黄底） */
+.noscript-note {
+  padding: 0.75rem 1rem;
+  text-align: center;
+  font-size: 0.9rem;
+  background: var(--panel-bg);
+  color: var(--text-primary);
+  border-bottom: 1px solid var(--warning);
 }

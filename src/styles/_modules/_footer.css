@@ -1,7 +1,6 @@
-/* Atom Blog — Footer（TUI 系统状态栏）
+/* Atom Blog — Footer
  *
- * 形态与 tmux / vim 的状态栏一致：左右两段 + 一行快捷键提示。
- * 右侧块内部再分两行：链接行在上，构建信息（build / astro / static）在其正下方。
+ * 顶部是一根完整的刻度尺 —— 全站刻度尺母题的最后一次出现。
  */
 
 .site-footer {
@@ -10,101 +9,161 @@
   margin-top: auto;
   position: relative;
   transition: background 0.3s ease;
-  font-family: var(--font-mono);
-  font-size: 0.74rem;
-  letter-spacing: 0.03em;
-  color: var(--text-muted);
+}
+
+/* 顶部的刻度尺 */
+.site-footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: var(--rule-height);
+  background-repeat: repeat-x;
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      var(--rule-tick-strong) 0 1px,
+      transparent 1px var(--rule-major)
+    ),
+    repeating-linear-gradient(90deg, var(--rule-tick) 0 1px, transparent 1px var(--rule-minor));
+  background-size:
+    100% var(--rule-height),
+    100% calc(var(--rule-height) * 0.42);
+  background-position:
+    0 0,
+    0 100%;
+  opacity: 0.7;
 }
 
 .footer-content {
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 1rem 1.75rem 1.15rem;
+  padding: 1.75rem 1.75rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.7rem;
+  gap: 1.1rem;
+  font-size: 0.78rem;
+  color: var(--text-muted);
 }
 
-/* ===== 状态栏 ===== */
-.footer-status {
+/* ===== 第一行：标识 + 链接 ===== */
+.footer-top {
   display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 0.7rem 1rem;
-  flex-wrap: wrap;
-  min-width: 0;
-}
-
-/* 右侧块：链接行 + 其正下方的构建信息（两行右对齐） */
-.footer-right-col {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 0.3rem;
-  min-width: 0;
-}
-
-.footer-left,
-.footer-mid {
-  display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  /* 允许在窄屏折行，避免状态栏内容溢出自己的盒子 */
+  justify-content: space-between;
+  gap: 1.5rem;
   flex-wrap: wrap;
-  min-width: 0;
-  max-width: 100%;
 }
 
-.footer-copy {
-  color: var(--text-secondary);
-}
-
-/* TERMINAL SESSION —— 站点的终端身份标识，不随宽度折行 */
-.footer-tagline {
-  color: var(--text-muted);
-  letter-spacing: 0.12em;
-  white-space: nowrap;
-}
-
-.footer-author {
-  color: var(--accent);
-}
-
-.footer-build {
-  color: var(--text-secondary);
-}
-
-.footer-mid a {
-  color: var(--text-muted);
-}
-
-.footer-mid a:hover {
-  color: var(--accent);
-}
-
-.footer-right {
+.footer-brand {
   display: flex;
-  gap: 0.9rem;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.footer-brand-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-variation-settings:
+    'wdth' 108,
+    'wght' 800;
+  font-size: 0.95rem;
+  letter-spacing: -0.02em;
+  color: var(--text-bright);
+}
+
+.footer-brand-tag {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.footer-links {
+  display: flex;
+  gap: 0.35rem;
   flex-wrap: wrap;
 }
 
-.footer-right a {
+.footer-links a {
   color: var(--text-muted);
+  font-weight: 500;
   /* 保证触控热区 ≥ 24px（WCAG 2.5.8） */
   display: inline-flex;
   align-items: center;
-  padding: 0.15rem 0;
-  transition: color 0.18s ease;
+  padding: 0.3rem 0.5rem;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
 }
 
-.footer-right a:hover {
+.footer-links a:hover {
   color: var(--accent);
+  background: var(--accent-glow);
 }
 
-/* ===== 快捷键提示 ===== */
-.footer-keys {
-  font-size: 0.68rem;
+/* ===== 第二行：版权 ===== */
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--border-light);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+}
+
+.footer-built {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+/* 右侧一组：版本号 + Powered by */
+.footer-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+}
+
+/* 版本号 —— 真实数据，沿用页脚的 mono 字体，弱化处理不抢视线 */
+.footer-version {
   color: var(--text-muted);
-  padding-top: 0.6rem;
-  border-top: 1px dashed var(--border-light);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.08em;
+  padding: 0.15rem 0.4rem;
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+}
+
+/* 状态点 */
+.footer-built::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--success);
+}
+
+/* 页脚里的文字链接同样保证 ≥ 24px 的触控高度 */
+.footer-bottom a {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.25rem;
+  border-radius: var(--radius-sm);
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.footer-bottom a:hover {
+  color: var(--accent);
+  background: var(--accent-glow);
 }

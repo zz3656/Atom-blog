@@ -1,0 +1,30 @@
+---
+// 文章列表：blog/index.astro 与 blog/[...page].astro 原先各抄了一遍，
+// 连序号列都在两个页面里重复实现。统一到这里。
+import type { CollectionEntry } from 'astro:content';
+import PostCard from './PostCard.astro';
+import { blogPostUrl } from '../utils/path';
+
+interface Props {
+  posts: CollectionEntry<'blog'>[];
+  /** 序号起点：第 2 页从 13 开始（1-based 由 PostCard 负责补零） */
+  startIndex?: number;
+}
+
+const { posts, startIndex = 0 } = Astro.props;
+---
+
+<ul class="log-list">
+  {posts.map((post, idx) => (
+    <PostCard
+      href={blogPostUrl(post.id)}
+      title={post.data.title}
+      description={post.data.description}
+      body={post.body}
+      pubDate={post.data.pubDate}
+      category={post.data.category}
+      tags={post.data.tags}
+      index={startIndex + idx}
+    />
+  ))}
+</ul>

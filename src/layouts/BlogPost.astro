@@ -1,19 +1,13 @@
 ---
-// Atom Blog — 文章页（TUI: cat 输出）
-//
-// 刊头 = 命令回显：~/inte8 $ cat posts/<slug>.md
-// 刊头下方 = 文件元信息（大小 / 行数 / 日期 / 分类 / 阅读时长）
-// 正文   = cat 的输出，左侧带行号槽（纯装饰，app.js 渲染）
 import BaseLayout from './BaseLayout.astro';
 import TableOfContents from '../components/TableOfContents.astro';
-import { AUTHOR, SITE_TITLE, TUI_PROMPT } from '../consts';
-import { blogPostUrl, rootPath, baseAssetsPath } from '../utils/path';
+import { AUTHOR, SITE_TITLE, SITE_FAVICON } from '../consts';
+import { blogPostUrl, rootPath, baseAssetsPath, absoluteUrl } from '../utils/path';
 import { readingTime, countWords } from '../utils/blog';
 import { formatDateISO } from '../utils/date';
 
 interface Props {
   title: string;
-  slug?: string;
   pubDate: Date;
   updatedDate?: Date;
   description: string;
@@ -31,7 +25,6 @@ interface Props {
 
 const {
   title,
-  slug = '',
   pubDate,
   updatedDate,
   description,
@@ -47,9 +40,6 @@ const {
   toc = [],
 } = Astro.props;
 const readingMinutes = readingTime(body || '');
-// 文件元信息（真实数据）：字节数与行数都取自 Markdown 原文
-const fileSize = `${(new TextEncoder().encode(body || '').length / 1024).toFixed(1)}K`;
-const fileLines = body ? body.split('\n').length : 0;
 ---
 
 <BaseLayout
@@ -60,9 +50,10 @@ const fileLines = body ? body.split('\n').length : 0;
 >
   <fragment slot="head">
     {(() => {
-      const imageUrl =
-        featuredImage || heroImage ? `${Astro.url.origin}${featuredImage || heroImage}` : undefined;
-      const publisherLogo = `${Astro.url.origin}/favicon.svg`;
+      // 结构化数据必须是完整 URL，且要跟随 base（Astro.url.origin 不含 base）
+      const socialImage = featuredImage || heroImage;
+      const imageUrl = socialImage ? absoluteUrl(socialImage) : undefined;
+      const publisherLogo = absoluteUrl(SITE_FAVICON);
       const wordCount = countWords(body || '');
       return (
         <script
@@ -97,63 +88,40 @@ const fileLines = body ? body.split('\n').length : 0;
       <div class="reading-progress-fill"></div>
     </div>
   </div>
-  <article class="post" data-post-slug={slug}>
-    <header class="post-header">
-      <p class="post-command">
-        <span class="post-prompt" aria-hidden="true">{TUI_PROMPT}</span>
-        <span class="post-cmd">cat posts/{slug}.md</span>
+  <article class="post">
+    <div class="post-header">
+      <p class="post-eyebrow">
+        <span class="post-eyebrow-mark"></span>
+        {category && <span class="post-category-tag">{category}</span>}
+        <span class="post-eyebrow-sep">/</span>
+        <time datetime={pubDate.toISOString()}>{formatDateISO(pubDate)}</time>
+        {readingMinutes > 0 && (
+          <>
+            <span class="post-eyebrow-sep">/</span>
+            <span>约 {readingMinutes} 分钟</span>
+          </>
+        )}
       </p>
       <h1>{title}</h1>
+      <div class="rule rule--draw"></div>
       <p class="post-description">{description}</p>
-
-      <ul class="post-filemeta">
-        <li>
-          <span class="fm-key">size</span>
-          <span class="fm-val">{fileSize}</span>
-        </li>
-        <li>
-          <span class="fm-key">lines</span>
-          <span class="fm-val">{fileLines}</span>
-        </li>
-        <li>
-          <span class="fm-key">date</span>
-          <span class="fm-val">
-            <time datetime={pubDate.toISOString()}>{formatDateISO(pubDate)}</time>
-          </span>
-        </li>
-        {category && (
-          <li>
-            <span class="fm-key">cat</span>
-            <span class="fm-val fm-val--cat">{category}</span>
-          </li>
-        )}
-        <li>
-          <span class="fm-key">read</span>
-          <span class="fm-val">{readingMinutes} min</span>
-        </li>
-        {updatedDate && (
-          <li>
-            <span class="fm-key">upd</span>
-            <span class="fm-val fm-val--warn">updated {formatDateISO(updatedDate)}</span>
-          </li>
-        )}
-      </ul>
-
+      <div class="post-meta">
+        {updatedDate && <span class="updated">更新于 {formatDateISO(updatedDate)}</span>}
+      </div>
       {tags.length > 0 && (
         <div class="post-meta-extra">
           <span class="post-tags-row">
             {tags.map((tag) => (
-              <span class="tag">#{tag}</span>
+              <span class="tag">{tag}</span>
             ))}
           </span>
         </div>
       )}
-    </header>
-
+    </div>
     {heroImage && (
       <div class="hero-image">
         <img
-          src={heroImage}
+          src={baseAssetsPath(heroImage)}
           alt={title}
           loading="eager"
           fetchpriority="high"
@@ -162,41 +130,41 @@ const fileLines = body ? body.split('\n').length : 0;
         />
       </div>
     )}
-
     <div class="post-content-wrapper">
-      <TableOfContents headings={toc} postSlug={slug} />
-      {/* 行号槽由 CSS counter 渲染（.post-content > *），零 JS */}
+      <TableOfContents headings={toc} />
       <div class="post-content">
         <slot />
       </div>
     </div>
-
     {reward && (
       <div class="post-reward">
-        <p class="reward-title">🤖 觉得文章有帮助？给因特吧加个油</p>
+        <p class="reward-title">🤖 觉得文章有帮助？给 Atom 加个油</p>
         <div class="reward-qr">
           <div class="reward-item">
             <img
-              src={baseAssetsPath('/medias/reward/wechat.png')}
+              src={baseAssetsPath('/medias/reward/wechat.webp')}
               alt="微信赞赏码"
               width="140"
               height="140"
+              loading="lazy"
+              decoding="async"
             />
             <span>微信赞赏</span>
           </div>
           <div class="reward-item">
             <img
-              src={baseAssetsPath('/medias/reward/alipay.png')}
+              src={baseAssetsPath('/medias/reward/alipay.webp')}
               alt="支付宝收款码"
               width="140"
               height="140"
+              loading="lazy"
+              decoding="async"
             />
             <span>支付宝赞赏</span>
           </div>
         </div>
       </div>
     )}
-
     {relatedPosts.length > 0 && (
       <section class="related-posts">
         <h3 class="related-title">📚 相关推荐</h3>
@@ -204,36 +172,32 @@ const fileLines = body ? body.split('\n').length : 0;
           {relatedPosts.map((p) => (
             <li>
               <a href={blogPostUrl(p.slug)} class="related-link">
-                <span class="related-link-path" aria-hidden="true">/posts/{p.slug}.md</span>
                 <span class="related-link-title">{p.title}</span>
-                <span class="related-link-arrow" aria-hidden="true">→</span>
+                <span class="related-link-arrow">→</span>
               </a>
             </li>
           ))}
         </ul>
       </section>
     )}
-
     {prevPost || nextPost ? (
       <nav class="post-nav">
         <div class="post-nav-links">
           {prevPost && (
             <a href={blogPostUrl(prevPost.slug)} class="post-nav-link prev">
-              <span class="nav-label">{prevPost.title}</span>
-              <span class="post-nav-dir" aria-hidden="true">← prev</span>
+              ← <span class="nav-label">{prevPost.title}</span>
             </a>
           )}
           {nextPost && (
             <a href={blogPostUrl(nextPost.slug)} class="post-nav-link next">
-              <span class="nav-label">{nextPost.title}</span>
-              <span class="post-nav-dir" aria-hidden="true">next →</span>
+              <span class="nav-label">{nextPost.title}</span> →
             </a>
           )}
         </div>
       </nav>
     ) : (
       <div class="post-nav">
-        <a href={rootPath()}>← cd ~ 返回首页</a>
+        <a href={rootPath()}>← 返回首页</a>
       </div>
     )}
   </article>

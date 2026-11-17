@@ -2,24 +2,35 @@
   "name": "atom",
   "version": "1.6.2",
   "type": "module",
+  "upstream": {
+    "repo": "zz3656/Atom",
+    "version": "1.1.5"
+  },
   "scripts": {
+    "clean": "rm -rf dist public/js public/_assets src/generated .astro coverage",
     "dev": "astro dev",
+    "predev": "node scripts/minify-app-js.mjs",
+    "prebuild": "node scripts/generate-search-index.mjs",
     "build": "node scripts/minify-app-js.mjs && astro build",
     "preview": "astro preview",
+    "preview:github": "DEPLOY_TARGET=github REPO_NAME=Atom-blog npm run build && DEPLOY_TARGET=github REPO_NAME=Atom-blog astro preview",
     "check": "astro check",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
+    "test:watch": "vitest",
     "format": "prettier --write \"**/*.{ts,tsx,js,mjs,cjs,astro,css,json,md,yml,yaml}\" --ignore-path .prettierignore",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,mjs,cjs,astro,css,json,md,yml,yaml}\" --ignore-path .prettierignore",
     "new": "node scripts/atom-cli.mjs new",
     "list": "node scripts/atom-cli.mjs list",
     "theme:create": "node scripts/create-theme.mjs",
-    "postbuild": "node --experimental-strip-types scripts/generate-rss.mjs && node --experimental-strip-types scripts/fix-sitemap.mjs && node scripts/generate-og.mjs"
+    "postbuild": "node scripts/generate-rss.mjs && node scripts/generate-og.mjs",
+    "verify:links": "node scripts/verify-build-links.mjs",
+    "verify:search": "node scripts/verify-search-index.mjs"
   },
   "engines": {
-    "node": ">=22.23.4",
+    "node": ">=24",
     "npm": ">=10.8"
   },
   "dependencies": {
@@ -45,5 +56,6 @@
     "typescript": "^6.0.3",
     "vitest": "^5.0.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "private": true
 }

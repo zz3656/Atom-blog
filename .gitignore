@@ -4,7 +4,7 @@ dist/
 # 构建产物中的临时资产（search-index.json 会被重新生成）
 public/_assets/
 
-# postbuild minify 产物（源在 src/scripts/app.js，scripts/minify-app-js.mjs 生成这里）
+# prebuild minify 产物（源在 src/scripts/app.js，scripts/minify-app-js.mjs 生成这里）
 public/js/
 # 同上：minify 脚本为子路径部署额外生成（public/<base>/js/app.js）
 public/*/js/
@@ -15,8 +15,6 @@ node_modules/
 # IDE
 .vscode/
 .idea/
-.env
-.env.*
 
 # OS
 .DS_Store
@@ -30,8 +28,11 @@ npm-debug.log*
 coverage/
 src/generated/
 
-# Astro dev server 缓存（.astro 下其余类型文件是被 git 跟踪的）
-.astro/data-store.json
-.astro/dev.json
-.astro/settings.json
-.astro/preview.json
+# Astro 生成目录（types.d.ts / content.d.ts / collections schema 等全是构建产物，
+# 由 dev/build/astro check 自动重建；入库只会制造 diff 噪音与版本漂移）
+.astro/
+
+# 环境变量（本地建 .env 前必须已在忽略列表里；示例文件可入库）
+.env
+.env.*
+!.env.example

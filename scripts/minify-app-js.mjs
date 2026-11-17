@@ -1,53 +1,48 @@
-// 复制 src/scripts/app.js → public/js/app.js，再用 esbuild 压缩覆盖。
-//
-// 为什么源文件放在 src/scripts/ 而不是 public/js/？
-//   public/ 下的文件会被 Astro 原样复制到 dist/，不会经过 Vite/esbuild 处理。
-//   把"开发源"放在 src/scripts/，"构建产物"放在 public/js/，
-//   这样可以反复构建（不会基于压缩版本再次压缩），
-//   同时源代码仍受 ESLint/Prettier 控制。
-//
-// 为什么需要在 build 之前跑（prebuild 而不是 postbuild）？
-//   public/ 下的文件会被 Astro 原样复制到 dist/，但 public/js/app.js
-//   不存在（.gitignore 排除）。本脚本从 src/scripts/app.js 生成并
-//   esbuild 压缩到 public/js/app.js 让 Astro build 时能找到。
-
+/**
+ * 生成 public/js/app.js（esbuild 直接从 src/scripts/app.js 出产，压缩 + 校验）。
+ *
+ * 为什么源文件在 src/scripts/：public/ 下的文件会被 Astro 原样复制、不经过构建，
+ * 所以"开发源"留在 src/，"构建产物"落在 public/js/，这样反复构建不会基于压缩结果再压。
+ *
+ * 为什么不再 copyFileSync 再原地压：
+ *   1. 多一次全量拷贝纯属浪费；
+ *   2. 在会改写权限位的文件系统上（如 fnOS 卷），Node 的 copy_file_range 会产出
+ *      不可读文件，导致 esbuild 立刻读不了——直接出产就没有这个问题。
+ *
+ * 失败必须让构建失败：以前只 console.warn，会把未压缩甚至半写坏的 JS 发上线。
+ */
 import { build } from 'esbuild';
-import { copyFileSync, existsSync, mkdirSync, statSync } from 'node:fs';
-import { dirname, join } from 'node:path';
+import { existsSync, mkdirSync, statSync } from 'node:fs';
+import { dirname, join, relative } from 'node:path';
 
-const SRC = join(process.cwd(), 'src', 'scripts', 'app.js');
-const DST = join(process.cwd(), 'public', 'js', 'app.js');
+const ROOT = process.cwd();
+const SRC = join(ROOT, 'src', 'scripts', 'app.js');
+const DST = join(ROOT, 'public', 'js', 'app.js');
 
 if (!existsSync(SRC)) {
-  console.log('No src/scripts/app.js found, skipping minification');
-  process.exit(0);
+  console.error(`✗ 找不到源脚本：${relative(ROOT, SRC)}`);
+  process.exit(1);
 }
 
-// 确保目标目录存在（首次克隆的仓库因 .gitignore 排除 public/js/，可能没有该目录）
 mkdirSync(dirname(DST), { recursive: true });
 
 const before = statSync(SRC).size;
 
-// 先把开发版拷贝到 public/js/（根路径部署场景需要）
-copyFileSync(SRC, DST);
-
 try {
   await build({
-    entryPoints: [DST],
+    entryPoints: [SRC],
     outfile: DST,
-    allowOverwrite: true,
     bundle: true,
     minify: true,
     target: 'es2020',
     legalComments: 'none',
     logLevel: 'silent',
   });
-  const after = statSync(DST).size;
-  const pct = (((before - after) / before) * 100).toFixed(1);
-  console.log(`Minified app.js: ${before} → ${after} bytes (${pct}% smaller)`);
 } catch (err) {
-  console.warn('app.js minification failed:', err.message);
-  // 失败时把开发版留下，保证 dist 至少能跑
+  console.error('✗ app.js 压缩失败，构建中止：', err.message);
+  process.exit(1);
 }
-// (子路径兼容逻辑已移除：dist/<base>/js/app.js 是冗余产物，
-//  HTML 引用 /<base>/js/app.js 对应 dist/js/app.js，已足够)
+
+const after = statSync(DST).size;
+const pct = (((before - after) / before) * 100).toFixed(1);
+console.log(`Minified app.js: ${before} → ${after} bytes (${pct}% smaller)`);
