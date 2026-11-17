@@ -82,7 +82,7 @@ export function scanThemes(): ThemeManifest[] {
       console.warn(`[themes] Failed to parse ${manifestPath}:`, (err as Error).message);
     }
   }
-  // 排序：第一个主题保持首位（通常是 atom-geek）
+  // 排序：第一个主题保持首位（通常是 atom-default）
   return themes;
 }
 

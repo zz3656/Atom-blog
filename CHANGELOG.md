@@ -7,30 +7,14 @@ All notable changes to this project will be documented in this file.
 **版本号的唯一数据源是 `package.json` 的 `version` 字段** —— 页脚显示的版本号从那里读取，
 `tests/version.test.ts` 会校验它与本文件的最新发布版本号一致，两边不会漂移。
 
-发布流程：改 `package.json` 的 `version` → 把下面 `[Unreleased]` 段改成 `[x.y.z] — 日期` → `git tag vx.y.z`。
-
-Based on Atom **1.1.5**（`package.json` 的 `upstream` 字段记录基础版本；两条版本线不互相对齐）
+发布流程：改 `package.json` 的 `version` → 把下面 `[Unreleased]` 段改成 `[x.y.z] — 日期` → `git tag -a vx.y.z -m "..."` → `git push main --tags`。
 
 ---
-
-## [1.6.2] — 2026-10-26
-
-### 🐛 Fixed
-
-- **canonical / og:url / sitemap / RSS 全部指向了错的域名**：Cloudflare Pages 的自定义域名是 `www.inte8.top`（裸域 `inte8.top` 指向同一份站点），但 `astro.config.mjs` 里 `CF_DOMAIN` 的默认值写的是 `atom.inte8.top` —— 结果三个域名下发的都是 `atom.inte8.top`，等于告诉搜索引擎「正版在另一个域名上」。现默认值改为 `www.inte8.top`，构建产物实测：canonical / og:url / og:image / RSS 频道地址 / sitemap 全 102 条**无一例外**指向 `https://www.inte8.top/`
-  - GitHub Pages 那条部署不受影响：`DEPLOY_TARGET=github` 走的是仓库名推导的独立分支，仍以 `https://zz3656.github.io/Atom-blog/` 为准
-
-### 📚 Documentation
-
-- `README.md` 的环境变量说明同步更新：`CF_DOMAIN` 默认值改为 `www.inte8.top`
 
 ## [Unreleased]
 
 <!-- 下一轮改动写在这里。发布时把这一段改成 [x.y.z] — YYYY-MM-DD，并同步 package.json -->
 
-<<<<<<< HEAD
-### 🔄 Upstream sync — 全量同步 Atom v1.1.5 的代码层
-=======
 ### ✨ Added — 主题包机制：主题自带规则与首页 Hero（装主题不改项目源码）
 
 - **主题包可以携带 `overlay.css`**：该主题作用域下的规则（直角化 / 等宽数据位 / CRT / 焦点辉光），
@@ -60,132 +44,123 @@ Based on Atom **1.1.5**（`package.json` 的 `upstream` 字段记录基础版本
 
 
 ### 📝 Docs
->>>>>>> upstream/main
 
-- **工程层整树跟随上游**（以 git 合并记录基线，后续同步只需再 merge）：`scripts/`（`lib/blog-posts.mjs` 共享文章读取、`generate-search-index.mjs`、`verify-build-links.mjs`、`verify-search-index.mjs`）、`astro-plugins/`、`src/{components,layouts,pages,styles,utils,scripts,generated}`、`tests/`、`astro.config.mjs`、`vitest.config.ts`、`eslint.config.js`、`.nvmrc`、`.gitignore`
-- **站内搜索索引改 prebuild 生成**：以前在 postbuild 写 `public/_assets/`，而 Astro 构建开始时只拷一次 `public/` —— 新文章要等下一次构建才搜得到。现在 `prebuild` 先产出索引，构建期自然带进 `dist/`
-- **两道构建期门禁**：`npm run verify:links` 把每份 HTML 的站内链接映射回 `dist` 真实产物（拦 `/Atom/Atom/` 这类 base 双前缀）；`npm run verify:search` 断言索引与 `dist/blog/` 的文章页一一对应（本仓另有分页目录 `/blog/2/`、`/blog/3/`，已在脚本里排除）
-- **robots.txt / manifest.json 改为构建期端点**：`src/pages/robots.txt.ts` 带跟随 base 的 Sitemap 绝对地址；`src/pages/manifest.json.ts` 用 `absoluteUrl()` 拼 origin + base，子路径部署（GitHub Pages `/Atom-blog/`）下 PWA 不再指向域名根。`public/robots.txt`、`public/manifest.json` 已删除
-- **sitemap 的 lastmod 交给 `@astrojs/sitemap` 集成**（`serialize`），删掉 `scripts/fix-sitemap.mjs`；同时 `filter` 掉 404；`trailingSlash: 'always'` 让内链、canonical、sitemap 三者口径一致
-- **CI 合并为单条 `verify.yml`**：check → lint → test → build → 两道门禁 → 部署（部署是 `needs: verify` 的下游并复用产物）；删除 `test.yml` / `deploy.yml`，避免「测试红了照样发布」
-- **依赖与运行时口径**：`.nvmrc` = 24、`engines.node` = `>=24`、`sharp` 显式列入 `devDependencies`、`private: true`
-- 上游修掉的 bug 一并对齐：`remark-img-lazy` 首图不再 lazy（LCP）、`path.ts` 的 `encodeURIComponent`（含 `#`/空格的标签）、`sitemap-filter`、`stripBase` 导航高亮
+- 明确「两条版本线」：本仓 semver 是模板契约（主题 token / 脚本 CLI / 目录约定），派生站点有自己的发版史，
+  不互相对齐。`DEVELOP.md` 新增「两条版本线：模板仓 vs 派生站点」小节（含 `upstream` 字段写法、
+  升级时哪些文件不要覆盖、升级后必跑的校验）；`README.md` 同步摘要；历史版本表补齐 1.1.1–1.1.5
+- `AGENTS.md` 补两条规则：链接不得重复包 `baseAssetsPath`（附 `npm run verify:links`）、版本号分线
 
-### 🎨 atom-geek 主题适配（本站）
+---
 
-- **token 契约升到 47 个**：上游组件层新增 `--overlay-bg` / `--on-overlay` / `--overlay-control-*` / `--on-success` / `--control-border` / `--code-inset`（灯箱、控件描边、成功态），已按磷光终端 / 磷光纸两套配色补齐；同时清掉 6 个本仓独有但已无引用的 token（`--accent-secondary`、`--accent-gradient`、`--accent-glow-strong`、`--glow-secondary`、`--purple-glow`、`--shadow-sm`）
-- **overlay 重新对齐上游 DOM**：`src/styles/_theme-geek.css` 从旧的 `.term-bar` / `.nav-row` 改写为上游的 `.site-header` / `.hero-eyebrow` / `.section-heading` / `.log-row` / `.search-*`，保留直角化、等宽角色、终端标题栏、CRT 扫描线、焦点辉光；由 `global.css` 末尾 import
-- 站点标识（因特吧 / `~/inte8` / Hero 文案 / `OG_IMAGE=/og.jpg` / `DEFAULT_THEME_COLORS`）回填到 `src/consts.ts`；页头与页脚里写死的 "Precision Log" 抽成 `SITE_TAGLINE = 'phosphor terminal'`；`CF_DOMAIN` 默认值仍是 `www.inte8.top`（上游模板默认 `atom.inte8.top` 会把 canonical 指错域名）
-
-### 🛠️ 运维
-
-- `ops/tools/sync-mirror.sh` 的 rsync 加 `--delete`：上游删掉的文件现在会真的从构建镜像里消失，不再残留成幻影路由/幻影规则（`node_modules`、`dist`、`.astro`、`public/js`、`public/_assets` 仍在排除列表里受保护）
-
-### ⚠️ 已知遗留（下一步）
-
-- 组件层的 TUI 化只做到「主题作用域」这一层：`CommandHeader`/`TerminalAscii`/`TerminalBoot`/`GrepHit`/`IndexSummary` 等站点自有组件随全量同步被上游组件替换，终端外壳的完整视觉（窗口按钮条、启动自检、grep 面板）需在组件层重新实现
-- `src/styles/_theme-geek.css` 的第一版映射未做逐页视觉回归（灯箱/移动端/窄屏 TOC 待验）
-
-## [1.6.1] — 2026-10-26
-
-### 📝 Content
-
-- **新文章《Atom Geek：把博客做成一台终端机——一套客制化主题的设计与安装说明》**：把 atom-geek 主题的**设计想法**（终端语义当信息架构、磷光终端/磷光纸双模、零圆角辉光代替投影、等宽字体只管真实数据、只留两条语义色通道）与**使用说明**（45 个 token 的契约、为什么版式必须走 overlay 而非主题包、两条安装路径、硬性红线）一次写全，并附实测数据：合规自查（0 `!important` / 0 组件选择器 / 0 布局 token 覆盖 / light-dark token 完全对齐 45）、WCAG 对比度实测表、移动端 48 组判定 0 不合格
-  - 后续订正了两处不实表述：主题的实际开发周期（当天做完，不是「跑了半年多」）、亮色底上的绿色对比度（`#00e88f` 实测 1.49:1，2.83:1 属于 `#00a86b`），并同步了 overlay 的真实文件数（46）与「样式层必须整份覆盖」的警告
+## [1.1.5] — 2026-11-16
 
 ### 🐛 Fixed
 
-- **搜索结果与 RSS 链接大量指向 404（12 / 26 篇）**：postbuild 脚本把**文件名原样**当 slug 用，而 Astro 7 自己用 github-slugger 生成内容路由（转小写 + 去标点 + 空格转连字符）—— `DrawThings完全使用指南.md` 的真实路由是 `/blog/drawthings完全使用指南/`，脚本却生成了 `/blog/DrawThings完全使用指南/`。现已抽出 `src/utils/slug.ts` 的 `astroSlug()`，与 Astro 规则逐字对齐（真实语料 0 差异），搜索结果 / RSS 链接现为 **26 / 26 全部命中真实路由**
-  - 修掉后搜索框里选一条结果按 Enter，会直接落到 `command not found` 的 404 页 —— 之前一直误以为是快捷键没实现
-- **sitemap 的 `lastmod` 只覆盖 9 / 29 条 blog URL**：`fix-sitemap.mjs` 拿未编码的 slug 去拼正则，中文 slug 全部匹配不上。改为先把 `<loc>` 百分号解码再比对，现在 **26 篇文章全部带 `lastmod`**（剩下 3 条是列表页与分页页，本就不该有）
-- **部署出去的搜索索引比源码旧一个版本**：postbuild 只写 `public/_assets/search-index.json`，而 Astro 在构建开始时就把 `public/` 拷进了 `dist/`。现在索引同时写入 `dist/_assets/` 与 `public/_assets/`，部署的那份永远是最新的
-- **搜索快捷键在焦点离开输入框后全部失灵**：键盘监听原先挂在 `searchInput` / `.search-wrapper` 上，而 ↓ 会把焦点移到结果项、结果列表重渲染又会销毁被聚焦项。改挂 `document`，作用域仍由「结果面板是否展开」限定 —— 页脚那行 `[↑↓] 切换结果 · [Enter] 打开 · [Esc] 关闭` 现在是真的
-- **弱网下第一次搜索被静默丢弃**：旧实现是 `setInterval` 轮询 + 3 秒清空窗口，而线上索引 fetch 实测可达 11.5 秒，窗口一过查询就没了。改成挂起式（`pendingQuery` + 索引到位后补跑），加载期显示「正在加载索引…」
+- **线上整站 404（严重）**：`Header.astro` 的导航链接被 `baseAssetsPath()` 拼了两次 base
+  ——`navLinks` 的值已经由 `path.ts` 的工具函数带上 `/Atom`，模板里又包了一层，
+  于是所有导航变成 `/Atom/Atom/blog/`。构建与 CI 都不会报错，只有点开站点才发现。
+  这次同时补了会拦住它的门：新增 `scripts/verify-build-links.mjs`，
+  把 `dist` 里每份 HTML 的站内链接映射回真实产物，缺一个就失败，CI 已接入
+  （实测：23 份 HTML、base=`/Atom`，全部命中）。
 
-### ✨ Changed
-
-- **页脚改成两段式**：桌面端右侧块内两行（`github rss about Atom` 一行，构建信息 `build v1.6.1 · astro · static` 落在其正下方），窄屏整块左对齐
-
-### 验收
-
-- 构建期新增一道闸门：postbuild 会拿 `dist/blog/` 的真实路由反查每一篇文章的 slug（依据是文章页 JSON-LD 里的 `BlogPosting`），对不上就让**构建直接失败** —— 宁可构建红，也别上线一批 404 链接
-- 新增 `tests/slug.test.ts`：固定期望表覆盖全部真实语料，并断言每篇文章算出的 slug 都能在 `dist/blog/` 里找到
-- 浏览器实测（headless Chrome + CDP）：↓ 落焦第 1 项 / 第二次 ↓ 到第 2 项 / Esc 收起面板 / Enter 打开结果文章页，**4 / 4 全绿**（此前 v2 脚本用导航后读 `location.pathname` 的方式判定，执行上下文销毁时会读到 `'/'` 这样的假值，v3 改为跟踪 `frameNavigated` + 读标题判定 404）
-
-## [1.6.0] — 2026-10-25
-
-### ✨ Added
-
-- **社交卡片计数改为构建期实时生成**：新增 `scripts/generate-og.mjs`（postbuild 阶段执行），统计 `src/content/blog/`（排除 `draft`）得到文章数 / 分类数 / 标签数，渲染成 `25 POSTS · 08 CATS · 58 TAGS` 叠加到卡片底板上 —— 文章增减后卡片数字自动跟随，不再像以前那样烤死在图片里
-  - 计数行用 **sharp 的 `text` 选项**（底层 Pango）渲染，`fontfile` 指向仓库内自带的 JetBrains Mono → 字体被内嵌，**不依赖构建机装没装字体，也不依赖网络**，CI 与本地产出完全一致
-  - 排版常数（dpi 80 / 墨迹右缘 1163 / 上缘 33）按底板标题栏的 13px JetBrains Mono 标定，计数行与标题栏 host 文本同基线、同字号
-  - **优雅降级**：字体缺失 / sharp 不可用 / 渲染异常一律只打警告并保留底板，绝不中断构建（社交卡片是装饰，不是构建产物的前置条件）
-
-### ✨ Changed
-
-- **社交卡片底板重做**：`public/og.jpg` 现在是**不含计数**的底板（AI 生成的 CRT 背景氛围 + 终端窗口外壳 + logo + 站名/副标题/提示符），计数在构建期叠加
-  - 顺带修掉一个隐藏问题：上一版卡片的等宽字其实**不是 JetBrains Mono**，而是无头 Chrome 拿不到 Google Fonts 后回落出来的系统字体 —— 现在底板把字体以 base64 内联进 HTML，计数行走 Pango 内嵌字体，两边同一款字体
-
-### 📚 Documentation
-
-- **第三方主题仓链接**：`docs/THEMING.md` 的「主题的去向」改写为远端真实状态（此前还写着 `zz3656/atom-themes` 未建仓的过时提示），新增「第三方主题仓」小节与「发布到社区」的参考样例；`README.md` 的主题特性行与「主题 / 换肤」章节加入指向 [zz3656/atom-geek](https://github.com/zz3656/atom-geek) / [zz3656/atom-themes](https://github.com/zz3656/atom-themes) 的链接
-- 明确记录「两条安装路径不等价」：Atom 主题契约规定主题目录只能放 CSS token，复制 `atom-geek/` 只得到配色，TUI 版式必须靠覆盖组件层实现
-- 新增 `src/assets/og/README.md` 记录社交卡片资产管线（底板 / 字体 / 构建期叠加 / 降级策略）；`AGENTS.md` 补充 `src/assets/og/` 目录说明与 sharp 依赖的降级约定
-
-## [1.5.0] — 2026-10-25
-
-### ✨ Changed
-
-- **品牌标识重做**：导航栏 logo、favicon、Hero 图标统一改为终端提示符 `>_` 的磷光绿标记（替换旧版紫罗兰渐变原子）；笔画加大以保证 16px 下仍可辨认
-- **PWA 图标**：新增 192 / 512 / maskable-512（由同一矢量渲染，512 图标仅 3KB）；`manifest.json` 名称改为「因特吧」，主题色 `#8a5407` → `#00e88f`，背景色 → `#05070a`
-- **社交分享卡片**：`og:image` / `twitter:image` 不再拿 favicon 顶替，改为 1200×630 的 TUI 卡片 `/og.png` —— 终端标题栏、站名、提示符与光标，背景氛围由本地 Draw Things（Qwen-Image 2512 / SDXL Turbo）生成，文字与界面元素全部代码排版保证清晰
-
-## [1.4.0] — 2026-10-25
-
-### ✨ Changed
-
-- **标签页 → 词频面板**：索引摘要（`tags: 58 unique · cats: 8 dirs · posts: 25 files`）+ 频次分布条 + 按频次分档（≥5 / 3–4 / 1–2 篇），档内标签为带篇数与热度条的 chip
-- **分类页 → 目录树面板**：`├──` / `└──` 树线串起目录卡片，卡内含分类名、文章数、最新文章标题与日期、该分类标签（含 `+N` 溢出标记）
-- 两个索引页改为带边框的独立面板形态，与文章列表页的平铺 `ls -la` 行明确区分
-- 索引面板样式（`_index.css`）改为**页面级引入**（仅 /tags/ 与 /categories/ 各自 import），不再全局引入 —— CSS 全内联进每个 HTML，全局引入等于让所有页面为用不到的样式买单；改动后每页少背约 5.6KB CSS（首页 76,959B → 71,364B）
+## [1.1.4] — 2026-11-16
 
 ### 🐛 Fixed
 
-- **移动端横向溢出**：`html/body` 的 `overflow-x: hidden` → `clip`。`hidden` 会让 html 变成滚动容器、页头 sticky 失效；`clip` 才能真正阻断 iOS Safari 上的横向平移
-- **点阵字标**（22 行 × 73 列）改为按视口等比缩放（`font-size: min(clamp(...), (100vw - 3.5rem) / 43.8)`），去掉 `overflow-x: auto` —— 它是站内唯一真正能左右滑动的区域（320px 下 scrollWidth 294 > clientWidth 285）
-- **触摸设备输入框字号提至 16px**（`@media (pointer: coarse)`）：iOS Safari 会对 <16px 的输入框在聚焦时自动放大整个页面，放大后用户就能左右平移看到超出范围的内容
-- 搜索框改为可伸缩（`flex: 1 1 auto; min-width: 0`），聚焦时不再突然变宽顶破顶栏
-- 另修四处实测溢出：`footer-status`（窄屏溢出 10px）、`dir-date`（日期列比内容窄 2px）、`nav.toc`（侧栏内部横向滚动区）、`about-topics`（320px 下两列只剩 61px，标签 chip 溢出卡片）
-- 标签 chip 名称被挤成 `#...` 的问题（chip 改按内容定宽，热度条改固定轨道 + `calc()` 填充，避免百分比在按内容定宽的 flex 里循环依赖）
+- **字体改为自托管**：移除 `fonts.googleapis.com` 外链。原来两个 `preconnect` + 一个阻塞渲染的
+  样式表请求，大陆网络下会挂到超时，之后才回落到系统字体（还带字宽跳变）。
+  现在 `@fontsource-variable/archivo`（手写 `@font-face`，只取 latin 的 `wdth` 轴文件）
+  + `@fontsource/jetbrains-mono` 的 latin 400/500/700，实测首页 gzip 仍 14KB、文章页 18KB
+- **对比度**：亮色主题 `--warning` 4.35:1 → 5.3:1；搜索结果命中文字改用 `--text-bright`
+- **动效与溢出**：`html body *` 的全局颜色过渡收敛到 `body`（换主题不再整页重绘）；
+  `overflow-x: hidden` → `clip`（hidden 会创建滚动容器，把真实横向溢出藏起来）
+- **`site`/`base` 双前缀隐患**：`site` 只写 origin、`base` 单独给子路径——原来两者都含
+  `/<repo>`，只改一边就会生成 `/Atom//Atom/`；fork 后缺 `GITHUB_USER`/`CF_DOMAIN` 会打印警告
+- 删掉与 `inlineStylesheets:'always'` 互相抵消的 `cssCodeSplit`，以及无效的 dev-toolbar 预构建
 
-### 验收
+### ✨ Changed
 
-320 / 360 / 375 / 390 / 412 / 430px 六个宽度 × 首页 / 文章列表 / 标签页 / 分类页，共 48 组：页面最大越界 0px、`.term-window` scrollWidth 等于 clientWidth、`scrollLeft` 回写恒为 0（含聚焦搜索框后复测），不合格 0 组。
+- **PWA 图标补 PNG**：192/512（含 maskable）与 `apple-touch-icon.png`——Android/Chrome
+  不会拿 SVG 当启动图标；`<link rel="apple-touch-icon">` 走 base
+- 新增 `draft-example.md`（`draft: true`）：把 `featuredImage` / `updatedDate` / `reward` /
+  `draft` 四个可选项的写法固化成可运行的样例，且不会进构建
+- 新增 `npm run preview:github`：本地按 GitHub Pages 子路径预览
 
-## [1.3.0] — 2026-10-25
+### ♻️ Refactor
 
-### ✨ Added
+- 抽出 `PostList.astro` + `Pagination.astro` + `src/utils/pagination.ts`：
+  `index.astro` / `blog/index.astro` / `blog/[...page].astro` 原先各抄一份列表与分页算术，
+  序号列还在两个地方重复实现。首页也改用 `PostList`
+- `PostCard` 的参数 `slug` 更名为 `href`（它一直传的是完整 URL，不是 slug）
+- 新增 `tests/pagination.test.ts` 覆盖 0 / 11 / 12 / 13 篇与 `perPage=0` 的边界
 
-- **TUI 终端形态全站客制化** —— 组件层与视觉层全部重写，不是换皮
-  - 站点外壳：整页包进 `.term-window` 终端窗口（1px 硬边框、标题栏、状态栏、零圆角）
-  - Header 两行化：① 标题栏（红绿灯 · `zz3656@node:~` · 实时 `25 POSTS · 08 CATS · 58 TAGS` · build 版本 · 日夜开关）② 命令行（`~/ ~/posts ~/cats ~/tags ~/about`，当前项前缀 `>`，hover 前缀也换 `>` 并带闪烁光标）
-  - Hero 终端启动：纯文本点阵「因特吧」字标（22 行 × 73 列）→ 逐行自检输出（kernel / articles / index / status）→ `~/yinteba $` 提示符与闪烁光标；原 Telemetry 右列并入自检输出
-  - 文章列表：`ls -la ~/posts` 行式（`[01] -rw-r--r-- 日期 大小 标题.md [分类]`，hover 整行反色 + 浮出 `>`）
-  - 文章页：`cat posts/x.md` 回显刊头 + 真实文件元信息（size / lines / date / cat / read）+ 行号槽 + 命令树目录（`├─` `└─`）+ 终端标题栏代码块（真实文件名 + 语言标签 + 复制按钮）
-  - 归档 / 分类 / 标签：`ls ~/cats` 目录列表；标签页 `grep -rn "tag" ~/posts`，命中行号真实、大小写不敏感
-  - 搜索：`grep` 终端输入 + 带路径的命令输出下拉
-  - 404：`yinteba: command not found` + 建议命令
-  - About：`cat README.md` + 终端面板 + `df -h` 数据条（正文内容一字未删）
-  - 新增组件 `TerminalBoot` / `TerminalAscii` / `CommandHeader` / `GrepHit`，新增样式模块 `_terminal.css`
-  - 实测：对比度暗色 5.26–13.91:1、亮色 4.60–12.92:1，全部 ≥ WCAG AA；390px 无横向溢出；`app.js` 压缩后 9,800B（gzip 3,790B）；无新增依赖
-  - 已知折中：行号槽是块级序号而非渲染行号（零 JS 方案）；点阵字标为构建期栅格化固化结果，换字需重跑栅格化流程（流程见 `TerminalAscii.astro` 头注释）
+### 📝 Docs
 
-### ♻️ Changed
+- **文档事实修正**：Cloudflare Pages 不再写成「配三个 secret 的 deploy.yml」（仓库只有
+  GitHub Pages 的 workflow，CF 走其 Git 集成）；发版命令统一为 `git tag -a`；
+  token 数 12 → 18 个语义表面 token（全站 47 个）；minify 脚本描述改成 esbuild 直出；
+  修 README 章节编号重复；`THEMING.md` 三处虚构引用（主题选择里的 Ocean、`scanThemes()` 去重、
+  官方 `atom-themes` 仓库）；`DEVELOP.md` 的 frontmatter 表补齐 `category`/`featuredImage`/`draft`
+- `IDEA.md` 澄清定位：本仓是源码/模板仓，Pages 部署只是流水线自检产物，正式站是另一个仓库
 
-- **单主题化**：`atom-default` 移出本站，站点只剩 `atom-geek` 一个设计。归档位置 `~/Documents/GitHub/atom-themes/atom-default/`（三个文件 sha 与 git 历史 `1d6073b` 逐一校验一致）；文件同时保留在本仓库 git 历史中，可随时取回
-- **默认主题与扫描顺序解耦**：默认主题由 `src/consts.ts` 的 `DEFAULT_THEME_ID` 决定，与 `scanThemes()` 的扫描顺序无关；`scanThemes()` 与 `astro-plugins/theme-loader.mjs` 统一改为 id 字典序，两处保持同序
-- 站点不再内联第二套主题的 CSS，首页 HTML 从 70,064B 降至 67,732B（`inlineStylesheets:'always'` 下每页都背这部分）
-- 老访客 localStorage 里存过 `themeId=atom-default` 的：该 id 已不在清单 → 校验失败自动回退 `atom-geek`；**日/夜模式选择始终保留**
+## [1.1.3] — 2026-11-16
+
+### 🐛 Fixed
+
+- **灯箱可键盘使用**：原来只能鼠标点开，键盘/读屏用户完全用不了；现在图片可 Tab 聚焦、Enter/Space 打开，关闭后焦点归还给原图，Tab 不出遮罩
+- **搜索可读性**：输入框 `type=search` + `role=combobox` + `aria-expanded/aria-controls`，结果容器 `role=listbox` + `aria-live`，结果项 `role=option`；结果项焦点态原来是 `outline:none` + 1.1:1 的背景色，键盘根本看不出选中项
+- **桌面端幽灵按钮**：`.nav-toggle` 在 ≥769px 无任何样式却照常渲染，是个能 Tab 停住、按了没反应的控件 → 桌面端 `display:none`
+- **控件描边对比度**：搜索框与主题开关用 `--border-color`，对页面底色只有 1.09–1.22:1（WCAG 1.4.11 需 3:1）→ 新增 `--control-border`
+- **导航高亮在子路径部署下永远不亮**：`Header.astro` 用 `Astro.url.pathname` 直接比 `/blog`，而 GitHub Pages 下是 `/Atom/blog/` → 新增 `stripBase()` 后比较
+- **RSS 四处不合规**：`<lastBuildDate>` 写进每个 `<item>`（只允许 channel 层）、`content:encoded` 塞原始 Markdown、缺 `<language>`、`]]>` 未转义；正文改为从构建产物抽取渲染后 HTML
+- **sitemap lastmod**：删掉正则注入的 `scripts/fix-sitemap.mjs`（还插在 `<changefreq>` 之后，不合 XSD 顺序），改用集成 `serialize`，文章页用 `updatedDate ?? pubDate`、其余页面用最新文章日期
+- **robots.txt 没有 Sitemap 指令**且静态文件写不出 base 前缀 → 改为构建期生成；**404** 加 `noindex`、去掉指向首页的 canonical
+- **`og:image` 兜底是 SVG favicon**（微信/X/LinkedIn 都不解析）→ 新增 1200×630 的 `og-default.png`，补 `og:image:width/height/alt`
+- **`SITE_TITLE` 不生效**：7 个页面标题硬编码「Atom Blog」，分页/分类/标签页 meta description 全站同一句 → 改为 `SITE_TITLE` 与逐页描述
+- **正文首图被 lazy**（它通常就是 LCP 元素）→ 首图 `eager` + `fetchpriority=high`，其余仍 lazy
+- 分类/标签 URL 未编码：`getTagUrl('入门')` 现输出 `/tag/%E5%85%A5%E9%97%A8/`
+- frontmatter 块状 YAML 列表（`tags:` 后跟 `- a`）此前静默丢标签，现已支持
+
+### ✨ Changed
+
+- `trailingSlash: 'always'`：内链、canonical、sitemap 三处口径统一，导航少一次 301
+- 打赏二维码 PNG（160KB+143KB）→ 280×280 webp（各 14KB），并加 `loading="lazy"`
+- **移除 6 个全站零引用的 token**（`--accent-secondary`、`--accent-gradient`、`--accent-glow-strong`、`--glow-secondary`、`--purple-glow`、`--shadow-sm`），第三方主题的必填契约随之收窄
+
+### 🧹 Chore & CI
+
+- **一条流水线 `verify.yml`** 取代 test.yml + deploy.yml：部署是 `needs: verify` 的下游 job（测试红了不再发布），且复用 verify 的构建产物（原先 4 次 `npm ci`、2 次全量 build）
+- 覆盖率从"装饰品"变成门禁：`vitest.config.ts` 加 thresholds（lines 80 / stmts 75 / branches 62 / funcs 85），当前实测 91.6 / 88 / 80.5 / 97.3
+- 依赖与工具链：`sharp` 正式列入 devDependencies、`private: true`、`engines.node >= 24` + `.nvmrc`、新增 `clean` / `test:watch`
+- 删掉零引用代码：`FormattedDate.astro`、`date.ts` 的 `formatDateCN`/`formatFullDate`、`path.ts` 的 `isRoot`、`_about.css` 里 78 行死选择器
+- 测试 103 → 128（新增 CLI 模板、token 契约、图片 lazy、块状 YAML、路径编码、`absoluteUrl`/`joinBase`/`stripBase`）
+
+## [1.1.2] — 2026-11-16
+
+### 🐛 Fixed
+
+- **站内搜索索引落后一次构建**：索引原先在 `postbuild` 写 `public/_assets/`，而 `astro build` 早已把 `public/` 复制进 `dist/`，导致新文章页面能打开、sitemap 有收录，但站内搜索搜不到它。改为 `prebuild` 生成，并新增 `scripts/verify-search-index.mjs`，在 CI 断言「索引 slug 集合 == `dist/blog` 目录集合」（原先只 `test -f`，旧索引也能过关）
+- `atom new --draft` 的 `draft: true` 被写到 frontmatter 收尾 `---` **之后**（落进正文，草稿会直接发布）；`--reward` 从未写入文件。frontmatter 组装抽到 `scripts/lib/post-template.mjs` 并补测试
+- `atom new` 写完文件后崩溃 `relative is not defined`（`node:path` 少 import 一个）
+- **子路径部署（base=`/Atom`）下头图 404**：`BlogPost` 的 `<img>` 直接用 frontmatter 原值，JSON-LD 的 image/logo 用 `Astro.url.origin`（不含 base），与 `og:image` 给出两个不同 URL。统一走 `baseAssetsPath()` / 新增的 `absoluteUrl()`
+- `public/manifest.json` 的 `start_url:"/"`、图标路径同样不吃 base → 改为构建期生成 `src/pages/manifest.json.ts`
+- `_responsive.css` 断点顺序错乱（`400px` 排在 `480px` 之前），超窄屏的导航栏压缩规则被反覆盖
+- noscript 提示条写死 `#fef3c7` 黄底，暗色模式下是一块刺眼白 → 迁到 `_modules/_layout.css` 的 `.noscript-note`，用 token 着色
+
+### ✨ Changed
+
+- **新增 7 个主题 token**：`--overlay-bg`、`--on-overlay`、`--overlay-control-bg`、`--overlay-control-bg-hover`、`--overlay-control-border`、`--on-success`、`--code-inset`。`_post.css` 里 8 处字面色值（灯箱遮罩、复制成功态、代码块内阴影）全部改用 token；`docs/THEMING.md` 与 `scripts/create-theme.mjs` 已同步
+- 主题 manifest 新增可选 `themeColor{light,dark}`，`<meta name="theme-color">` 与 PWA 配色改为从主题读取，兜底值集中在 `src/consts.ts` 的 `DEFAULT_THEME_COLORS`
+- 内置 Hero「黄铜原子」明确为**品牌资产**（颜色固定，不随主题），THEMING.md 里写明这是组件层不写死颜色的唯一例外
+- 移除不可用的 OpenSearch 声明与 `public/opensearch.xml`：模板从未实现 `?q=` 搜索，静态 XML 里的 `"/"` 也不吃 base
+
+### 🧹 Chore
+
+- `.env` / `.env.*` 进 `.gitignore`（模板仓会被 fork，避免误提交密钥）
+- `.astro/`、`src/generated/themes.ts` 不再入库——dev/build/`astro check` 会自动重建（已实测删除后 `astro check` 与全部测试仍绿）；`.prettierignore` 补 `src/generated`
+- 新增 `tests/blog-posts.test.ts`、`tests/post-template.test.ts`、`tests/theme-tokens.test.ts`，用例数 103 → 118
+
+## [1.1.1] — 2026-11-16
 
 ### 📝 Docs
 
@@ -193,6 +168,7 @@ Based on Atom **1.1.5**（`package.json` 的 `upstream` 字段记录基础版本
 - `README_EN.md` 项目结构树重写为当前真实结构，并同步 Node/npm 版本要求、Frontmatter 字段表、部署流程
 - `README.md` / `README_EN.md` / `DEVELOP.md` 项目结构树补齐 `tests/`、`.github/`、`src/scripts/app.js`、`src/generated/`、`src/content.config.ts`、`AGENTS.md`、`CHANGELOG.md`
 - 体积数字与实测对齐：交互脚本 8.7KB、单页 HTML gzip 12–18KB、构建产物约 1.8MB
+- `AGENTS.md` 补「本机（Linux / fnOS 卷）环境坑」：构建要在 `/tmp` 临时镜像里跑（该卷会让 Node 的 `copy_file_range` 产出不可读文件）、`astro check` 需 `ASTRO_TELEMETRY_DISABLED=1`、`node_modules` 必须本机 `npm ci`
 
 ### 🐛 Fixed
 
@@ -202,27 +178,6 @@ Based on Atom **1.1.5**（`package.json` 的 `upstream` 字段记录基础版本
 - Actions 版本升级到 Node 24 运行时：`checkout@v7`、`setup-node@v7`、`upload-artifact@v7`，消除 "Node.js 20 is deprecated" 警告
 
 ---
-
-## [1.2.0] — 2026-10-25
-
-### ✨ Added
-
-- **极客主题 `atom-geek`** —— 成为站点默认主题，磷光绿 + 青双色通道
-  - 主题包 `src/themes/atom-geek/{manifest.json,light.css,dark.css}`：45 个契约 token 全覆盖，0 组件选择器、0 `!important`、不覆盖任何布局 token
-  - 暗色主形态 `#00e88f` on `#05070a`（12.43:1）；亮色主色按 WCAG AA 由 `#00a86b` 降为 `#00794c`（5.01:1）
-  - 站点级增补 `src/styles/_theme-geek.css`（作用域锁 `html[data-theme='atom-geek']`）：直角化、等宽字体承担数据、终端标题栏、CRT 扫描线、命令行导航、Hero 与 404 终端化
-  - 删除该文件即完整回退到纯 token 形态；不改动 `atom-default`，主题包可随时并存
-- **默认主题可配置** —— `src/consts.ts` 新增 `DEFAULT_THEME_ID`；`BaseLayout.astro` 优先取站点配置，主题包缺失时自动回退清单首个（删主题不会导致构建失败），老访客本地的日/夜选择不受影响
-- 主题设计文档：`docs/REQUIREMENTS-ATOM-GEEK.md`（需求说明与验收标准）、`docs/ARCHITECTURE-ATOM-GEEK.md`（技术方案与 token 契约）
-
-### 🐛 Fixed
-
-- `src/utils/themes.ts` 的主题排序不再依赖 `readdirSync` 的实现细节，改为显式排序，新增主题目录时顺序不再漂移（与 `astro-plugins/theme-loader.mjs` 保持一致）
-
-### ⚠️ Known gaps
-
-- `theme-color` meta 仍为 `atom-default` 色值（`BaseLayout.astro` 中硬编码），浏览器地址栏配色暂不跟随主题
-- 5 个契约 token（`--accent-secondary` / `--accent-gradient` / `--accent-glow-strong` / `--glow-secondary` / `--purple-glow`）当前无组件消费，属契约完整性保留
 
 ## [1.1.0] — 2026-10-25
 

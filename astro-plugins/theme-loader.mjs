@@ -79,10 +79,6 @@ function scan() {
       console.warn(`[theme-loader] Skipping "${id}":`, e.message);
     }
   }
-<<<<<<< HEAD
-  // 排序: 按 id 字典序（通用规则，无 per-id 特例）
-  themes.sort((a, b) => a.id.localeCompare(b.id));
-=======
   // 排序: 声明 default:true 的置顶，其余按 id 字典序（通用规则，无 per-id 特例）
   themes.sort((a, b) => {
     const ad = a.default ? 1 : 0;
@@ -90,7 +86,6 @@ function scan() {
     if (ad !== bd) return bd - ad;
     return a.id.localeCompare(b.id);
   });
->>>>>>> upstream/main
   return themes;
 }
 

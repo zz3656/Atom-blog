@@ -46,8 +46,8 @@ Atom —— 一个用 Astro 构建的现代轻量级博客（「因特吧」，�
 - 主题 token 契约是 **47 个**（`src/themes/atom-geek/{light,dark}.css` 各 47 且集合完全相同）；新增/修改 token 时，`scripts/create-theme.mjs` 脚手架和 `docs/THEMING.md` 必须同步，`tests/theme-tokens.test.ts` 会三方比对
 - JetBrains Mono **只用于真实数据**（日期、计数、序号、刻度、代码）；中文界面一律无衬线
 - 分类 = 青色通道（`--cat-*`），标签 = 绿色描边（`--tag-*`）；全站只保留两条语义色通道
-- **版本号只有一个数据源**——只改 `package.json` 的 `version`。`src/consts.ts` 的 `SITE_VERSION` 从那里 import，页脚显示它；`tests/version.test.ts` 会校验它与 `CHANGELOG.md` 最新版本号一致
-- **版本号分两条线**：本仓 semver 是自己的发版史，上游 `zz3656/Atom` 的 semver 是模板契约，不要互相对齐；本仓用 `package.json` 的 `upstream` 字段 + `CHANGELOG.md` 顶行记录基础版本（当前 `1.1.5`）
+- **版本号只有一个数据源**——`package.json` 的 `version`（= 源仓版本）。`src/consts.ts` 的 `SITE_VERSION` 从那里 import，页脚显示它；`tests/version.test.ts` 会校验它与 `CHANGELOG.md` 最新发布版本号一致
+- **版本号跟源仓，不自造**：本站的 `package.json` `version`、`CHANGELOG.md`、页脚显示的 `SITE_VERSION` 一律与源码仓 `zz3656/Atom` 同源同值（当前 `1.1.5`）。同步源码时把这三样一起带过来，不要给站点单独编版本号
 - **搜索索引必须 prebuild 生成**——Astro 在构建开始时只拷贝一次 `public/`，postbuild 再写 `public/_assets/` 永远进不了 `dist/`
 - `@astrojs/markdown-remark` 在 Astro 7 里是 **peer dependency**，必须显式留在 `devDependencies`
 - Markdown 管线走 `astro.config.mjs` 的 `markdown.processor: unified({ ... })`（旧的 `markdown.remarkPlugins` 顶层写法已废弃）

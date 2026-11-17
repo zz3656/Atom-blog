@@ -10,7 +10,7 @@ describe('isValidThemeId', () => {
   it('accepts hyphens and underscores', () => {
     expect(isValidThemeId('sepia-paper')).toBe(true);
     expect(isValidThemeId('sepia_paper')).toBe(true);
-    expect(isValidThemeId('atom-geek')).toBe(true);
+    expect(isValidThemeId('atom-default')).toBe(true);
   });
 
   it('rejects empty string', () => {
@@ -59,20 +59,27 @@ describe('isValidMode', () => {
 });
 
 describe('scanThemes', () => {
-  it('returns at least the atom-geek built-in theme', () => {
+  it('至少扫描到一个可用主题', () => {
     const themes = scanThemes();
     expect(themes.length).toBeGreaterThanOrEqual(1);
   });
 
-  it('contains atom-geek', () => {
+  it('每个主题的 id 都合法，且清单不含重复 id', () => {
     const themes = scanThemes();
     const ids = themes.map((t) => t.id);
-    expect(ids).toContain('atom-geek');
+    expect(new Set(ids).size).toBe(ids.length);
+    for (const id of ids) expect(isValidThemeId(id)).toBe(true);
   });
 
-  it('puts atom-geek first', () => {
+  it('排序稳定：声明 default 的置顶，其余按 id 字典序（不写死某个 id）', () => {
     const themes = scanThemes();
-    expect(themes[0].id).toBe('atom-geek');
+    const expected = [...themes].sort((a, b) => {
+      const ad = a.default ? 1 : 0;
+      const bd = b.default ? 1 : 0;
+      if (ad !== bd) return bd - ad;
+      return a.id.localeCompare(b.id);
+    });
+    expect(themes.map((t) => t.id)).toEqual(expected.map((t) => t.id));
   });
 
   it('every scanned theme has required fields', () => {
@@ -91,9 +98,9 @@ describe('scanThemes', () => {
     }
   });
 
-  it('atom-geek supports both light and dark', () => {
+  it('至少有一个主题同时支持 light 与 dark', () => {
     const themes = scanThemes();
-    const def = themes.find((t) => t.id === 'atom-geek');
-    expect(def?.modes).toEqual(expect.arrayContaining(['light', 'dark']));
+    const dual = themes.filter((t) => t.modes.includes('light') && t.modes.includes('dark'));
+    expect(dual.length).toBeGreaterThanOrEqual(1);
   });
 });

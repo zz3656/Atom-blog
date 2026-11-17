@@ -37,7 +37,7 @@ const ogImage = absoluteUrl(image || OG_IMAGE);
 // 用于内联脚本的运行时校验，防止老用户 localStorage 中的过期主题 ID 被吞
 const themeIds = themes.map((t) => t.id);
 // 默认主题：清单中第一个
-const defaultThemeId = themeIds[0] || 'atom-geek';
+const defaultThemeId = themeIds[0] || 'atom-default';
 // 浏览器地址栏配色随主题走（组件层不写死颜色）
 const defaultTheme = themes.find((t) => t.id === defaultThemeId);
 const themeColorLight = defaultTheme?.themeColor?.light ?? DEFAULT_THEME_COLORS.light;

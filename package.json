@@ -1,11 +1,7 @@
 {
   "name": "atom",
-  "version": "1.6.2",
+  "version": "1.1.5",
   "type": "module",
-  "upstream": {
-    "repo": "zz3656/Atom",
-    "version": "1.1.5"
-  },
   "scripts": {
     "clean": "rm -rf dist public/js public/_assets src/generated .astro coverage",
     "dev": "astro dev",
