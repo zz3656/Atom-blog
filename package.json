@@ -23,7 +23,8 @@
     "theme:create": "node scripts/create-theme.mjs",
     "postbuild": "node scripts/generate-rss.mjs && node ops/tools/generate-og.mjs",
     "verify:links": "node scripts/verify-build-links.mjs",
-    "verify:search": "node scripts/verify-search-index.mjs"
+    "verify:search": "node scripts/verify-search-index.mjs",
+    "verify:theme": "node ops/tools/theme-audit.mjs ."
   },
   "engines": {
     "node": ">=24",
